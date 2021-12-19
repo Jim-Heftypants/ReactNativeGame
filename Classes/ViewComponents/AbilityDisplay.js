@@ -16,28 +16,55 @@ class AbilityDisplay extends React.Component {
         this.abilitiesArr = Object.values(charAbilities);
         // modding this will not update values for character object
     }
-    createStyle(ability) {
+    createStyle(ability, key) {
         // [name, levelReq, currentCD, cd, func, onCDColor, baseColor]
         // console.log("style ability: " + ability);
         const cdPercent = 1 - (ability[2] / ability[3]);
         // console.log("cdPercent: " + cdPercent);
         const color = ability[2] ? ability[6] : ability[5];
-        const textColor = ability[2] ? ability[6] : ability[5];
+        const textColor = ability[2] ? ability[5] : ability[6];
+
+        const width = circleDims;
+        const height = circleDims;
+        const borderRadius = (width + height) / 4;
+
+        const distanceConst = 1.1;
+        const right = Math.floor((this.abilitiesArr.length - (key)) * (circleDims * distanceConst) + ((distanceConst-1) * circleDims));
+        const top = Math.floor(this.props.deviceHeight - (circleDims * distanceConst));
+        // console.log("right: " + right);
+        // console.log("top: " + top);
+
+        const innerHeight = height * cdPercent;
+        const innerWidth = width * cdPercent;
+        const innerRadius = (innerHeight + innerWidth) / 4;
 
         return StyleSheet.create({
+            view: {
+                position: 'absolute',
+                right: right,
+                top: top,
+            },
             button: {
-                // position: 'absolute',
-                marginLeft: 300,
-                marginTop: 20,
-                borderRadius: circleDims / 2,
-                width: circleDims,
-                height: circleDims,
+                position: 'absolute',
                 alignItems: "center",
                 justifyContent: 'center',
+                width,
+                height,
+                borderRadius,
                 backgroundColor: `rgba(${color},${cdPercent})`, // color, opacity
             },
+            subButton: {
+                position: 'absolute',
+                width: innerWidth,
+                height: innerHeight,
+                borderRadius: innerRadius,
+                backgroundColor: `rgb(${color})`,
+                zIndex: 11,
+            },
             text: {
+                position: 'absolute',
                 color: `rgb(${textColor})`,
+                zIndex: 15,
             }
         });
     }
@@ -52,6 +79,7 @@ class AbilityDisplay extends React.Component {
             }
             if (this.abilitiesArr[i][2] === 0) continue;
             this.abilitiesArr[i][2] -= (interval / 1000);
+            this.abilitiesArr[i][2] = Math.round(this.abilitiesArr[i][2] * 1000) / 1000;
             count++;
         }
         if (!count) {
@@ -89,11 +117,15 @@ class AbilityDisplay extends React.Component {
             <View>
                 {this.abilitiesArr.map((ability) => {
                     // console.log("ability: " + JSON.stringify(ability));
-                    const styles = this.createStyle(ability);
+                    const styles = this.createStyle(ability, key);
+                    const textDisp = !ability[2] ? "Click Me" : `${ability[2]}`;
                     return (
-                        <TouchableOpacity key={key++} onPress={() => this.addCooldown(ability)} style={styles.button}>
-                            <Text style={styles.text} >Click Me</Text>
-                        </TouchableOpacity>
+                        <View key={key++} style={styles.view} >
+                            <TouchableOpacity onPress={() => this.addCooldown(ability)} style={styles.button}>
+                                <Text style={styles.text} >{textDisp}</Text>
+                                <View style={styles.subButton} ></View>
+                            </TouchableOpacity>
+                        </View>
                     )
                 })}
             </View>

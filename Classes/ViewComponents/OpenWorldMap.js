@@ -49,8 +49,8 @@ class OpenWorldMap extends React.Component {
                 height: imgHeight,
             },
             spacer: {
-                height: 50,
-                width: 50,
+                height: 0,
+                width: 0,
                 marginTop: y,
                 marginLeft: x,
                 backgroundColor: 'transparent',

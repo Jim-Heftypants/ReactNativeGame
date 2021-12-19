@@ -23,15 +23,15 @@ class LaunchScreen extends React.Component {
             deviceHeight = temp;
         }
         this.deviceDims = {
-            deviceWidth: deviceWidth,
-            deviceHeight: deviceHeight,
-            displayScale: displayScale,
+            deviceWidth,
+            deviceHeight,
+            displayScale,
         }
     }
     render() {
         const Character = Characters.PlayerOne;
         return(
-            <View>
+            <View style={{ width: this.deviceDims.deviceWidth, height: this.deviceDims.deviceHeight }} >
                 <OpenWorldMapContainer {...this.deviceDims} img={img} Character={Character} ></OpenWorldMapContainer>
                 <CharacterDisplay {...this.deviceDims} Character={Character} ></CharacterDisplay>
                 <AbilityDisplay {...this.deviceDims} Character={Character} ></AbilityDisplay>
