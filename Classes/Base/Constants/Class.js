@@ -1,36 +1,25 @@
 import * as Abilities from "./Abilities/Abilities";
 import ObjectBuilder from "./ObjectBuilders/ObjectBuilder";
 import Traits from "./Traits/Traits";
-import ClassAnimations from './Images/ClassAnimations'
+import Animations from './Images/ClassAnimations'
 
-// console.log("Abilities: " + JSON.stringify(Abilities));
+const NoStats = [0, 0, 0, 0, 0, 0];
+// stats = [Str, Dex, Con, Int, Wis, Cha];
+// base total = 20;
 
-// console.log("Class Animations: " + JSON.stringify(ClassAnimations));
-
-let noStats = [0, 0, 0, 0, 0, 0];
-
-const WizardAbilities = Abilities.WizardAbilities;
-const WizardTraits = Traits.Wizard;
-const WizardAnimations = ClassAnimations.WizardAnimations;
-// const WizardAnimations = {};
-
-const Classes = {
-    Wizard: ObjectBuilder("Wizard", noStats, WizardAbilities, WizardTraits, WizardAnimations),
-    Berserker: {
-
-    },
-    Ninja: {
-
-    },
-    Paladin: {
-
-    },
-    Necromancer: {
-
-    },
-    Rogue: {
-
-    },
+const Stats = {
+    Wizard: [0, 0, 0, 0, 0, 0],
+    NoStats,
 };
+
+const nameList = [
+    "Wizard",
+];
+
+const Classes = {};
+for (let i = 0; i < nameList.length; i++) {
+    const name = nameList[i];
+    Classes[name] = ObjectBuilder(name, Stats[name], Abilities[name + 'Abilities'], Traits[name], Animations[name]);
+}
 
 export default Classes;

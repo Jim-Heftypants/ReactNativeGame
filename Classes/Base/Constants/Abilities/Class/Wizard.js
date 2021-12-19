@@ -13,8 +13,6 @@ const LightningBolt = ["Lightning Bolt", 1, 0, 20,
     wizardBaseColor
 ]
 
-// console.log("Lightning Bolt: " + LightningBolt);
-
 export default WizardAbilities = {
     LightningBolt,
 };

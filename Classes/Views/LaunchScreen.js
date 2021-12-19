@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Text, TextInput, View, Image, Dimensions } from 'react-native';
 
 import OpenWorldMapContainer from '../ViewComponents/OpenWorldMapContainer';
@@ -9,20 +9,23 @@ import Characters from '../Base/Characters'
 
 import img from '../../assets/rpg-background.jpg';
 
+const displayScale = 1;
+
 class LaunchScreen extends React.Component {
     constructor(props) {
         super(props);
-        this.deviceWidth = Dimensions.get('window').width; //full width
-        this.deviceHeight = Dimensions.get('window').height; //full height
+        let deviceWidth = Dimensions.get('window').width; //full width
+        let deviceHeight = Dimensions.get('window').height; //full height
         // bandadge fix for wrong Dimensions vals on launch
-        if (this.deviceHeight > this.deviceWidth) {
-            const temp = this.deviceWidth;
-            this.deviceWidth = this.deviceHeight;
-            this.deviceHeight = temp;
+        if (deviceHeight > deviceWidth) {
+            const temp = deviceWidth;
+            deviceWidth = deviceHeight;
+            deviceHeight = temp;
         }
         this.deviceDims = {
-            deviceWidth: this.deviceWidth,
-            deviceHeight: this.deviceHeight,
+            deviceWidth: deviceWidth,
+            deviceHeight: deviceHeight,
+            displayScale: displayScale,
         }
     }
     render() {

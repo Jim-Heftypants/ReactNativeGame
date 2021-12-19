@@ -8,6 +8,7 @@ const addAspectRatio = true;
 class ControlCircle extends React.Component {
     constructor(props) {
         super(props);
+        this.props = props;
         this.timer;
         this.touchX;
         this.touchY;
@@ -71,7 +72,7 @@ class ControlCircle extends React.Component {
     }
     render() {
         // console.log("Control Circle render called");
-        // console.log("Circle Control props: " + JSON.stringify(props));
+        // console.log("Circle Control props width: " + JSON.stringify(this.props.deviceWidth));
         const deviceWidth = this.props.deviceWidth;
         const deviceHeight = this.props.deviceHeight;
         const styles = StyleSheet.create({
@@ -82,6 +83,8 @@ class ControlCircle extends React.Component {
                 // padding: 10,
                 top: deviceHeight*0.5,
                 left: deviceWidth*0.1,
+                top: 200,
+                left: 20,
                 borderRadius: circleDims/2,
                 width: circleDims,
                 height: circleDims,

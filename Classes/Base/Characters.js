@@ -28,12 +28,10 @@ const updateAnimationSet = (that, setName) => {
     // const Equipment = Object.values(that.Data.Equipment);
     const names = [
         that.Data.RaceName,
-        // that.Data.ClassName,
+        that.Data.ClassName,
         // ...Equipment,
     ]
     // console.log("namesArr: " + names);
-    // const raceName = that.Data.raceName;
-    // const className = that.Data.className;
     const animSet = [];
     for (let i = 0; i < names.length; i++) {
         animSet.push(animations[`${names[i]}${setName}`])

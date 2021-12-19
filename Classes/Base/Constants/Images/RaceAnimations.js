@@ -4,12 +4,12 @@ import SkeletonCompiled from "../../../../assets/RaceAssets/Skeleton/SkeletonCom
 import CatCompiled from "../../../../assets/RaceAssets/Cat/CatCompiled";
 
 
-const SkeletonAnimations = ImageConverter(SkeletonCompiled); // { animationName: [ {uri}, {uri} ] }
-const CatAnimations = ImageConverter(CatCompiled);
+const Skeleton = ImageConverter(SkeletonCompiled); // { animationName: [ {uri}, {uri} ] }
+const Cat = ImageConverter(CatCompiled);
 
 const RaceAnimations = {
-    SkeletonAnimations: SkeletonAnimations,
-    CatAnimations,
+    Skeleton,
+    Cat,
 }
 
 export default RaceAnimations;

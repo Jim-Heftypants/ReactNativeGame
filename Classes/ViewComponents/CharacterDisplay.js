@@ -33,19 +33,26 @@ class CharacterDisplay extends React.Component {
     render() {
         // console.log("Character: " + JSON.stringify(this.props.Character.Data.Attributes.Animations));
         // const Character = this.props.Character;
-        // const raceName = Character.Data.raceName;
-        // const className = Character.Data.className;
-        // const raceCycleImages = Character.Data.Attributes.Animations[`${raceName}AttackCompiled`];
-        // const classCycleImages = Character.Data.Attributes.Animations[`${className}AttackCompiled`];
-        // console.log("length: " + this.cycleImages[0].length);
-        // console.log("animCycle: " + this.animCycle);
-        const imgWidth = 150;
-        const imgHeight = 150;
+        // console.log("charDisp width: " + this.props.deviceWidth);
+        // const imgWidth = 150;
+        // const imgHeight = 150;
+        const devWidth = this.props.deviceWidth;
+        const devHeight = this.props.deviceHeight;
+        const dispScale = this.props.displayScale;
+        // use width or height for img scale?
+        const imgScale = devHeight * 0.25 * dispScale; // 1/4 screen height * user zoom setting
+        // console.log("imgScale: " + imgScale);
+        const aspectRatio = this.cycleImages[0][0].width / this.cycleImages[0][0].height;
+        // pixel size shouldn't be relevant for display
+        const width = imgScale * aspectRatio; 
+        // console.log('width: ' + width);
+        const height = imgScale;
+        // console.log('height: ' + height);
         const charImgProps = {
-            width: imgWidth,
-            height: imgHeight,
-            centerX: (this.props.deviceWidth / 2) - (imgWidth / 2),
-            centerY: (this.props.deviceHeight / 2) - (imgHeight / 2),
+            width,
+            height,
+            centerX: (devWidth / 2) - (width / 2),
+            centerY: (devHeight / 2) - (height / 2),
         }
         // console.log("imgProps: " + JSON.stringify(charImgProps));
         const styles = StyleSheet.create({
@@ -53,18 +60,19 @@ class CharacterDisplay extends React.Component {
                 position: 'absolute',
                 marginTop: charImgProps.centerY,
                 marginLeft: charImgProps.centerX,
-                width: charImgProps.width,
-                height: charImgProps.height,
+                // marginTop: 50,
+                // marginLeft: 100,
+                width: width,
+                height: height,
                 // backgroundColor: 'red',
                 zIndex: 5,
                 alignItems: "center",
                 justifyContent: 'center',
             },
             image: {
-                width: imgWidth * 0.8,
-                height: imgHeight * 0.95,
+                width: width,
+                height: height,
                 position: 'absolute',
-
             }
         });
         // console.log("state: " + JSON.stringify(this.state));

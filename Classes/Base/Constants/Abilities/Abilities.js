@@ -4,6 +4,8 @@ import wizardAbilities from './Class/Wizard';
 
 import skeletonAbilities from './Race/Skeleton';
 
+// console.log("wizardAbilities: " + JSON.stringify(wizardAbilities));
+
 export const WizardAbilities = wizardAbilities;
 
 // console.log("Wiz abilities: " + JSON.stringify(WizardAbilities));

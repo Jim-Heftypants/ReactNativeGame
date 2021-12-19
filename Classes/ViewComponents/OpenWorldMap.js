@@ -3,10 +3,6 @@ import { View, Image, Text, StyleSheet } from 'react-native';
 // import ControlCircle from "./ControlCircle";
 
 class OpenWorldMap extends React.Component {
-    constructor(props) {
-        super(props);
-        this.props = props;
-    }
     panResponder = {
         onStartShouldSetResponder: () => true, // should respond to requests
         onMoveShouldSetResponder: () => true, // should take priority over other responders

@@ -6,11 +6,12 @@ const circleDims = 100;
 class AbilityDisplay extends React.Component {
     constructor(props) {
         super(props);
+        // console.log("Dev width in abilityDisplay: " + this.props.deviceWidth);
         this.abilitiesObj = {};
         this.timer;
-        // console.log("Abilities: " + JSON.stringify(this.props.Character.Data.Attributes.Abilities));
         const charAbilities = this.props.Character.Data.Attributes.Abilities;
-        console.log("charAbilities: " + JSON.stringify(charAbilities));
+        // console.log("charAttributes: " + JSON.stringify(this.props.Character.Data.Attributes));
+        // console.log("charAbilities: " + JSON.stringify(charAbilities));
         // { name: [name, levelReq, currentCD, cd, func, onCDColor, baseColor]}
         this.abilitiesArr = Object.values(charAbilities);
         // modding this will not update values for character object
@@ -19,7 +20,7 @@ class AbilityDisplay extends React.Component {
         // [name, levelReq, currentCD, cd, func, onCDColor, baseColor]
         // console.log("style ability: " + ability);
         const cdPercent = 1 - (ability[2] / ability[3]);
-        console.log("cdPercent: " + cdPercent);
+        // console.log("cdPercent: " + cdPercent);
         const color = ability[2] ? ability[6] : ability[5];
         const textColor = ability[2] ? ability[6] : ability[5];
 
@@ -75,7 +76,7 @@ class AbilityDisplay extends React.Component {
             this.trackCooldowns();
         }
         // activate ability
-        // ability[4]();
+        ability[4](this.props.Character, "some data");
     }
     componentWillUnmount() {
         clearInterval(this.timer);

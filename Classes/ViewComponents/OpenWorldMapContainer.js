@@ -18,22 +18,23 @@ class OpenWorldMapContainer extends React.Component {
         const imgWidth = widthMultiplier * width;
         const imgHeight = heightMultiplier * height;
 
-        return {imgWidth: imgWidth, imgHeight: imgHeight, uri: uri, aspectRatio: aspectRatio};
+        return {imgWidth, imgHeight, uri, aspectRatio, imgScale: this.props.imgScale};
     }
     render() {
         // console.log("Container render called")
-        const Character = this.props.Character;
         const imgData = this.getImgData();
         const charProps = {
-            Character: Character,
+            Character: this.props.Character,
             deviceWidth: this.props.deviceWidth,
             deviceHeight: this.props.deviceHeight,
         }
+        // console.log("charPropsWidth: " + JSON.stringify(charProps.deviceWidth));
         return (
             <View>
                 <OpenWorldMap {...charProps} {...imgData} />
                 <ControlCircle that={this} {...charProps} {...imgData} />
-            </View>)
+            </View>
+        )
     }
 }
 
