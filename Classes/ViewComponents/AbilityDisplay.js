@@ -10,33 +10,24 @@ class AbilityDisplay extends React.Component {
         this.timer;
         // console.log("Abilities: " + JSON.stringify(this.props.Character.Data.Attributes.Abilities));
         const charAbilities = this.props.Character.Data.Attributes.Abilities;
-        const entities = Object.entries(charAbilities);
-        // console.log("entities: " + JSON.stringify(entities));
-        for (let i = 0; i < entities.length; i++) {
-            this.abilitiesObj[entities[i][0]] = {
-                cooldown: entities[i][1].cooldown,
-                currentCooldown: 0,
-                baseColor: '255,0,0',
-                cooldownColor: '0,0,255',
-            // for (let j = 0; j < entities[i].length; j++) {
-                }
-            // }
-        }
-        this.abilitiesArr = Object.values(this.abilitiesObj);
-        // console.log("abilitiesArr: " + JSON.stringify(this.abilitiesArr));
+        console.log("charAbilities: " + JSON.stringify(charAbilities));
+        // { name: [name, levelReq, currentCD, cd, func, onCDColor, baseColor]}
+        this.abilitiesArr = Object.values(charAbilities);
+        // modding this will not update values for character object
     }
     createStyle(ability) {
-        // console.log("style ability: " + JSON.stringify(ability));
-        const cooldown = ability.cooldown; // have to track seconds since cast manually
-        const currentCooldown = ability.currentCooldown;
-        const cdPercent = 1 - (currentCooldown / cooldown);
+        // [name, levelReq, currentCD, cd, func, onCDColor, baseColor]
+        // console.log("style ability: " + ability);
+        const cdPercent = 1 - (ability[2] / ability[3]);
         console.log("cdPercent: " + cdPercent);
-        const color = '255,0,0';
-        const textColor = 'white';
+        const color = ability[2] ? ability[6] : ability[5];
+        const textColor = ability[2] ? ability[6] : ability[5];
 
         return StyleSheet.create({
             button: {
                 // position: 'absolute',
+                marginLeft: 300,
+                marginTop: 20,
                 borderRadius: circleDims / 2,
                 width: circleDims,
                 height: circleDims,
@@ -45,16 +36,21 @@ class AbilityDisplay extends React.Component {
                 backgroundColor: `rgba(${color},${cdPercent})`, // color, opacity
             },
             text: {
-                color: textColor,
+                color: `rgb(${textColor})`,
             }
         });
     }
-    updateCooldowns() {
-        console.log("updating cooldowns");
+    updateCooldowns(interval) {
+        // console.log("updating cooldowns");
+        // [name, levelReq, currentCD, cd, func, onCDColor, baseColor]
         let count = 0;
         for (let i = 0; i < this.abilitiesArr.length; i++) {
-            if (this.abilitiesArr[i].currentCooldown <= 0) continue;
-            this.abilitiesArr[i].currentCooldown -= 1;
+            if (this.abilitiesArr[i][2] < 0) {
+                this.abilitiesArr[i][2] = 0;
+                console.log("ability now off cooldown");
+            }
+            if (this.abilitiesArr[i][2] === 0) continue;
+            this.abilitiesArr[i][2] -= (interval / 1000);
             count++;
         }
         if (!count) {
@@ -65,18 +61,21 @@ class AbilityDisplay extends React.Component {
     }
     trackCooldowns() {
         console.log("beginning cooldown intervel");
+        const interval = 100;
         this.timer = setInterval(() => {
-            this.updateCooldowns();
-        }, 100)
+            this.updateCooldowns(interval);
+        }, interval)
     }
     addCooldown(ability) {
-        if (ability.currentCooldown != 0) return;
-        console.log("ability added: " + JSON.stringify(ability));
-        ability.currentCooldown = ability.cooldown;
+        // [name, levelReq, currentCD, cd, func, onCDColor, baseColor]
+        if (ability[2] != 0) return;
+        // console.log("ability added: " + JSON.stringify(ability));
+        ability[2] = ability[3];
         if (!this.timer) {
             this.trackCooldowns();
         }
         // activate ability
+        // ability[4]();
     }
     componentWillUnmount() {
         clearInterval(this.timer);
@@ -84,7 +83,7 @@ class AbilityDisplay extends React.Component {
     }
     render() {
         let key = 0;
-        console.log("abilitiesArr: " + JSON.stringify(this.abilitiesArr));
+        // console.log("abilitiesArr: " + JSON.stringify(this.abilitiesArr));
         return (
             <View>
                 {this.abilitiesArr.map((ability) => {

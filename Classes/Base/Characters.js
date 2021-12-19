@@ -28,7 +28,7 @@ const updateAnimationSet = (that, setName) => {
     // const Equipment = Object.values(that.Data.Equipment);
     const names = [
         that.Data.RaceName,
-        that.Data.ClassName,
+        // that.Data.ClassName,
         // ...Equipment,
     ]
     // console.log("namesArr: " + names);

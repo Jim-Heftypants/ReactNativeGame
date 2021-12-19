@@ -1,17 +1,11 @@
-import Ability from "./AbilityBuilder";
+// { psudoName: [name, levelReq, currentCD, cd, func, CDColor, color]}
 
-const AuraOfDeath = new Ability("Aura of Death", 1, 20, (Character, Data) => { });
-const LightningBolt = new Ability("Lightning Bolt", 1, 10, (Character, Data) => { });
-// console.log("Ability: " + AuraOfDeath);
-// console.log("Ability name " + AuraOfDeath.name);
-// AbilityBuilder(abilityName, levelReq, cooldown, abilityFunc) => [function, boolean]
-const Abilities = {
-    Skeleton: {
-        AuraOfDeath: AuraOfDeath,
-    },
-    Wizard: {
-        LightningBolt: LightningBolt,
-    }
-};
+import wizardAbilities from './Class/Wizard';
 
-export default Abilities;
+import skeletonAbilities from './Race/Skeleton';
+
+export const WizardAbilities = wizardAbilities;
+
+// console.log("Wiz abilities: " + JSON.stringify(WizardAbilities));
+
+export const SkeletonAbilities = skeletonAbilities;

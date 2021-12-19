@@ -15,7 +15,7 @@ class CharacterDisplay extends React.Component {
     // componentDidMount() {
     //     this.animator = setInterval(() => {
     //         this.updateImageCycle(this.cycleImages);
-    //     }, 1000);
+    //     }, 500);
     // }
     updateImageCycle() {
         // console.log("cycleImages uri: " + this.cycleImages[0].uri);
@@ -39,8 +39,8 @@ class CharacterDisplay extends React.Component {
         // const classCycleImages = Character.Data.Attributes.Animations[`${className}AttackCompiled`];
         // console.log("length: " + this.cycleImages[0].length);
         // console.log("animCycle: " + this.animCycle);
-        const imgWidth = 100;
-        const imgHeight = 100;
+        const imgWidth = 150;
+        const imgHeight = 150;
         const charImgProps = {
             width: imgWidth,
             height: imgHeight,
@@ -62,7 +62,7 @@ class CharacterDisplay extends React.Component {
             },
             image: {
                 width: imgWidth * 0.8,
-                height: imgHeight * 0.8,
+                height: imgHeight * 0.95,
                 position: 'absolute',
 
             }
