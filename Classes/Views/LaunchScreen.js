@@ -9,7 +9,10 @@ import Characters from '../Base/Characters'
 
 import img from '../../assets/rpg-background.jpg';
 
-const displayScale = 1;
+const displayScale = 1; // get from props eventually
+const characterSize = 100;
+const mapSizeByCharacterSize = 20; // num characters left to right to equal map size
+const mapScale = characterSize * mapSizeByCharacterSize;
 
 class LaunchScreen extends React.Component {
     constructor(props) {
@@ -26,6 +29,8 @@ class LaunchScreen extends React.Component {
             deviceWidth,
             deviceHeight,
             displayScale,
+            mapScale,
+            characterSize,
         }
     }
     render() {

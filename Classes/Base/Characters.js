@@ -5,6 +5,7 @@ const Characters = {
         Data: CharacterData.PlayerOne,
         DynamicData: {
             currentPosition: [0, 0],
+            movementSpeed: 1000,
             imageCycleId: 0,
             currentAnimationSet: [],
             Equipment: {

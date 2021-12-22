@@ -1,6 +1,5 @@
 import React from "react";
 import { View, Image, Text, StyleSheet } from 'react-native';
-// import ControlCircle from "./ControlCircle";
 
 class OpenWorldMap extends React.Component {
     panResponder = {
@@ -26,33 +25,26 @@ class OpenWorldMap extends React.Component {
     render() {
         // console.log("Open world map render called");
         // console.log("OpenWorldMap props: " + JSON.stringify(this.props));
-        const deviceWidth = this.props.deviceWidth; //full width
-        const deviceHeight = this.props.deviceHeight; //full height
-        const imgWidth = this.props.imgWidth;
-        const imgHeight = this.props.imgHeight;
-        const widthMax = imgWidth - deviceWidth;
-        const heightMax = imgHeight - deviceHeight;
+        // const charPosPre = this.props.Character.DynamicData.currentPosition;
+        // const multiplier = this.props.characterSize / this.props.displayScale;
+        // // console.log("multiplier: " + multiplier);
+        // const charPos = [charPosPre[0] / multiplier, charPosPre[1] / multiplier];
         const charPos = this.props.Character.DynamicData.currentPosition;
-        if (charPos[0] > 1) charPos[0] = 1;
-        if (charPos[0] < -widthMax) charPos[0] = -widthMax;
-        if (charPos[1] > 1) charPos[1] = 1;
-        if (charPos[1] < -heightMax) charPos[1] = -heightMax;
-        const x = charPos[0];
-        const y = charPos[1];
+        // console.log("charPos map: " + charPos);
         const imgStyle = StyleSheet.create({
             openWorldMap: {
                 position: 'absolute',
                 zIndex: 0,
                 top: 0,
                 left: 0,
-                width: imgWidth,
-                height: imgHeight,
+                width: this.props.imgWidth,
+                height: this.props.imgHeight,
             },
             spacer: {
                 height: 0,
                 width: 0,
-                marginTop: y,
-                marginLeft: x,
+                marginTop: charPos[1],
+                marginLeft: charPos[0],
                 backgroundColor: 'transparent',
             }
         });

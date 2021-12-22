@@ -1,43 +1,48 @@
 import React from "react";
 import { View, Image, Text, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 
-const circleDims = 150;
-const displacement = 20;
-const addAspectRatio = true;
-
 class ControlCircle extends React.Component {
     constructor(props) {
         super(props);
-        this.props = props;
         this.timer;
         this.touchX;
         this.touchY;
+        this.circleDims = this.props.deviceHeight * 0.35;
     }
     getRelPosVar(relative) {
         if (relative < 0) relative = 0;
-        if (relative > circleDims) relative = circleDims;
-        relative -= (circleDims / 2);
-        relative /= displacement;
+        if (relative > this.circleDims) relative = this.circleDims;
+        relative -= (this.circleDims / 2);
         return relative
     }
-    getRelativePos(ev) {
+    getRelativePos() {
         return [this.getRelPosVar(this.touchX), this.getRelPosVar(this.touchY)];
     }
     buttonFunc() {
-        // console.log("this: " + JSON.stringify(this));
-        // Alert.alert("Test")
-        // console.log("locationX: " + JSON.stringify(ev.nativeEvent.locationX));
         const parent = this.props.that;
         const relPos = this.getRelativePos(this.event);
-        const aspectRatio = this.props.aspectRatio; // width / height
+        const posTotal = Math.abs(relPos[0]) + Math.abs(relPos[1]);
+        let verticalPercent = 0; let horizontalPercent = 0;
+        if (posTotal) {
+            verticalPercent = relPos[1] / posTotal;
+            horizontalPercent = relPos[0] / posTotal;
+        }
         const charPos = this.props.Character.DynamicData.currentPosition;
-        const widthMod = addAspectRatio ? relPos[0] * aspectRatio : relPos[0];
-        charPos[0] ? charPos[0] -= widthMod : charPos[0] = widthMod;
-        charPos[1] ? charPos[1] -= relPos[1] : charPos[1] = relPos[1];
+        const movementSpeed = this.props.Character.DynamicData.movementSpeed;
+        // console.log("widthMod: " + widthMod + " heightMod: " + heightMod);
+        // console.log("horizontalPercent: " + horizontalPercent + " verticalPercent: " + verticalPercent);
+        const posMod = movementSpeed / (this.props.characterSize / this.props.displayScale);
+        charPos[0] -= (horizontalPercent * posMod);
+        charPos[1] -= (verticalPercent * posMod);
+        // console.log("Char pos pre: " + charPos);
+        if (charPos[0] > 0) charPos[0] = 0;
+        if (charPos[0] < -this.props.widthMax) charPos[0] = -this.props.widthMax;
+        if (charPos[1] > 0) charPos[1] = 0;
+        if (charPos[1] < -this.props.heightMax) charPos[1] = -this.props.heightMax;
         // console.log("Char pos: " + charPos);
 
         parent.setState({ x: charPos[0], y: charPos[1] });
-        console.log("re-render from button triggered");
+        // console.log("re-render from button triggered");
     }
     panResponder = {
         onStartShouldSetResponder: () => true, // should respond to requests
@@ -73,21 +78,16 @@ class ControlCircle extends React.Component {
     render() {
         // console.log("Control Circle render called");
         // console.log("Circle Control props width: " + JSON.stringify(this.props.deviceWidth));
-        const deviceWidth = this.props.deviceWidth;
-        const deviceHeight = this.props.deviceHeight;
         const styles = StyleSheet.create({
             main: {
                 position: 'absolute',
                 alignItems: "center",
                 justifyContent: 'center',
-                // padding: 10,
-                top: deviceHeight*0.5,
-                left: deviceWidth*0.1,
-                top: 200,
-                left: 20,
-                borderRadius: circleDims/2,
-                width: circleDims,
-                height: circleDims,
+                top: this.props.deviceHeight-(this.circleDims * 1.1),
+                left: this.circleDims*0.2,
+                borderRadius: this.circleDims/2,
+                width: this.circleDims,
+                height: this.circleDims,
                 backgroundColor: 'black',
                 zIndex: 100,
             },

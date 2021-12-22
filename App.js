@@ -13,6 +13,7 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 import Test from './Classes/ViewComponents/Test';
 
 
+
 class App extends React.Component {
   componentDidMount() {
     // console.log("ScreenOrientation: " + JSON.stringify(ScreenOrientation));
@@ -25,7 +26,7 @@ class App extends React.Component {
         {/* <Image style={imageStyles.default} source={require('./assets/rpg-background.jpg')} /> */}
         {/* <TextDisplay style={textStyles.default}></TextDisplay> */}
 
-        <LaunchScreen/>
+        <LaunchScreen ></LaunchScreen>
 
         {/* <Test></Test> */}
 

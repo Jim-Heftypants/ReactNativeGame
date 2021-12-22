@@ -1,5 +1,6 @@
 import { View, Image, Text, StyleSheet } from "react-native";
 import React from 'react';
+import getImgDims from "./Utilities/getImgDims";
 
 class CharacterDisplay extends React.Component {
     constructor(props) {
@@ -10,6 +11,14 @@ class CharacterDisplay extends React.Component {
         // console.log("cycleImages: " + JSON.stringify(this.cycleImages));
         this.animCycle = this.props.Character.DynamicData.imageCycleId;
         this.state = { animCycle: this.animCycle, cycleImages: this.cycleImages };
+        const dims = getImgDims(this.props.characterSize, this.cycleImages[0][0].width,
+                                this.cycleImages[0][0].height, this.props.displayScale);
+        this.width = dims[0];
+        this.height = dims[1];
+        // this.width = dims[0] / (this.props.standardScale / this.props.characterSize);
+        // this.height = dims[1] / (this.props.standardScale / this.props.characterSize);
+
+        // console.log("dims: " + dims);
     }
     // logic should be in parent component
     // componentDidMount() {
@@ -33,45 +42,29 @@ class CharacterDisplay extends React.Component {
     render() {
         // console.log("Character: " + JSON.stringify(this.props.Character.Data.Attributes.Animations));
         // const Character = this.props.Character;
-        // console.log("charDisp width: " + this.props.deviceWidth);
-        // const imgWidth = 150;
-        // const imgHeight = 150;
         const devWidth = this.props.deviceWidth;
         const devHeight = this.props.deviceHeight;
-        const dispScale = this.props.displayScale;
-        // use width or height for img scale?
-        const imgScale = devHeight * 0.25 * dispScale; // 1/4 screen height * user zoom setting
-        // console.log("imgScale: " + imgScale);
-        const aspectRatio = this.cycleImages[0][0].width / this.cycleImages[0][0].height;
-        // pixel size shouldn't be relevant for display
-        const width = imgScale * aspectRatio; 
-        // console.log('width: ' + width);
-        const height = imgScale;
-        // console.log('height: ' + height);
-        const charImgProps = {
-            width,
-            height,
-            centerX: (devWidth / 2) - (width / 2),
-            centerY: (devHeight / 2) - (height / 2),
-        }
-        // console.log("imgProps: " + JSON.stringify(charImgProps));
+        const width = this.width;
+        const height = this.height;
+        const centerX = (devWidth / 2) - (width / 2);
+        const centerY = (devHeight / 2) - (height / 2);
         const styles = StyleSheet.create({
             view: {
                 position: 'absolute',
-                marginTop: charImgProps.centerY,
-                marginLeft: charImgProps.centerX,
+                marginTop: centerY,
+                marginLeft: centerX,
                 // marginTop: 50,
                 // marginLeft: 100,
-                width: width,
-                height: height,
+                width,
+                height,
                 // backgroundColor: 'red',
                 zIndex: 5,
                 alignItems: "center",
                 justifyContent: 'center',
             },
             image: {
-                width: width,
-                height: height,
+                width,
+                height,
                 position: 'absolute',
             }
         });
