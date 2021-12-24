@@ -4,15 +4,12 @@ import { Text, View, TextInput, Image } from 'react-native';
 import imageStyles from './Style-Sheets/images';
 import TextDisplay from './Classes/ViewComponents/TextDisplay';
 import textStyles from './Style-Sheets/text';
-import LaunchScreen from './Classes/Views/LaunchScreen';
+import LaunchScreen from './Classes/Views/GameDisplay';
+import Main from './Classes/Views/ViewController';
 
-// doesn't work :)
-import Orientation from 'react-native-orientation';
 import * as ScreenOrientation from 'expo-screen-orientation';
 
 import Test from './Classes/ViewComponents/Test';
-
-
 
 class App extends React.Component {
   componentDidMount() {
@@ -23,13 +20,7 @@ class App extends React.Component {
     console.log("running application")
     return (
       <View>
-        {/* <Image style={imageStyles.default} source={require('./assets/rpg-background.jpg')} /> */}
-        {/* <TextDisplay style={textStyles.default}></TextDisplay> */}
-
-        <LaunchScreen ></LaunchScreen>
-
-        {/* <Test></Test> */}
-
+        <Main></Main>
         <StatusBar style="auto" />
       </View>
     );

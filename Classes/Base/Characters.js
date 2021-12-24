@@ -1,7 +1,8 @@
 import CharacterData from "./Constants/CharacterData";
 
+// Characters = { characterID: { Data: {}, DynamicData: {}, Actions: {} } }
 const Characters = {
-    PlayerOne: {
+    1: {
         Data: CharacterData.PlayerOne,
         DynamicData: {
             currentPosition: [0, 0],

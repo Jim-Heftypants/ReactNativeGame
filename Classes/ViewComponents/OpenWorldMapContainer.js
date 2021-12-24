@@ -7,7 +7,8 @@ import getImgDims from "./Utilities/getImgDims";
 class OpenWorldMapContainer extends React.Component {
     constructor(props) {
         super(props);
-        const currentPos = props.Character.DynamicData.currentPosition;
+        // console.log("Container props: " + JSON.stringify(this.props));
+        const currentPos = this.props.Character.DynamicData.currentPosition;
         this.state = { x: currentPos[0], y: currentPos[1] }
         const {uri, width, height} = Image.resolveAssetSource(this.props.img);
         const aspectRatio = width / height;
