@@ -14,7 +14,8 @@ class ViewController extends React.Component {
         super(props);
         // props that could be changed from settings page
         this.state = {
-            page: -1,
+            // page: -1,
+            page: -1, // for testing
             data: {
                 displayScale: 1,
                 characterID: 0,

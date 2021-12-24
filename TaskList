@@ -4,8 +4,6 @@
 * character animation trigger
     * animation based by character actions
 * settings View
-    * re-render parent of main upon exit
-        * re-render a preview of openWorldMap upon settings change
-* change img load location for background in assets
+    * re-render a preview of openWorldMap upon settings change
 
 * character size == 1 ?

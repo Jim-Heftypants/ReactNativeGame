@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState, useRef} from 'react';
 import { Text, TextInput, View, Image, StyleSheet, PixelRatio, Animated, 
     ScrollView, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import Accounts from '../Base/Accounts';
@@ -25,16 +25,19 @@ const SplashPage = (props) => {
         },
         textInput: {
             marginTop: props.deviceDims.deviceHeight * 0.1,
-            height: props.deviceDims.deviceHeight * 0.1,
+            // height: props.deviceDims.deviceHeight * 0.1,
             marginLeft: props.deviceDims.deviceWidth * 0.05,
             width: props.deviceDims.deviceWidth * 0.9,
             zIndex: 10,
             backgroundColor: 'rgba(255,255,255,0.5)',
-            color: 'white',
+            color: 'black',
+            textAlign: 'center',
             fontSize: normalize(30),
             borderColor: 'black',
-            borderWidth: 10,
-            padding: 20,
+            borderWidth: props.deviceDims.deviceHeight * 0.01,
+            padding: normalize(10),
+            paddingLeft: normalize(20),
+            paddingRight: normalize(20),
         },
         title: {
             fontSize: 1000,
