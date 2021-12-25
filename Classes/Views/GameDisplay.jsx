@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TextInput, View, Image } from 'react-native';
+import { Text, TextInput, View, Image, PanResponder } from 'react-native';
 
 import OpenWorldMapContainer from '../ViewComponents/OpenWorldMapContainer';
 import CharacterContainer from '../ViewComponents/CharacterContainer';

@@ -45,6 +45,7 @@ class ControlCircle extends React.Component {
         } else { relPos = [this.getRelPosVar(this.touchX), this.getRelPosVar(this.touchY)]; }
         // console.log("relPos: " + relPos);
         const posTotal = Math.abs(relPos[0]) + Math.abs(relPos[1]);
+        if (posTotal < 10) return;
         let verticalPercent = 0; let horizontalPercent = 0;
         if (posTotal) {
             verticalPercent = relPos[1] / posTotal;
