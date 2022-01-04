@@ -8,6 +8,10 @@ const Accounts = {
         password: '123',
         characterID: 1,
     },
+    PeppyTalker: {
+        password: "pinkiepie",
+        characterID: 1,
+    }
 }
 
 export default Accounts;

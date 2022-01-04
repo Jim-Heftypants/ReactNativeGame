@@ -1,11 +1,11 @@
 import React from 'react';
 import { Text, TextInput, View, Image, Dimensions } from 'react-native';
-import GameDisplay from './GameDisplay';
 import Settings from './Settings';
 import SplashPage from './SplashPage';
+import GameDisplayContainer from './GameDisplayContainer';
 
-import splashImg from '../../assets/LandscapeAssets/splash-background.jpg';
-import backgroundImg from '../../assets/LandscapeAssets/rpg-background.jpg';
+import splashImg from '../assets/LandscapeAssets/splash-background.jpg';
+import backgroundImg from '../assets/LandscapeAssets/rpg-background.jpg';
 
 const characterSize = 100;
 
@@ -14,11 +14,10 @@ class ViewController extends React.Component {
         super(props);
         // props that could be changed from settings page
         this.state = {
-            // page: -1,
-            page: 1, // for testing
+            page: 1,
             data: {
                 displayScale: 1,
-                characterID: 0,
+                characterID: 1,
             }
         };
         this.deviceWidth = Dimensions.get('window').width; //full width
@@ -51,11 +50,12 @@ class ViewController extends React.Component {
                 console.log("Opening settings page");
                 break;
             case 1:
-                disp = <GameDisplay that={this} img={backgroundImg} data={this.state.data} deviceDims={this.deviceDims} ></GameDisplay>;
+                disp = <GameDisplayContainer that={this} img={backgroundImg}
+                        data={this.state.data} deviceDims={this.deviceDims} ></GameDisplayContainer>;
                 console.log("Opening game display");
                 break;
             default:
-                disp = <></>;
+                disp = <View></View>;
         }
         return (
             <View>

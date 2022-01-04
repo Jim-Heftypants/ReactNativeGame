@@ -26,8 +26,23 @@ class ControlCircle extends React.Component {
             }, 20);
         }
         this.onMove = (evt) => {
-            this.touchX = evt.nativeEvent.locationX;
-            this.touchY = evt.nativeEvent.locationY;
+            let x = evt.nativeEvent.touches[0].locationX;
+            let y = evt.nativeEvent.touches[0].locationY;
+            // console.log("Touches detected with locations: ");
+            // pick left-most touch
+            let minLeft = evt.nativeEvent.touches[0].pageX;
+            for (let i = 1; i < evt.nativeEvent.touches.length; i++) {
+                const touch = evt.nativeEvent.touches[i];
+                // console.log(touch.pageX);
+                if (touch.pageX < minLeft) {
+                    x = touch.locationX;
+                    y = touch.locationY;
+                    minLeft = touch.pageX;
+                }
+            }
+            // console.log("Chose: " + x);
+            this.touchX = x;
+            this.touchY = y;
         }
     }
     getRelPosVar(touch) {

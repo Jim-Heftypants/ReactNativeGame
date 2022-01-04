@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import { Slider, Text, Icon } from 'react-native-elements';
 
 const Sliders = (props) => {
-    const [value, setValue] = useState(0);
+    const [value, setValue] = useState(1);
 
     const interpolate = (start, end) => {
         let k = (value - 0) / 10; // 0 =>min  && 10 => MAX

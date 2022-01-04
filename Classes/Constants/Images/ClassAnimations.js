@@ -1,6 +1,6 @@
 import ImageConverter from "../Utilities/ImageConverter";
 
-import WizardCompiled from "../../../../assets/ClassAssets/Wizard/WizardCompiled";
+import WizardCompiled from "../../../assets/ClassAssets/Wizard/WizardCompiled";
 
 const Wizard = ImageConverter(WizardCompiled); // { animationName: [ {uri}, {uri} ] }
 

@@ -1,7 +1,6 @@
 import React, {useState, useRef} from 'react';
-import { Text, TextInput, View, Image, StyleSheet, PixelRatio, Animated, 
-    ScrollView, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
-import Accounts from '../Base/Accounts';
+import { Text, TextInput, View, Image, StyleSheet, PixelRatio, Animated, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import Accounts from '../Classes/Accounts';
 
 const SplashPage = (props) => {
     const animPos = useRef(new Animated.Value(0)).current;
@@ -16,6 +15,8 @@ const SplashPage = (props) => {
             return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2;
         }
     }
+    let adjustedFontSize = 1000;
+    if (Platform.OS != 'ios') adjustedFontSize = normalize(50);
     styles = StyleSheet.create({
         img: {
             width: props.deviceDims.deviceWidth,
@@ -40,7 +41,7 @@ const SplashPage = (props) => {
             paddingRight: normalize(20),
         },
         title: {
-            fontSize: 1000,
+            fontSize: adjustedFontSize,
             width: props.deviceDims.deviceWidth,
             height: props.deviceDims.deviceHeight * 0.1,
             textAlign: 'center',
@@ -48,7 +49,7 @@ const SplashPage = (props) => {
             zIndex: 8,
         },
         submitButton: {
-            fontSize: 1000,
+            fontSize: adjustedFontSize,
             zIndex: 12,
             width: props.deviceDims.deviceWidth * 0.2,
             height: props.deviceDims.deviceHeight * 0.1,

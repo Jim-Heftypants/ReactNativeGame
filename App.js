@@ -1,15 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { Text, View, TextInput, Image } from 'react-native';
-import imageStyles from './Style-Sheets/images';
-import TextDisplay from './Classes/ViewComponents/TextDisplay';
-import textStyles from './Style-Sheets/text';
-import LaunchScreen from './Classes/Views/GameDisplay';
-import Main from './Classes/Views/ViewController';
+import Main from './Views/ViewController';
 
 import * as ScreenOrientation from 'expo-screen-orientation';
 
-import Test from './Classes/ViewComponents/Test';
+import Test from './ViewComponents/Test';
+// import MultiTouchTest from './ViewComponents/MultiTouchTest';
 
 class App extends React.Component {
   componentDidMount() {
@@ -21,6 +18,8 @@ class App extends React.Component {
     return (
       <View>
         <Main></Main>
+        {/* <MultiTouchTest></MultiTouchTest> */}
+        {/* <Test></Test> */}
         <StatusBar style="auto" />
       </View>
     );

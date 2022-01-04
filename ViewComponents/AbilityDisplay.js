@@ -6,12 +6,9 @@ const circleDims = 100;
 class AbilityDisplay extends React.Component {
     constructor(props) {
         super(props);
-        // console.log("Dev width in abilityDisplay: " + this.props.deviceWidth);
         this.abilitiesObj = {};
         this.timer;
         const charAbilities = this.props.Character.Data.Attributes.Abilities;
-        // console.log("charAttributes: " + JSON.stringify(this.props.Character.Data.Attributes));
-        // console.log("charAbilities: " + JSON.stringify(charAbilities));
         // { name: [name, levelReq, currentCD, cd, func, onCDColor, baseColor]}
         this.abilitiesArr = Object.values(charAbilities);
         // modding this will not update values for character object
