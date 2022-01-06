@@ -118,7 +118,7 @@ class AbilityDisplay extends React.Component {
                     const textDisp = !ability[2] ? "Click Me" : `${ability[2]}`;
                     return (
                         <View key={key++} style={styles.view} >
-                            <TouchableOpacity onPressIn={() => this.addCooldown(ability)} style={styles.button}>
+                            <TouchableOpacity /* onPressIn={() => this.addCooldown(ability)} */ style={styles.button}>
                                 <Text style={styles.text} >{textDisp}</Text>
                                 <View style={styles.subButton} ></View>
                             </TouchableOpacity>
