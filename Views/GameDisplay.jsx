@@ -20,7 +20,6 @@ export default GameDisplay = (props) => {
             onPanResponderGrant: (evt, gesture) => {
                 console.log("Game Display touch granted");
                 priorTouches.current = 1;
-
                 if (evt.nativeEvent.pageX < (props.deviceDims.deviceWidth / 2)) {
                     mapTouch.current = { initial: evt.nativeEvent, next: null, ID: evt.nativeEvent.identifier };
                     console.log("Set mapTouch initial");
@@ -67,15 +66,15 @@ export default GameDisplay = (props) => {
         </View>, [mapOffset.current.x, mapOffset.current.y, props.imgData.uri, props.imgData.dims[0], props.imgData.dims[1]]
     );
     const charDisp = useMemo(
-        () => <CharacterDisplay {...props.deviceDims} Character={props.Character} touches={touches} >
+        () => <CharacterDisplay {...props.deviceDims} Character={props.Character} touches={touches.abilityTouch} >
             </CharacterDisplay>, [props.Character.ID]
     );
     const abilityDisp = useMemo(
-        () => <AbilityDisplay {...props.deviceDims} Character={props.Character} touches={touches} >
-            </AbilityDisplay>, [props.Character.ID]
+        () => <AbilityDisplay {...props.deviceDims} Character={props.Character} touches={touches.abilityTouch} >
+            </AbilityDisplay>, [props.Character.ID, touches.abilityTouch.current.ID] // re-renders on new touch not touch change
     );
     return (
-        <View {...panResponder.panHandlers} >
+        <View {...panResponder.panHandlers} style={{width: props.deviceDims.deviceWidth, height: props.deviceDims.deviceHeight, zIndex: 100}} >
             {map}
             {/* <View style={{transform: [{ translateX: mapOffset.x }, { translateY: mapOffset.y }] }}>
                 <Image source={{ uri: props.imgData.uri }} style={props.styles.openWorldMap} ></Image>
@@ -146,11 +145,12 @@ const moveTouches = (evt, gesture, touches, setTouches, mapOffset, Character, de
 }
 
 const mapFunc = (initialTouch, currentTouch, mapOffset, Character, dims) => {
+    // NEED TO CONTINUE MOVING AND JUST UPDATE CURRENT POSITION -- NOT MOVE ON POSITION CHANGE
     const dx = initialTouch.pageX - currentTouch.pageX;
     const dy = initialTouch.pageY - currentTouch.pageY;
     
     const posTotal = Math.abs(dx) + Math.abs(dy);
-    if (posTotal < 10) {
+    if (posTotal < 8) {
         // console.log("returning early");
         return;
     }
