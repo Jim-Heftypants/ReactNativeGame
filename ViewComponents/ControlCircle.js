@@ -126,10 +126,6 @@ class ControlCircle extends React.Component {
                 position: 'absolute',
                 zIndex: 100,
             },
-            text: {
-                color: 'white',
-                fontSize: 25,
-            }
         });
         return (
             <View {...this.panResponder} style={styles[this.controlType]} ></View>

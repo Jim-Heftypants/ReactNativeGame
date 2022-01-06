@@ -19,6 +19,7 @@ const Characters = {
         Actions: {
             updateAnimationSet: (that, setName) => {updateAnimationSet(that, setName)},
         },
+        ID: 1,
     },
 };
 

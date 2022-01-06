@@ -18,6 +18,7 @@ class ViewController extends React.Component {
             data: {
                 displayScale: 1,
                 characterID: 1,
+                controlType: 'transparent',
             }
         };
         this.deviceWidth = Dimensions.get('window').width; //full width

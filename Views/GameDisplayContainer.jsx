@@ -28,7 +28,7 @@ const GameDisplayContainer = (props) => {
 
     return (
         <GameDisplay imgData={{ uri, width, height, dims }} deviceDims={{...props.deviceDims,widthMax,heightMax}}
-            styles={styles} Character={Character} ></GameDisplay>
+            styles={styles} Character={Character} controlType={props.data.controlType} ></GameDisplay>
     )
 }
 
