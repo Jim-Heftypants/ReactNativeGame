@@ -1,9 +1,0 @@
-* visual-less movement controls
-* ability data
-    * ability targetting on hold
-* character animation trigger
-    * animation based by character actions
-* settings View
-    * re-render a preview of openWorldMap upon settings change
-
-* character size == 1 ?

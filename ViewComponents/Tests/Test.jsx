@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {View, TouchableOpacity, Image} from 'react-native';
 
-import backgroundImg from '../assets/LandscapeAssets/rpg-background.jpg';
+import backgroundImg from '../../assets/LandscapeAssets/rpg-background.jpg';
 
 export default Test = () => {
     const [animPos, setAnimPos] = useState({ x: 0, y: 0 });

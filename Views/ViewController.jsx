@@ -16,7 +16,7 @@ class ViewController extends React.Component {
         this.state = {
             page: 1,
             data: {
-                displayScale: 1,
+                displayScale: 2,
                 characterID: 1,
                 controlType: 'transparent',
             }
@@ -29,6 +29,7 @@ class ViewController extends React.Component {
             this.deviceWidth = this.deviceHeight;
             this.deviceHeight = temp;
         }
+        // console.log(backgroundImg);
     }
     render() {
         const mapSizeByCharacterSize = 20; // num characters left to right to equal map size

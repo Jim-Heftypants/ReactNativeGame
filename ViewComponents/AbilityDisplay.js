@@ -4,8 +4,6 @@ import React, {useEffect, useState} from 'react';
 const circleDims = 100;
 
 const AbilityDisplay = (props) => {
-    // console.log("touches: ");
-    // console.log(props.touches);
     let timer;
     const charAbilities = props.Character.Data.Attributes.Abilities;
     // { name: [name, levelReq, currentCD, cd, func, onCDColor, baseColor]}
@@ -56,11 +54,10 @@ const AbilityDisplay = (props) => {
         }
     })
     const isPressed = (top, right) => {
-        if (!props.touches.current.initial) return false;
-        const touch = props.touches.current.initial;
-        const dx = Math.abs(touch.pageX - (props.deviceWidth - right - (circleDims/2)));
-        const dy = Math.abs(touch.pageY - (top + (circleDims/2)));
-        // console.log("pageX: " + touch.pageX);
+        if (!props.touch) return false;
+        const dx = Math.abs(props.touch.pageX - (props.deviceWidth - right - (circleDims/2)));
+        const dy = Math.abs(props.touch.pageY - (top + (circleDims/2)));
+        // console.log("pageX: " + props.touch.pageX);
         // console.log("modRight: " + (props.deviceWidth - right));
         console.log("dx: " + dx);
         console.log("dy: " + dy);
