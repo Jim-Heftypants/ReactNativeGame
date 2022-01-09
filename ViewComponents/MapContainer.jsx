@@ -1,14 +1,12 @@
-import React, {useMemo, useRef, useState} from "react";
+import React, {useMemo, useRef, useState, useEffect} from "react";
 import { View, Image } from "react-native";
-
-// import Map from "./Map";
+import MapDisplay from "./MapDisplay";
 
 export default MapContainer = (props) => {
-    console.log("Map Container loaded");
+    // console.log("Map Container loaded");
     // console.log(props.touches);
     // props = deviceDims={props.deviceDims} style={props.styles.openWorldMap} touches={touches.mapTouch.current} >
     //     imgData = { props.imgData } Character = { props.Character }
-    // const [mapOffset, setMapOffset] = useState({ x: 0, y: 0 });
     const [state, setState] = useState(0);
     const mapOffset = useRef({ x: 0, y: 0 });
     const mapTimer = useRef();
@@ -39,20 +37,18 @@ export default MapContainer = (props) => {
             if (nextTouch.current) {
                 // console.log('x: ' + nextTouch.current.pageX + ' y: ' + nextTouch.current.pageY);
                 mapFunc(props.touches.initial, nextTouch.current, props.deviceDims, props.Character, mapOffset);
-                setState(state+1);
-                console.log(state);
+                setState(state => state+1);
             }
         }, 20);
     }
     const map = useMemo(
-        () => <View style={{ transform: [{ translateX: mapOffset.current.x }, { translateY: mapOffset.current.y }] }}>
-            <Image source={{ uri: props.imgData.uri }} style={style} ></Image>
-        </View>, [mapOffset.current.x, mapOffset.current.y]
+        () => <MapDisplay mapOffset={mapOffset} style={style} uri={props.imgData.uri}>
+        </MapDisplay>, [mapOffset.current.x, mapOffset.current.y]
     );
     return (
-        <View>
+        <>
             {map}
-        </View>
+        </>
     )
 }
 

@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { Text, View, TextInput, Image } from 'react-native';
 import Main from './Views/ViewController';
-// import Test from './ViewComponents/Tests/Test'
+import Test from './ViewComponents/Tests/UseEffectTest';
 
 import * as ScreenOrientation from 'expo-screen-orientation';
 
