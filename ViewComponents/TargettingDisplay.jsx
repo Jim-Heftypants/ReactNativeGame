@@ -2,10 +2,10 @@ import React from "react";
 import { View } from 'react-native';
 
 export default TargettingDisplay = (props) => {
-    console.log("Targetting Display Loaded");
+    // console.log("Targetting Display Loaded");
 
     if (!props.initialTouch || !props.nextTouch) {
-        console.log("touch missing");
+        console.log("Targetting Display touch missing");
         return <></>;
     }
 
@@ -13,16 +13,10 @@ export default TargettingDisplay = (props) => {
     const dy = props.initialTouch.pageY - props.nextTouch.pageY;
     const radians = Math.atan2(dy, dx);
     const transform = radians * (180 / Math.PI);
-    console.log("transform: " + transform);
-
-    // const total = Math.abs(dx) + Math.abs(dy);
-    // const xRatio = dx / total;
-    // const yRatio = dy / total;
+    // console.log("transform: " + transform);
 
     const width = Math.round((Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2)) - props.circleDims/2)*10)/10; // triangles
     const height = props.circleDims / 2;
-
-    // top == yRatio || bottom == -yRatio
 
     const opacity = 0.5;
     const color = 'white';
@@ -64,10 +58,8 @@ export default TargettingDisplay = (props) => {
     }
 
     return (
-        <>
-            <View style={style.body} >
-                <View style={style.top} ></View>
-            </View>
-        </>
+        <View style={style.body} >
+            <View style={style.top} ></View>
+        </View>
     )
 }

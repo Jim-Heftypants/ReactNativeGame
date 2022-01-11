@@ -8,17 +8,18 @@ export default AbilityButton = (props) => {
     const [cooldown, setCooldown] = useState(0);
 
     const timer = useRef();
-    const right = useRef(Math.floor((props.abilitiesLength - (props.keyy)) * (props.circleDims * props.distanceConst) +
-            ((props.distanceConst - 1) * props.circleDims))).current;
+    // const right = useRef(Math.floor((props.abilitiesLength - (props.keyy)) * (props.circleDims * props.distanceConst) +
+    //         ((props.distanceConst - 1) * props.circleDims))).current;
+    const left = useRef(Math.floor(props.deviceDims.deviceWidth - (props.circleDims * props.distanceConst) * props.keyy)).current;
     const top = useRef(Math.floor(props.deviceDims.deviceHeight - (props.circleDims * props.distanceConst))).current;
 
     // useEffect(() => {return () => {if (timer.current) clearInterval(timer.current);}}) // breaks the timer
 
-    if (!cooldown && isPressed(top, right, props.touch, props.circleDims, props.deviceDims.deviceWidth)) {
+    if (!cooldown && props.touches) {
         addCooldown(props.ability, props.Character, cooldown, setCooldown, timer);
     }
     
-    const styles = useMemo(() => {return createStyle(props.ability, props.circleDims, top, right);}, [cooldown, top, right]);
+    const styles = useMemo(() => {return createStyle(props.ability, props.circleDims, top, left);}, [cooldown, top, left]);
     const textDisp = !cooldown ? "Click Me" : `${cooldown}`;
     const buttonDisp = useMemo(() => 
         <View style={styles.view} >
@@ -34,7 +35,7 @@ export default AbilityButton = (props) => {
     }
     const targettingDisp = useMemo(() => {
             return cooldown ? <TargettingDisplay initialTouch={props.touch} nextTouch={props.nextTouch}
-                circleDims={props.circleDims} top={top} right={right} >
+                circleDims={props.circleDims} top={top} left={left} >
                 </TargettingDisplay> : <></>;
         }, [nextX, nextY]
     );
@@ -73,14 +74,7 @@ const addCooldown = (ability, Character, cooldown, setCooldown, timer) => {
     ability[4](Character, "some data");
 }
 
-const isPressed = (top, right, touch, circleDims, deviceWidth) => {
-    if (!touch) return false;
-    const dx = Math.abs(touch.pageX - (deviceWidth - right - (circleDims / 2)));
-    const dy = Math.abs(touch.pageY - (top + (circleDims / 2)));
-    return (dx < (circleDims / 2) && dy < (circleDims / 2));
-}
-
-const createStyle = (ability, circleDims, top, right) => {
+const createStyle = (ability, circleDims, top, left) => {
     // [name, levelReq, currentCD, cd, func, onCDColor, baseColor]
     const cdPercent = 1 - (ability[2] / ability[3]);
     const color = ability[2] ? ability[6] : ability[5];
@@ -98,8 +92,8 @@ const createStyle = (ability, circleDims, top, right) => {
     return ({
         view: {
             position: 'absolute',
-            right: right,
-            top: top,
+            left,
+            top,
             alignItems: "center",
             justifyContent: 'center',
             width,

@@ -14,16 +14,24 @@ export default AbilityButtonContainer = (props) => {
     // modding this will not update values for character object
     let key = 1;
 
-    // logic for which button pressed goes here
-    // need to keep ref of which button to re-update
-
     return (
         <View>
             {abilitiesArr.map((ability) => {
+                const pressed = isPressed(key, props.touches.initial, circleDims, distanceConst, props.deviceDims);
+                const touches = pressed ? props.touches : null;
                 return <AbilityButton circleDims={circleDims} ability={ability} key={key} abilitiesLength={abilitiesArr.length}
-                    touch={props.touches.initial} keyy={key++} deviceDims={props.deviceDims} Character={props.Character}
-                distanceConst={distanceConst} nextTouch={props.touches.next} ></AbilityButton>
+                    keyy={key++} deviceDims={props.deviceDims} Character={props.Character}
+                    distanceConst={distanceConst} touches={touches} ></AbilityButton>
             })}
         </View>
     )
+}
+
+const isPressed = (key, touch, circleDims, distanceConst, dims) => {
+    if (!(touch)) return false;
+    const left = Math.floor(dims.deviceWidth - (circleDims * distanceConst) * key);
+    const top = Math.floor(dims.deviceHeight - (circleDims * distanceConst));
+    const dx = Math.abs(touch.pageX - (left + (circleDims / 2)));
+    const dy = Math.abs(touch.pageY - (top + (circleDims / 2)));
+    return (dx < (circleDims / 2) && dy < (circleDims / 2));
 }
