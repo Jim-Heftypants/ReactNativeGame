@@ -1,74 +1,83 @@
 import React, {useRef, useState, useEffect, useMemo} from 'react';
 import {View, Text} from 'react-native';
 
+import TargettingDisplay from './TargettingDisplay';
+
 export default AbilityButton = (props) => {
     // console.log(`Ability Button ${props.keyy} Loaded`);
     const [cooldown, setCooldown] = useState(0);
 
+    const timer = useRef();
     const right = useRef(Math.floor((props.abilitiesLength - (props.keyy)) * (props.circleDims * props.distanceConst) +
             ((props.distanceConst - 1) * props.circleDims))).current;
     const top = useRef(Math.floor(props.deviceDims.deviceHeight - (props.circleDims * props.distanceConst))).current;
 
+    // useEffect(() => {return () => {if (timer.current) clearInterval(timer.current);}}) // breaks the timer
+
     if (!cooldown && isPressed(top, right, props.touch, props.circleDims, props.deviceDims.deviceWidth)) {
-        addCooldown(props.ability, props.Character, cooldown, setCooldown);
+        addCooldown(props.ability, props.Character, cooldown, setCooldown, timer);
     }
     
     const styles = useMemo(() => {return createStyle(props.ability, props.circleDims, top, right);}, [cooldown, top, right]);
     const textDisp = !cooldown ? "Click Me" : `${cooldown}`;
-    const buttonDisp = useMemo(() => {
-        return (<View style={styles.view} >
+    const buttonDisp = useMemo(() => 
+        <View style={styles.view} >
             <Text style={styles.text} >{textDisp}</Text>
             <View style={styles.subButton} ></View>
-        </View>)
-    }, [cooldown, props.circleDims, props.distanceConst])
+        </View>,
+        [cooldown, props.circleDims, props.distanceConst]
+    );
+    let nextX; let nextY;
+    if (props.nextTouch) {
+        nextX = props.nextTouch.pageX;
+        nextY = props.nextTouch.pageY;
+    }
+    const targettingDisp = useMemo(() => {
+            return cooldown ? <TargettingDisplay initialTouch={props.touch} nextTouch={props.nextTouch}
+                circleDims={props.circleDims} top={top} right={right} >
+                </TargettingDisplay> : <></>;
+        }, [nextX, nextY]
+    );
     return (
         <>
             {buttonDisp}
+            {targettingDisp}
         </>
     )
 }
 
-const updateCooldown = (ability, cdSpeed, interval, setCooldown) => {
-    // console.log("updating cooldowns");
+const updateCooldown = (ability, cdSpeed, setCooldown, timer) => {
     // [name, levelReq, currentCD, cd, func, onCDColor, baseColor]
     ability[2] -= cdSpeed;
     ability[2] = Math.round(ability[2] * 1000) / 1000;
     if (ability[2] < 0) ability[2] = 0;
     if (!ability[2] === 0) {
-        clearInterval(interval);
-        interval = null;
+        clearInterval(timer.current);
+        timer.current = null;
         console.log("ability now off cooldown");
     }
     setCooldown(ability[2]);
 }
 
-const addCooldown = (ability, Character, cooldown, setCooldown) => {
+const addCooldown = (ability, Character, cooldown, setCooldown, timer) => {
     // [name, levelReq, currentCD, cd, func, onCDColor, baseColor]
-    if (ability[2] != 0) return;
+    if (cooldown || ability[2]) return;
     ability[2] = ability[3];
-    if (!cooldown) {
-        console.log("using ability: " + JSON.stringify(ability));
-        const inter = 100; const cdSpeed = (inter / 1000)
-        const interval = setInterval(() => {
-            updateCooldown(ability, cdSpeed, interval, setCooldown);
-        }, inter)
-        // activate ability
-        ability[4](Character, "some data");
-    }
+    console.log("using ability: " + JSON.stringify(ability));
+    const inter = 100; const cdSpeed = (inter / 1000); // any cooldown speed mods go here
+    timer.current = setInterval(() => {
+        // console.log("here");
+        updateCooldown(ability, cdSpeed, setCooldown, timer);
+    }, inter)
+    // activate ability
+    ability[4](Character, "some data");
 }
 
 const isPressed = (top, right, touch, circleDims, deviceWidth) => {
     if (!touch) return false;
     const dx = Math.abs(touch.pageX - (deviceWidth - right - (circleDims / 2)));
     const dy = Math.abs(touch.pageY - (top + (circleDims / 2)));
-    // console.log("pageX: " + touch.pageX);
-    // console.log("modRight: " + (deviceWidth - right));
-    console.log("dx: " + dx);
-    console.log("dy: " + dy);
-    if (dx < (circleDims / 2) && dy < (circleDims / 2)) {
-        return true;
-    }
-    return false;
+    return (dx < (circleDims / 2) && dy < (circleDims / 2));
 }
 
 const createStyle = (ability, circleDims, top, right) => {

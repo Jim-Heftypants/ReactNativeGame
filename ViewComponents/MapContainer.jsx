@@ -13,7 +13,7 @@ export default MapContainer = (props) => {
     const nextTouch = useRef();
     const style = useRef({
         position: 'absolute',
-        zIndex: -5,
+        zIndex: -50,
         top: 0,
         left: 0,
         width: props.imgData.dims[0],

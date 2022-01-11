@@ -83,19 +83,19 @@ export default GameDisplay = (props) => {
             </CharacterDisplay>,
             [props.Character.ID]
     );
-    const abilityDisp = useMemo(
-        () => <AbilityDisplayContainer deviceDims={props.deviceDims} Character={props.Character} touches={touches.abilityTouch.current} >
+    const abilityDisp = useMemo(() =>
+        <AbilityDisplayContainer deviceDims={props.deviceDims} Character={props.Character} touches={touches.abilityTouch.current} >
         </AbilityDisplayContainer>,
         [props.Character.ID, touches.abilityTouch.current.ID, abilityX, abilityY]
     );
     return (
-        <View {...panResponder.panHandlers} style={{width: props.deviceDims.deviceWidth, height: props.deviceDims.deviceHeight, zIndex: 100}}>
+        <View {...panResponder.panHandlers}
+            style={{width: props.deviceDims.deviceWidth, height: props.deviceDims.deviceHeight, zIndex: 100}} >
             {mapDisp}
             {charDisp}
             {abilityDisp}
 
             {/* {just the visual display -- no functionality} */}
-            {/* {pointless to have its own class and memo -- just define here with type prop} */}
             {/* {controlCircle} */}
         </View>
     )
