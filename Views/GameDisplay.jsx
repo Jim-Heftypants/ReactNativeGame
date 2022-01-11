@@ -2,7 +2,7 @@ import React, {useState, useMemo, useRef} from 'react';
 import { Text, View, Image, PanResponder } from 'react-native';
 
 import MapContainer from '../ViewComponents/MapContainer';
-import AbilityDisplayContainer from '../ViewComponents/AbilityDisplayContainer';
+import AbilityButtonContainer from '../ViewComponents/AbilityButtonContainer';
 import CharacterDisplay from '../ViewComponents/CharacterDisplay';
 
 export default GameDisplay = (props) => {
@@ -84,9 +84,9 @@ export default GameDisplay = (props) => {
             [props.Character.ID]
     );
     const abilityDisp = useMemo(() =>
-        <AbilityDisplayContainer deviceDims={props.deviceDims} Character={props.Character} touches={touches.abilityTouch.current} >
-        </AbilityDisplayContainer>,
-        [props.Character.ID, touches.abilityTouch.current.ID, abilityX, abilityY]
+        <AbilityButtonContainer deviceDims={props.deviceDims} Character={props.Character} touches={touches.abilityTouch.current} >
+        </AbilityButtonContainer>,
+        [props.Character.ID, abilityX, abilityY]
     );
     return (
         <View {...panResponder.panHandlers}

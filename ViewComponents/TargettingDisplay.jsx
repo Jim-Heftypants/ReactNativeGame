@@ -3,17 +3,32 @@ import { View } from 'react-native';
 
 export default TargettingDisplay = (props) => {
     // console.log("Targetting Display Loaded");
+    // console.log("touches: "); console.log(props.touches);
 
-    if (!props.initialTouch || !props.nextTouch) {
-        console.log("Targetting Display touch missing");
-        return <></>;
+    if (props.touchedNode) {
+        console.log("Node has already been touched and not reset by abilityButton " + props.keyy);
+        return <></>
     }
 
-    const dx = props.initialTouch.pageX - props.nextTouch.pageX;
-    const dy = props.initialTouch.pageY - props.nextTouch.pageY;
+    const nextTouch = props.touches.next;
+    const initialTouch = props.touches.initial;
+
+    const dx = initialTouch.pageX - nextTouch.pageX; // goes from touch to touch -- not center to touch
+    const dy = initialTouch.pageY - nextTouch.pageY;
+    // const dx = 0 - nextTouch.pageX; // get center of circle
+    // const dy = 0 - nextTouch.pageY;
     const radians = Math.atan2(dy, dx);
-    const transform = radians * (180 / Math.PI);
+    const transform = Math.round(radians * (180 / Math.PI) * 100)/100;
     // console.log("transform: " + transform);
+    
+    if (!initialTouch && !nextTouch) {
+        console.log("Targetting Display touch released");
+        // use ability
+        props.ability[4](props.Character, " direction: " + transform);
+        // reload parent
+        props.setTouchedNode(() => props.keyy);
+        return <></>;
+    }
 
     const width = Math.round((Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2)) - props.circleDims/2)*10)/10; // triangles
     const height = props.circleDims / 2;
@@ -23,7 +38,7 @@ export default TargettingDisplay = (props) => {
     const style = {
         body: {
             bottom: -props.top - props.circleDims / 2,
-            right: props.right + props.circleDims / 2,
+            left: props.left + props.circleDims / 2,
             position: 'absolute',
             width,
             height,

@@ -1,36 +1,46 @@
 import { View, Image, Text } from "react-native";
-import React from 'react';
+import React, {useRef, useState} from 'react';
 
 import AbilityButton from "./AbilityButton";
+import TargettingDisplay from './TargettingDisplay';
 
 const circleDims = 100;
 const distanceConst = 1.1;
 
 export default AbilityButtonContainer = (props) => {
     // console.log("Ability Display Loaded");
+    const [touchedNode, setTouchedNode] = useState();
     const charAbilities = props.Character.Data.Attributes.Abilities;
     // { name: [name, levelReq, currentCD, cd, func, onCDColor, baseColor]}
     const abilitiesArr = Object.values(charAbilities);
     // modding this will not update values for character object
     let key = 1;
 
+    const top = Math.floor(props.deviceDims.deviceHeight - (circleDims * distanceConst)); // too simple to bother memoizing
     return (
+        // memo-ized content files
         <View>
             {abilitiesArr.map((ability) => {
-                const pressed = isPressed(key, props.touches.initial, circleDims, distanceConst, props.deviceDims);
-                const touches = pressed ? props.touches : null;
-                return <AbilityButton circleDims={circleDims} ability={ability} key={key} abilitiesLength={abilitiesArr.length}
-                    keyy={key++} deviceDims={props.deviceDims} Character={props.Character}
-                    distanceConst={distanceConst} touches={touches} ></AbilityButton>
+                const left = Math.floor(props.deviceDims.deviceWidth - (circleDims * distanceConst) * key);
+                const shouldDisp = !touchedNode && !ability[2] && isPressed(props.touches.initial, circleDims, left, top);
+                const targettingDisp = shouldDisp ? <TargettingDisplay touches={props.touches}
+                    circleDims={circleDims} top={top} left={left} ability={ability} 
+                    setTouchedNode={setTouchedNode} keyy={key} Character={props.Character}
+                    touchedNode={touchedNode}>
+                </TargettingDisplay> : <></>;
+                const shouldAddCooldown = touchedNode === key;
+                return <View key={key++} >
+                    <AbilityButton circleDims={circleDims} ability={ability} top={top} left={left}
+                        shouldAddCooldown={shouldAddCooldown} setTouchedNode={setTouchedNode} ></AbilityButton>
+                    {targettingDisp}
+                </View>
             })}
         </View>
     )
 }
 
-const isPressed = (key, touch, circleDims, distanceConst, dims) => {
+const isPressed = (touch, circleDims, left, top) => {
     if (!(touch)) return false;
-    const left = Math.floor(dims.deviceWidth - (circleDims * distanceConst) * key);
-    const top = Math.floor(dims.deviceHeight - (circleDims * distanceConst));
     const dx = Math.abs(touch.pageX - (left + (circleDims / 2)));
     const dy = Math.abs(touch.pageY - (top + (circleDims / 2)));
     return (dx < (circleDims / 2) && dy < (circleDims / 2));
