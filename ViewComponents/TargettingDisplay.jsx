@@ -5,40 +5,28 @@ export default TargettingDisplay = (props) => {
     // console.log("Targetting Display Loaded");
     // console.log("touches: "); console.log(props.touches);
 
-    if (props.touchedNode) {
-        console.log("Node has already been touched and not reset by abilityButton " + props.keyy);
-        return <></>
-    }
-
-    const nextTouch = props.touches.next;
-    const initialTouch = props.touches.initial;
-
-    const dx = initialTouch.pageX - nextTouch.pageX; // goes from touch to touch -- not center to touch
-    const dy = initialTouch.pageY - nextTouch.pageY;
-    // const dx = 0 - nextTouch.pageX; // get center of circle
-    // const dy = 0 - nextTouch.pageY;
+    const dx = props.touches.initial.pageX - props.touches.next.pageX; // goes from touch to touch -- not center to touch
+    const dy = props.touches.initial.pageY - props.touches.next.pageY;
+    const height = props.circleDims / 2;
+    // const dx = props.left - height - props.touches.next.pageX; // get center of circle
+    // const dy = props.top - height - props.touches.next.pageY;
     const radians = Math.atan2(dy, dx);
     const transform = Math.round(radians * (180 / Math.PI) * 100)/100;
     // console.log("transform: " + transform);
-    
-    if (!initialTouch && !nextTouch) {
-        console.log("Targetting Display touch released");
-        // use ability
-        props.ability[4](props.Character, " direction: " + transform);
-        // reload parent
-        props.setTouchedNode(() => props.keyy);
-        return <></>;
-    }
+    props.targetDirection.current = transform;
 
     const width = Math.round((Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2)) - props.circleDims/2)*10)/10; // triangles
-    const height = props.circleDims / 2;
 
     const opacity = 0.5;
     const color = 'white';
+    const bottom = -props.top - height;
+    // const left = props.left + height;
+    const right = props.dims.deviceWidth - (props.left + height);
     const style = {
         body: {
-            bottom: -props.top - props.circleDims / 2,
-            left: props.left + props.circleDims / 2,
+            bottom,
+            // left,
+            right,
             position: 'absolute',
             width,
             height,

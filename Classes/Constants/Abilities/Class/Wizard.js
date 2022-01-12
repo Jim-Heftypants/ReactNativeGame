@@ -3,7 +3,7 @@ const wizardCDColor = '0,0,255'; // blue
 const wizardBaseColor = '255,0,0'; // red
 
 const LightningBoltAction = (Character, ...Data) => {
-    console.log(Character.Data.Name + "used Lightning Bolt with data == " + JSON.stringify(Data));
+    console.log(Character.Data.Name + " used Lightning Bolt with data == " + JSON.stringify(Data));
     return;
 }
 

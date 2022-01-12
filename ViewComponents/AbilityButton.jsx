@@ -6,19 +6,16 @@ import {View, Text} from 'react-native';
 export default AbilityButton = (props) => {
     // console.log(`Ability Button ${props.keyy} Loaded`);
     const [cooldown, setCooldown] = useState(0);
-
     const timer = useRef();
-    const left = props.left;
-    const top = props.top;
 
-    if (!cooldown && props.shouldAddCooldown) {
-        addCooldown(props.ability, cooldown, setCooldown, timer);
-        props.setTouchedNode(() => null);
-    } else if (props.shouldAddCooldown) {
-        console.log("Node touch passed into abilityButton but ability is still on cooldown");
+    if (!cooldown && props.currentNodeID.current === props.keyy && props.targetDirection.current && !props.touch) {
+        addCooldown(props.ability, setCooldown, timer, props.Character, props.targetDirection.current);
+        props.targetDirection.current = null;
+        props.currentNodeID.current = null;
     }
     
-    const styles = useMemo(() => {return createStyle(props.ability, props.circleDims, top, left);}, [cooldown, top, left]);
+    const styles = useMemo(() => {return createStyle(props.ability, props.circleDims, props.top, props.left);},
+        [cooldown, props.top, props.left]);
     const textDisp = !cooldown ? "Click Me" : `${cooldown}`;
     const buttonDisp = useMemo(() => 
         <View style={styles.view} >
@@ -47,16 +44,16 @@ const updateCooldown = (ability, cdSpeed, setCooldown, timer) => {
     setCooldown(ability[2]);
 }
 
-const addCooldown = (ability, cooldown, setCooldown, timer) => {
+const addCooldown = (ability, setCooldown, timer, Character, direction) => {
     // [name, levelReq, currentCD, cd, func, onCDColor, baseColor]
-    if (cooldown || ability[2]) return;
+    if (ability[2]) return;
     ability[2] = ability[3];
     console.log("adding cooldown for: " + JSON.stringify(ability));
     const inter = 100; const cdSpeed = (inter / 1000); // any cooldown speed mods go here
     timer.current = setInterval(() => {
-        // console.log("here");
         updateCooldown(ability, cdSpeed, setCooldown, timer);
     }, inter)
+    ability[4](Character, " direction: ", direction);
 }
 
 const createStyle = (ability, circleDims, top, left) => {

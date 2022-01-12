@@ -9,29 +9,31 @@ const distanceConst = 1.1;
 
 export default AbilityButtonContainer = (props) => {
     // console.log("Ability Display Loaded");
-    const [touchedNode, setTouchedNode] = useState();
+    const targetDirection = useRef();
+    const currentNodeID = useRef();
     const charAbilities = props.Character.Data.Attributes.Abilities;
     // { name: [name, levelReq, currentCD, cd, func, onCDColor, baseColor]}
     const abilitiesArr = Object.values(charAbilities);
     // modding this will not update values for character object
-    let key = 1;
+    let key = 0;
 
-    const top = Math.floor(props.deviceDims.deviceHeight - (circleDims * distanceConst)); // too simple to bother memoizing
+    const top = Math.floor(props.deviceDims.deviceHeight - (circleDims * distanceConst));
     return (
-        // memo-ized content files
         <View>
             {abilitiesArr.map((ability) => {
+                key++;
                 const left = Math.floor(props.deviceDims.deviceWidth - (circleDims * distanceConst) * key);
-                const shouldDisp = !touchedNode && !ability[2] && isPressed(props.touches.initial, circleDims, left, top);
+                const shouldDisp = !ability[2] && isPressed(props.touches.initial, circleDims, left, top);
                 const targettingDisp = shouldDisp ? <TargettingDisplay touches={props.touches}
-                    circleDims={circleDims} top={top} left={left} ability={ability} 
-                    setTouchedNode={setTouchedNode} keyy={key} Character={props.Character}
-                    touchedNode={touchedNode}>
+                    circleDims={circleDims} top={top} left={left} keyy={key} dims={props.deviceDims}
+                    targetDirection={targetDirection} >
                 </TargettingDisplay> : <></>;
-                const shouldAddCooldown = touchedNode === key;
-                return <View key={key++} >
+                if (shouldDisp) currentNodeID.current = key;
+                return <View key={key} >
                     <AbilityButton circleDims={circleDims} ability={ability} top={top} left={left}
-                        shouldAddCooldown={shouldAddCooldown} setTouchedNode={setTouchedNode} ></AbilityButton>
+                        targetDirection={targetDirection} currentNodeID={currentNodeID} keyy={key}
+                        Character={props.Character} touch={props.touches.initial} >
+                        </AbilityButton>
                     {targettingDisp}
                 </View>
             })}
