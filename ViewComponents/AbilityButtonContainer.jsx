@@ -5,19 +5,20 @@ import AbilityButton from "./AbilityButton";
 import TargettingDisplay from './TargettingDisplay';
 
 const circleDims = 100;
-const distanceConst = 1.1;
+const distanceConst = 1.2;
 
 export default AbilityButtonContainer = (props) => {
     // console.log("Ability Display Loaded");
     const targetDirection = useRef();
+    const posChange = useRef();
     const currentNodeID = useRef();
     const charAbilities = props.Character.Data.Attributes.Abilities;
     // { name: [name, levelReq, currentCD, cd, func, onCDColor, baseColor]}
     const abilitiesArr = Object.values(charAbilities);
     // modding this will not update values for character object
-    let key = 0;
+    let key = 1;
 
-    const top = Math.floor(props.deviceDims.deviceHeight - (circleDims * distanceConst));
+    const top = Math.floor(props.deviceDims.deviceHeight - (circleDims * distanceConst * 2));
     return (
         <View>
             {abilitiesArr.map((ability) => {
@@ -26,16 +27,16 @@ export default AbilityButtonContainer = (props) => {
                 const shouldDisp = !ability[2] && isPressed(props.touches.initial, circleDims, left, top);
                 const targettingDisp = shouldDisp ? <TargettingDisplay touches={props.touches}
                     circleDims={circleDims} top={top} left={left} keyy={key} dims={props.deviceDims}
-                    targetDirection={targetDirection} >
+                    targetDirection={targetDirection} posChange={posChange} >
                 </TargettingDisplay> : <></>;
                 if (shouldDisp) currentNodeID.current = key;
                 return <View key={key} >
-                    <AbilityButton circleDims={circleDims} ability={ability} top={top} left={left}
-                        targetDirection={targetDirection} currentNodeID={currentNodeID} keyy={key}
-                        Character={props.Character} touch={props.touches.initial} >
-                        </AbilityButton>
-                    {targettingDisp}
-                </View>
+                            <AbilityButton circleDims={circleDims} ability={ability} top={top} left={left}
+                                targetDirection={targetDirection} currentNodeID={currentNodeID} keyy={key}
+                                Character={props.Character} touch={props.touches.initial} posChange={posChange} >
+                            </AbilityButton>
+                            {targettingDisp}
+                        </View>
             })}
         </View>
     )

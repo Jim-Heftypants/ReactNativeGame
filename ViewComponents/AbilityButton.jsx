@@ -7,16 +7,21 @@ export default AbilityButton = (props) => {
     // console.log(`Ability Button ${props.keyy} Loaded`);
     const [cooldown, setCooldown] = useState(0);
     const timer = useRef();
+    const abilityDisplay = useRef([<></>, 0]);
 
     if (!cooldown && props.currentNodeID.current === props.keyy && props.targetDirection.current && !props.touch) {
-        addCooldown(props.ability, setCooldown, timer, props.Character, props.targetDirection.current);
+        addCooldown(props.ability, setCooldown, timer);
+        useAbility(abilityDisplay, props.ability, props.Character, props.targetDirection.current,
+            props.top, props.left, props.posChange.current,
+            props.deviceDims, circleDims);
         props.targetDirection.current = null;
+        props.posChange.current = null;
         props.currentNodeID.current = null;
     }
     
     const styles = useMemo(() => {return createStyle(props.ability, props.circleDims, props.top, props.left);},
         [cooldown, props.top, props.left]);
-    const textDisp = !cooldown ? "Click Me" : `${cooldown}`;
+    const textDisp = !cooldown ? props.ability[0] : `${cooldown}`;
     const buttonDisp = useMemo(() => 
         <View style={styles.view} >
             <Text style={styles.text} >{textDisp}</Text>
@@ -24,9 +29,11 @@ export default AbilityButton = (props) => {
         </View>,
         [cooldown, props.circleDims]
     );
+    const abDisplay = abilityDisplay.current ? abilityDisplay.current[0] : <></>;
     return (
         <>
             {buttonDisp}
+            {abDisplay}
         </>
     )
 }
@@ -44,7 +51,7 @@ const updateCooldown = (ability, cdSpeed, setCooldown, timer) => {
     setCooldown(ability[2]);
 }
 
-const addCooldown = (ability, setCooldown, timer, Character, direction) => {
+const addCooldown = (ability, setCooldown, timer) => {
     // [name, levelReq, currentCD, cd, func, onCDColor, baseColor]
     if (ability[2]) return;
     ability[2] = ability[3];
@@ -53,7 +60,16 @@ const addCooldown = (ability, setCooldown, timer, Character, direction) => {
     timer.current = setInterval(() => {
         updateCooldown(ability, cdSpeed, setCooldown, timer);
     }, inter)
-    ability[4](Character, " direction: ", direction);
+}
+
+const useAbility = (abilityDisplay, ability, Character, direction, top, left, posChange, dims, circleDims) => {
+    // just pass basic dims -- handle conversions in ability file
+    abilityDisplay.current = ability[4](Character, {direction, top, left, ...posChange, ...dims, circleDims});
+    if (abilityDisplay.current[1]) {
+        setTimeout(() => {
+            abilityDisplay.current = null;
+        }, abilityDisplay.current[1]);
+    }
 }
 
 const createStyle = (ability, circleDims, top, left) => {
@@ -65,8 +81,6 @@ const createStyle = (ability, circleDims, top, left) => {
     const width = circleDims;
     const height = circleDims;
     const borderRadius = (width + height) / 4;
-    
-
     const innerHeight = height * cdPercent;
     const innerWidth = width * cdPercent;
     const innerRadius = (innerHeight + innerWidth) / 4;

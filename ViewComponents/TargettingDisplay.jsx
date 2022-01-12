@@ -1,31 +1,30 @@
 import React from "react";
 import { View } from 'react-native';
 
+const centerType = 1;
+
 export default TargettingDisplay = (props) => {
     // console.log("Targetting Display Loaded");
     // console.log("touches: "); console.log(props.touches);
 
-    const dx = props.touches.initial.pageX - props.touches.next.pageX; // goes from touch to touch -- not center to touch
-    const dy = props.touches.initial.pageY - props.touches.next.pageY;
     const height = props.circleDims / 2;
-    // const dx = props.left - height - props.touches.next.pageX; // get center of circle
-    // const dy = props.top - height - props.touches.next.pageY;
+    const top = centerType ? (props.dims.deviceHeight / 2) : (props.top + height);
+    const right = centerType ? (props.dims.deviceWidth / 2) : (props.dims.deviceWidth - (props.left + height));
+    const dx = right - props.touches.next.pageX;
+    const dy = top - props.touches.next.pageY;
     const radians = Math.atan2(dy, dx);
-    const transform = Math.round(radians * (180 / Math.PI) * 100)/100;
+    const transform = Math.round(radians * (180 / Math.PI) * 100)/100; // HORIZONTALLY SWAPPED (-,-) == quad 3 but is shown quad 4
     // console.log("transform: " + transform);
     props.targetDirection.current = transform;
+    props.posChange.current = {dx, dy};
 
-    const width = Math.round((Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2)) - props.circleDims/2)*10)/10; // triangles
+    const width = Math.round((Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2)) - height)*10)/10; // triangles
 
     const opacity = 0.5;
     const color = 'white';
-    const bottom = -props.top - height;
-    // const left = props.left + height;
-    const right = props.dims.deviceWidth - (props.left + height);
     const style = {
         body: {
-            bottom,
-            // left,
+            bottom: -top,
             right,
             position: 'absolute',
             width,
@@ -44,17 +43,17 @@ export default TargettingDisplay = (props) => {
             height: 0,
             backgroundColor: 'transparent',
             borderStyle: 'solid',
-            borderBottomWidth: props.circleDims * 3 / 8, // 50% more width than body
+            borderBottomWidth: height / 2,
             borderLeftWidth: 0,
-            borderRightWidth: props.circleDims * 3 / 4,
-            borderTopWidth: props.circleDims * 3 / 8,
+            borderRightWidth: height,
+            borderTopWidth: height / 2,
             borderBottomColor: 'transparent',
             borderTopColor: 'transparent',
             borderLeftColor: 'transparent',
             borderRightColor: color,
             transform: [
-                { translateX: -props.circleDims * 6 / 8 },
-                { translateY: -props.circleDims / 8 },
+                { translateX: -height },
+                // { translateY: props.circleDims / 2 },
             ],
             zIndex: -9,
         }
