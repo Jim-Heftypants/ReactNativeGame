@@ -33,7 +33,8 @@ export default AbilityButtonContainer = (props) => {
                 return <View key={key} >
                             <AbilityButton circleDims={circleDims} ability={ability} top={top} left={left}
                                 targetDirection={targetDirection} currentNodeID={currentNodeID} keyy={key}
-                                Character={props.Character} touch={props.touches.initial} posChange={posChange} >
+                                Character={props.Character} touch={props.touches.initial} posChange={posChange}
+                                dims={props.deviceDims} >
                             </AbilityButton>
                             {targettingDisp}
                         </View>

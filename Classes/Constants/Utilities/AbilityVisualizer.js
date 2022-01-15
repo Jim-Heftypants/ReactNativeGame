@@ -1,8 +1,10 @@
+import React from 'react';
 import {View} from 'react-native';
 
 import AbilityComponent from './AbilityComponent';
 
 export default makeVisualAbilityComponent = (rules, params) => {
+    // console.log("Making visual component with rules: ") + console.log(rules);
     // rules:
     // shouldFade(bool)  lifespan(double)  type(string/int)  opacity(double)
     // params: any
@@ -11,8 +13,10 @@ export default makeVisualAbilityComponent = (rules, params) => {
     switch (rules.type) {
         case 'line':
             component = makeLineComponent(rules, params);
+            break;
         default:
             component = <></>;
+            break;
     }
     return component;
 }
@@ -37,7 +41,9 @@ const makeLineComponent = (rules, params) => {
             backgroundColor: params.color,
         }
     }
-    const subComponent = <View style={styles.main}></View>;
-    const component = <AbilityComponent component={subComponent} rules={rules} params={params} ></AbilityComponent>;
+    // const subComponent = <View style={styles.main}></View>;
+    // component = { subComponent }
+    const component = <AbilityComponent styles={styles} rules={rules} params={params} ></AbilityComponent>;
+    // console.log(component);
     return component;
 }

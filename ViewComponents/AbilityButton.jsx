@@ -7,13 +7,13 @@ export default AbilityButton = (props) => {
     // console.log(`Ability Button ${props.keyy} Loaded`);
     const [cooldown, setCooldown] = useState(0);
     const timer = useRef();
-    const abilityDisplay = useRef([<></>, 0]);
+    const abilityDisplay = useRef({component: <></>, lifespan: 0});
 
     if (!cooldown && props.currentNodeID.current === props.keyy && props.targetDirection.current && !props.touch) {
         addCooldown(props.ability, setCooldown, timer);
         useAbility(abilityDisplay, props.ability, props.Character, props.targetDirection.current,
             props.top, props.left, props.posChange.current,
-            props.deviceDims, circleDims);
+            props.dims, props.circleDims);
         props.targetDirection.current = null;
         props.posChange.current = null;
         props.currentNodeID.current = null;
@@ -29,7 +29,11 @@ export default AbilityButton = (props) => {
         </View>,
         [cooldown, props.circleDims]
     );
-    const abDisplay = abilityDisplay.current ? abilityDisplay.current[0] : <></>;
+    // if (abilityDisplay.current.component._store) console.log(abilityDisplay.current.component._store); // empty object ?
+    const abDisplay = useMemo(() =>
+        abilityDisplay.current.component,
+        [abilityDisplay.current.lifespan]
+    );
     return (
         <>
             {buttonDisp}
@@ -65,10 +69,12 @@ const addCooldown = (ability, setCooldown, timer) => {
 const useAbility = (abilityDisplay, ability, Character, direction, top, left, posChange, dims, circleDims) => {
     // just pass basic dims -- handle conversions in ability file
     abilityDisplay.current = ability[4](Character, {direction, top, left, ...posChange, ...dims, circleDims});
-    if (abilityDisplay.current[1]) {
+    console.log('abilityDisplay lifespan (seconds): ' + abilityDisplay.current.lifespan/1000);
+    if (abilityDisplay.current.lifespan) {
         setTimeout(() => {
-            abilityDisplay.current = null;
-        }, abilityDisplay.current[1]);
+            abilityDisplay.current = { component: <></>, lifespan: 0 };
+            console.log("abilityDisplay lifespan concluded");
+        }, abilityDisplay.current.lifespan);
     }
 }
 

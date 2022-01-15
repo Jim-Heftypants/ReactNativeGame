@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { Text, View, TextInput, Image } from 'react-native';
 import Main from './Views/ViewController';
-import Test from './ViewComponents/Tests/UseEffectTest';
+import AbilityTest from './ViewComponents/Tests/AbilityTest';
 
 import * as ScreenOrientation from 'expo-screen-orientation';
 
@@ -17,7 +17,8 @@ export default class App extends React.Component {
     console.log("running application")
     return (
       <View>
-        <Main></Main>
+        <AbilityTest></AbilityTest>
+        {/* <Main></Main> */}
         {/* <Image style={{ width: 1000, height: 1000 }} source={backgroundImg} ></Image> */}
         {/* <Test></Test> */}
         <StatusBar style="auto" />
