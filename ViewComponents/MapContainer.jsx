@@ -1,4 +1,4 @@
-import React, {useMemo, useRef, useState, useEffect} from "react";
+import React, { useMemo, useRef, useState, useEffect } from "react";
 import { View, Image } from "react-native";
 import MapDisplay from "./MapDisplay";
 
@@ -28,7 +28,7 @@ export default MapContainer = (props) => {
         clearInterval(mapTimer.current);
         mapTimer.current = null;
         // update database (maybe needs to be on each change ?)
-        // props.Character.DynamicData.currentPosition = [mapOffset.current.x, mapOffset.current.y];
+        refreshCharPos(Character, [mapOffset.current.x, mapOffset.current.y]);
     }
     if (!props.touches.next && props.touches.initial && !mapTimer.current) {
         console.log("starting mapContainer timer");
@@ -37,7 +37,7 @@ export default MapContainer = (props) => {
             if (nextTouch.current) {
                 // console.log('x: ' + nextTouch.current.pageX + ' y: ' + nextTouch.current.pageY);
                 mapFunc(props.touches.initial, nextTouch.current, props.deviceDims, props.Character, mapOffset);
-                setState(state => state+1);
+                setState(state => state + 1);
             }
         }, 20);
     }
@@ -50,6 +50,15 @@ export default MapContainer = (props) => {
             {map}
         </>
     )
+}
+
+const refreshCharPos = (Character, pos) => {
+    Character.DynamicData.pos = pos;
+    const effects = Character.DynamicData.AnimEffects;
+    const keys = Object.keys(effects);
+    for (let i = 0; i < keys.length; i++) {
+        Character.DynamicData.AnimEffects[keys[i]] = Character.Data.Attributes.Abilities[keys[i]][4]();
+    }
 }
 
 const mapFunc = (initialTouch, currentTouch, dims, Character, mapOffset) => {
@@ -74,6 +83,5 @@ const mapFunc = (initialTouch, currentTouch, dims, Character, mapOffset) => {
     // console.log("tempX: " + tempX + " tempY: " + tempY);
     mapOffset.current = ({ x: tempX, y: tempY });
 
-    // Character.DynamicData.currentPosition = [tempX, tempY]; // seems slow to be here -- set on touch end ?
-    // sets location in database
+    refreshCharData(Character, [tempX, tempY]); // might be slow here (for server update)
 }

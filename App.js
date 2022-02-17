@@ -17,8 +17,8 @@ export default class App extends React.Component {
     console.log("running application")
     return (
       <View>
-        <AbilityTest></AbilityTest>
-        {/* <Main></Main> */}
+        {/* <AbilityTest></AbilityTest> */}
+        <Main></Main>
         {/* <Image style={{ width: 1000, height: 1000 }} source={backgroundImg} ></Image> */}
         {/* <Test></Test> */}
         <StatusBar style="auto" />

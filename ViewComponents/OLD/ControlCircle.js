@@ -63,7 +63,7 @@ class ControlCircle extends React.Component {
             verticalPercent = relPos[1] / posTotal;
             horizontalPercent = relPos[0] / posTotal;
         }
-        const charPos = this.props.Character.DynamicData.currentPosition;
+        const charPos = this.props.Character.DynamicData.pos;
         const movementSpeed = this.props.Character.DynamicData.movementSpeed;
         // console.log("widthMod: " + widthMod + " heightMod: " + heightMod);
         // console.log("horizontalPercent: " + horizontalPercent + " verticalPercent: " + verticalPercent);
@@ -77,7 +77,7 @@ class ControlCircle extends React.Component {
         if (charPos[1] < -this.props.heightMax) charPos[1] = -this.props.heightMax;
         // console.log("Char pos: " + charPos);
 
-        this.props.setAnimPos( { x: charPos[0], y: charPos[1] } );
+        this.props.setAnimPos({ x: charPos[0], y: charPos[1] });
         // this.props.setState({ x: charPos[0], y: charPos[1] });
         // console.log("re-render from button triggered");
     }
@@ -107,9 +107,9 @@ class ControlCircle extends React.Component {
                 position: 'absolute',
                 alignItems: "center",
                 justifyContent: 'center',
-                top: this.props.deviceHeight-(this.circleDims * 1.1),
-                left: this.circleDims*0.2,
-                borderRadius: this.circleDims/2,
+                top: this.props.deviceHeight - (this.circleDims * 1.1),
+                left: this.circleDims * 0.2,
+                borderRadius: this.circleDims / 2,
                 width: this.circleDims,
                 height: this.circleDims,
                 backgroundColor: 'black',

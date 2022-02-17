@@ -4,9 +4,9 @@ import AbilityVisualizer from "../../Utilities/AbilityVisualizer";
 const wizardCDColor = '0,0,255'; // blue
 const wizardBaseColor = '255,0,0'; // red
 
-const LightningBoltAction = (Character, data) => {
+const LightningBoltAction = (data) => {
     // console.log(data)
-    // data == { direction, top, left, ...posChange, ...dims, circleDims }
+    // data == { direction, top, left, ...posChange, ...dims, circleDims, prePos }
     // console.log(Character.Data.Name + " used Lightning Bolt with data == " + JSON.stringify(data));
     const rules = {
         shouldFade: true,
@@ -20,14 +20,16 @@ const LightningBoltAction = (Character, data) => {
     // colorVariant(children), zig-zag(children)
     const width = Math.round((Math.sqrt(Math.pow(data.dx, 2) + Math.pow(data.dy, 2))) * 10) / 10; // triangles
     const params = {
-        bottom: -data.top - data.circleDims/2,
-        right: data.deviceWidth - data.left + data.circleDims/2,
+        bottom: -data.deviceHeight / 2, // centered on character
+        right: data.deviceWidth / 2,
         width: width,
         height: 10,
         rotationAngle: data.direction,
         color: 'purple',
+        pos: data.pos,
+        prePos: data.prePos,
     }
-    return { component: AbilityVisualizer(rules, params), lifespan: rules.lifespan}; // returns component
+    return { component: AbilityVisualizer(rules, params), lifespan: rules.lifespan }; // returns component
 }
 
 const LightningBolt = ["Lightning Bolt", 1, 0, 20,
