@@ -1,4 +1,4 @@
-import React, {useState, useMemo, useRef} from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { Text, View, Image, PanResponder } from 'react-native';
 
 import MapContainer from '../ViewComponents/MapContainer';
@@ -12,6 +12,7 @@ export default GameDisplay = (props) => {
     const priorTouchList = useRef();
     const priorTouches = useRef(0);
     const [touches, setTouches] = useState({ mapTouch, abilityTouch });
+    const [effect, addEffect] = useState({});
 
     const onTouchMove = (evt, gesture) => {
         // console.log("Game Display touch moved");
@@ -74,26 +75,32 @@ export default GameDisplay = (props) => {
         abilityY = touches.abilityTouch.current.next.locationY;
     }
     const mapDisp = useMemo(
-        () => <MapContainer deviceDims={props.deviceDims} touches={touches.mapTouch.current} 
+        () => <MapContainer deviceDims={props.deviceDims} touches={touches.mapTouch.current}
             imgData={props.imgData} Character={props.Character} ></MapContainer>,
-            [touches.mapTouch.current.ID, mapX, mapY]
+        [touches.mapTouch.current.ID, mapX, mapY]
     );
     const charDisp = useMemo(
         () => <CharacterDisplay {...props.deviceDims} Character={props.Character} touches={touches.abilityTouch.current} >
-            </CharacterDisplay>,
-            [props.Character.ID]
+        </CharacterDisplay>,
+        [props.Character.ID]
     );
     const abilityDisp = useMemo(() =>
-        <AbilityButtonContainer deviceDims={props.deviceDims} Character={props.Character} touches={touches.abilityTouch.current} >
+        <AbilityButtonContainer deviceDims={props.deviceDims} Character={props.Character} touches={touches.abilityTouch.current} addEffect={addEffect} >
         </AbilityButtonContainer>,
         [props.Character.ID, abilityX, abilityY]
     );
+    const effectsDisp = useMemo(() =>
+        <EffectsContainer effects={props.Character.DynamicData.AnimEffects} charPos={props.Character.DynamicData.pos} effect={effect} >
+        </EffectsContainer>,
+        [props.Character.DynamicData.AnimEffects.length, mapX, mapY, effect]
+    );
     return (
         <View {...panResponder.panHandlers}
-            style={{width: props.deviceDims.deviceWidth, height: props.deviceDims.deviceHeight, zIndex: 100}} >
+            style={{ width: props.deviceDims.deviceWidth, height: props.deviceDims.deviceHeight, zIndex: 100 }} >
             {mapDisp}
             {charDisp}
             {abilityDisp}
+            {effectsDisp}
 
             {/* {just the visual display -- no functionality} */}
             {/* {controlCircle} */}
@@ -103,12 +110,12 @@ export default GameDisplay = (props) => {
 
 const addTouch = (newTouch, touches, setTouches, type) => {
     if (touches[type].current.initial) {
-        console.log(type+" couldn't be added -- one already exists");
+        console.log(type + " couldn't be added -- one already exists");
         return;
     }
     touches[type].current = { initial: newTouch, next: null, ID: newTouch.identifier };
     console.log("Set " + type + " initial");
-    setTouches({...touches});
+    setTouches({ ...touches });
 }
 
 const getRemovedTouch = (currentTouches, lastTouches) => {

@@ -2,7 +2,7 @@ import React from "react";
 import { View } from 'react-native';
 
 import AbilityVisualizer from "../../Classes/Constants/Utilities/AbilityVisualizer";
-import AbilityComponent from "../../Classes/Constants/Utilities/AbilityComponent";
+import AbilityComponent from "../AbilityComponent";
 
 export default AbilityTest = (props) => {
     const rules = {

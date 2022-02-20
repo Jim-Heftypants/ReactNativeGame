@@ -1,27 +1,22 @@
-import React from 'react';
-import { View } from 'react-native';
-
-import AbilityComponent from './AbilityComponent';
-
-export default makeVisualAbilityComponent = (rules, params) => {
+export default makeAbilityParams = (rules, params) => {
     // console.log("Making visual component with rules: ") + console.log(rules);
     // rules:
     // shouldFade(bool)  lifespan(double)  type(string/int)  opacity(double)
     // params: any
 
-    let component;
+    let displayParams;
     switch (rules.type) {
         case 'line':
-            component = makeLineComponent(rules, params);
+            displayParams = makeLineParams(rules, params);
             break;
         default:
-            component = <></>;
+            displayParams = {};
             break;
     }
-    return component;
+    return displayParams;
 }
 
-const makeLineComponent = (rules, params) => {
+const makeLineParams = (rules, params) => {
     // params requirements:
     // bottom, right, width, height, rotationAngle, color
     // params optionals:
@@ -41,9 +36,15 @@ const makeLineComponent = (rules, params) => {
             backgroundColor: params.color,
         }
     }
-    // const subComponent = <View style={styles.main}></View>;
-    // component = { subComponent }
-    const component = <AbilityComponent styles={styles} rules={rules} params={params} ></AbilityComponent>;
-    // console.log(component);
-    return component;
+    return {
+        styles,
+        rules,
+        params
+    }
+
+    // // const subComponent = <View style={styles.main}></View>;
+    // // component = { subComponent }
+    // const component = <AbilityComponent styles={styles} rules={rules} params={params} ></AbilityComponent>;
+    // // console.log(component);
+    // return component;
 }

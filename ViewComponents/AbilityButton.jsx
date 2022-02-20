@@ -7,21 +7,12 @@ export default AbilityButton = (props) => {
     // console.log(`Ability Button ${props.keyy} Loaded`);
     const [cooldown, setCooldown] = useState(0);
     const timer = useRef();
-    const abilityDisplay = useRef({ component: <></>, lifespan: 0 });
 
-    if (!cooldown && props.currentNodeID.current === props.keyy && props.targetDirection.current && !props.touch) {
-        addCooldown(props.ability, setCooldown, timer);
-        useAbility(abilityDisplay, props.ability, props.Character, props.targetDirection.current,
-            props.top, props.left, props.posChange.current,
-            props.dims, props.circleDims);
-        props.targetDirection.current = null;
-        props.posChange.current = null;
-        props.currentNodeID.current = null;
-    }
+    if (props.shouldStartCD) addCooldown(props.ability, setCooldown, timer);
 
     const styles = useMemo(() => { return createStyle(props.ability, props.circleDims, props.top, props.left); },
         [cooldown, props.top, props.left]);
-    const textDisp = !cooldown ? props.ability[0] : `${cooldown}`;
+    const textDisp = !cooldown ? props.abilityName : `${cooldown}`;
     const buttonDisp = useMemo(() =>
         <View style={styles.view} >
             <Text style={styles.text} >{textDisp}</Text>
@@ -29,15 +20,9 @@ export default AbilityButton = (props) => {
         </View>,
         [cooldown, props.circleDims]
     );
-    // if (abilityDisplay.current.component._store) console.log(abilityDisplay.current.component._store); // empty object ?
-    const abDisplay = useMemo(() =>
-        abilityDisplay.current.component,
-        [abilityDisplay.current.lifespan, props.Character.DynamicData.pos[0], props.Character.DynamicData.pos[1]]
-    );
     return (
         <>
             {buttonDisp}
-            {abDisplay}
         </>
     )
 }
@@ -59,25 +44,11 @@ const addCooldown = (ability, setCooldown, timer) => {
     // [name, levelReq, currentCD, cd, func, onCDColor, baseColor]
     if (ability[2]) return;
     ability[2] = ability[3];
-    console.log("adding cooldown for: " + JSON.stringify(ability));
+    console.log("Adding cooldown for: " + JSON.stringify(ability));
     const inter = 100; const cdSpeed = (inter / 1000); // any cooldown speed mods go here
     timer.current = setInterval(() => {
         updateCooldown(ability, cdSpeed, setCooldown, timer);
     }, inter)
-}
-
-const useAbility = (abilityDisplay, ability, Character, direction, top, left, posChange, dims, circleDims) => {
-    // currently only one effect per ability -- could add check data to change keys
-    Character.DynamicData.AnimEffects[ability[0]] = ability[4]({ direction, top, left, ...posChange, ...dims, circleDims, prePos: Character.DynamicData.pos.slice(), pos: Character.DynamicData.pos });
-    abilityDisplay.current = Character.DynamicData.AnimEffects[ability[0]];
-
-    console.log('abilityDisplay lifespan (seconds): ' + abilityDisplay.current.lifespan / 1000);
-    if (abilityDisplay.current.lifespan) {
-        setTimeout(() => {
-            abilityDisplay.current = { component: <></>, lifespan: 0 };
-            console.log("abilityDisplay lifespan concluded");
-        }, abilityDisplay.current.lifespan);
-    }
 }
 
 const createStyle = (ability, circleDims, top, left) => {

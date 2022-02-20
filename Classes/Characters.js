@@ -6,7 +6,7 @@ const Characters = {
         Data: CharacterData.PlayerOne,
         DynamicData: {
             pos: [0, 0],
-            AnimEffects: {},
+            AnimEffects: [], // [ [ name, data ] ]
             movementSpeed: 1000,
             imageCycleId: 0,
             currentAnimationSet: [],
