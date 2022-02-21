@@ -4,6 +4,7 @@ import { Text, View, Image, PanResponder } from 'react-native';
 import MapContainer from '../ViewComponents/MapContainer';
 import AbilityButtonContainer from '../ViewComponents/AbilityButtonContainer';
 import CharacterDisplay from '../ViewComponents/CharacterDisplay';
+import EffectsContainer from '../ViewComponents/EffectsContainer';
 
 export default GameDisplay = (props) => {
     const mapTouch = useRef({ initial: null, next: null, ID: null });
@@ -19,7 +20,7 @@ export default GameDisplay = (props) => {
         const lastTouchCount = priorTouches.current;
         priorTouches.current = gesture.numberActiveTouches;
         if (gesture.numberActiveTouches > lastTouchCount) {
-            console.log("New touch started");
+            // console.log("New touch started");
             priorTouchList.current = evt.nativeEvent.touches;
             const newTouch = evt.nativeEvent.touches[evt.nativeEvent.touches.length - 1];
             let touchType = "abilityTouch";
@@ -29,7 +30,7 @@ export default GameDisplay = (props) => {
         }
         if (gesture.numberActiveTouches < lastTouchCount) {
             const removedTouchID = getRemovedTouch(evt.nativeEvent.touches, priorTouchList.current);
-            console.log("Removing touch: " + removedTouchID);
+            // console.log("Removing touch: " + removedTouchID);
             removeTouch(removedTouchID, touches, setTouches);
             priorTouchList.current = evt.nativeEvent.touches;
             return;
@@ -41,23 +42,23 @@ export default GameDisplay = (props) => {
             onStartShouldSetPanResponder: () => true, // should respond to requests
             onMoveShouldSetPanResponder: () => false, // should take priority over other responders
             onPanResponderGrant: (evt, gesture) => {
-                console.log("Game Display touch granted");
+                // console.log("Game Display touch granted");
                 onTouchMove(evt, gesture);
             },
             onPanResponderReject: (evt, gesture) => { // another view is responding and won't release it
-                console.log("Game Display view priority rejected");
+                // console.log("Game Display view priority rejected");
             },
             onPanResponderMove: (evt, gesture) => {
                 onTouchMove(evt, gesture);
             },
             onPanResponderRelease: (evt, gesture) => {
-                console.log("Removing touch: " + evt.nativeEvent.identifier);
+                // console.log("Removing touch: " + evt.nativeEvent.identifier);
                 priorTouches.current = 0;
                 removeTouch(evt.nativeEvent.identifier, touches, setTouches);
             },
             onPanResponderTerminationRequest: (evt) => true, // allow other views to become responder
             onPanResponderTerminate: (evt, gesture) => { // responder taken from the view
-                console.log("Game Display view taken");
+                // console.log("Game Display view taken");
                 mapTouch.current = { initial: null, next: null, ID: null };
                 abilityTouch.current = { initial: null, next: null, ID: null };
                 setTouches({ mapTouch, abilityTouch });
@@ -90,9 +91,9 @@ export default GameDisplay = (props) => {
         [props.Character.ID, abilityX, abilityY]
     );
     const effectsDisp = useMemo(() =>
-        <EffectsContainer effects={props.Character.DynamicData.AnimEffects} charPos={props.Character.DynamicData.pos} effect={effect} >
+        <EffectsContainer Character={props.Character} effect={effect} >
         </EffectsContainer>,
-        [props.Character.DynamicData.AnimEffects.length, mapX, mapY, effect]
+        [Object.keys(props.Character.DynamicData.AnimEffects).length, mapX, mapY, effect]
     );
     return (
         <View {...panResponder.panHandlers}
@@ -114,7 +115,7 @@ const addTouch = (newTouch, touches, setTouches, type) => {
         return;
     }
     touches[type].current = { initial: newTouch, next: null, ID: newTouch.identifier };
-    console.log("Set " + type + " initial");
+    // console.log("Set " + type + " initial");
     setTouches({ ...touches });
 }
 
@@ -130,11 +131,11 @@ const getRemovedTouch = (currentTouches, lastTouches) => {
 const removeTouch = (lastTouchID, touches, setTouches) => {
     if (lastTouchID === touches.mapTouch.current.ID) {
         touches.mapTouch.current = { initial: null, next: null, ID: null };
-        console.log("Removed mapTouch");
+        // console.log("Removed mapTouch");
     }
     if (lastTouchID === touches.abilityTouch.current.ID) {
         touches.abilityTouch.current = { initial: null, next: null, ID: null };
-        console.log("Removed abilityTouch");
+        // console.log("Removed abilityTouch");
     }
     setTouches({ mapTouch: touches.mapTouch, abilityTouch: touches.abilityTouch });
 }

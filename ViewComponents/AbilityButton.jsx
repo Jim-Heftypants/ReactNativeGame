@@ -8,7 +8,9 @@ export default AbilityButton = (props) => {
     const [cooldown, setCooldown] = useState(0);
     const timer = useRef();
 
-    if (props.shouldStartCD) addCooldown(props.ability, setCooldown, timer);
+    useMemo(() => {
+        if (props.shouldStartCD) addCooldown(props.ability, setCooldown, timer);
+    }, [props.shouldStartCD]);
 
     const styles = useMemo(() => { return createStyle(props.ability, props.circleDims, props.top, props.left); },
         [cooldown, props.top, props.left]);

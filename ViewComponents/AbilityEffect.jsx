@@ -6,7 +6,7 @@ export default AbilityComponent = (props) => {
         console.log("Missing AbilityComponent props");
         return <></>;
     }
-    console.log("Creating abilityComponent");
+    // console.log("Creating abilityComponent");
     // console.log(props.styles.main);
     // console.log(props.pos);
 
@@ -15,10 +15,10 @@ export default AbilityComponent = (props) => {
     // const opacity = props.rules.shouldFade ? animOpacity : baseOpacity;
 
     const wOffset = (props.pos[0] - props.params.prePos[0]);
-    const hOffset = (props.pos[1] - props.params.prePos[1]);
-    console.log("W Offset: " + wOffset);
+    const hOffset = (props.pos[1] + props.params.prePos[1]);
+    // console.log("W Offset: " + wOffset);
     const varStyles = {
-        bottom: props.styles.main.bottom - hOffset,
+        top: props.styles.main.top - hOffset,
         right: props.styles.main.right - wOffset,
     }
 

@@ -1,6 +1,5 @@
 import React, { useMemo, useRef, useState, useEffect } from "react";
 import { View, Image } from "react-native";
-import AbilityComponent from "./AbilityComponent";
 import MapDisplay from "./MapDisplay";
 
 export default MapContainer = (props) => {
@@ -24,7 +23,7 @@ export default MapContainer = (props) => {
     if (props.touches.next) nextTouch.current = props.touches.next;
 
     if (!props.touches.ID && mapTimer.current) {
-        console.log("clearing mapContainer timer");
+        // console.log("clearing mapContainer timer");
         // clear timer
         clearInterval(mapTimer.current);
         mapTimer.current = null;
@@ -32,7 +31,7 @@ export default MapContainer = (props) => {
         refreshCharPos(props.Character, [mapOffset.current.x, mapOffset.current.y]);
     }
     if (!props.touches.next && props.touches.initial && !mapTimer.current) {
-        console.log("starting mapContainer timer");
+        // console.log("starting mapContainer timer");
         // start timer -- timer must check if next exists
         mapTimer.current = setInterval(() => {
             if (nextTouch.current) {
@@ -46,15 +45,9 @@ export default MapContainer = (props) => {
         () => <MapDisplay mapOffset={mapOffset} style={style} uri={props.imgData.uri}>
         </MapDisplay>, [mapOffset.current.x, mapOffset.current.y]
     );
-    const animEffects = Object.entries(props.Character.DynamicData.AnimEffects);
     return (
         <>
             {map}
-            {animEffects.map((params) => {
-                console.log(params[0]);
-                // console.log(props.Character.DynamicData.pos);
-                return <AbilityComponent key={params[0]} styles={params[1].styles} params={params[1].params} rules={params[1].rules} pos={props.Character.DynamicData.pos} ></AbilityComponent>
-            })}
         </>
     )
 }

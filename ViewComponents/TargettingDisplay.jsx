@@ -17,7 +17,7 @@ export default TargettingDisplay = (props) => {
     const radians = Math.atan2(dy, dx);
     const transform = Math.round(radians * (180 / Math.PI) * 100) / 100; // HORIZONTALLY SWAPPED (-,-) == quad 3 but is shown quad 4
     // console.log("transform: " + transform);
-    props.targetData = { direction: transform, posChange: { dx, dy }, initialPos: { top, right } };
+    props.targetData.current = { direction: transform, posChange: { dx, dy }, initialPos: { top, right } };
 
     const width = Math.round((Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2)) - height) * 10) / 10; // triangles
 

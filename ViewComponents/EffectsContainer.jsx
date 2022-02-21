@@ -1,16 +1,13 @@
 import React from "react";
+import AbilityEffect from "./AbilityEffect";
 
 export default EffectsContainer = (props) => {
-
-
-    const animEffects = Object.entries(props.Character.DynamicData.AnimEffects);
+    const animEffects = props?.Character?.DynamicData.AnimEffects;
     let key = 0;
     return (
         <>
-            {animEffects.map((params) => {
-                console.log(params[0]); // ability name
-                // console.log(props.Character.DynamicData.pos);
-                return <AbilityComponent key={key++} styles={params[1].styles} params={params[1].params} rules={params[1].rules} pos={props.Character.DynamicData.pos} ></AbilityComponent>
+            {Object.values(animEffects).map((data) => {
+                return <AbilityEffect key={key++} styles={data.styles} params={data.params} rules={data.rules} pos={props.Character.DynamicData.pos} ></AbilityEffect>
             })}
         </>
     )

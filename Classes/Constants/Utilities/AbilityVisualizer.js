@@ -18,13 +18,13 @@ export default makeAbilityParams = (rules, params) => {
 
 const makeLineParams = (rules, params) => {
     // params requirements:
-    // bottom, right, width, height, rotationAngle, color
+    // top, right, width, height, rotationAngle, color
     // params optionals:
     // colorVariant(children), zig-zag(children)
     const styles = {
         main: {
             position: 'absolute',
-            bottom: params.bottom,
+            top: params.top,
             right: params.right,
             width: params.width,
             height: params.height,
