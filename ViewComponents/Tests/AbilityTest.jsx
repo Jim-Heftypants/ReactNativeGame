@@ -38,7 +38,7 @@ export default AbilityTest = (props) => {
     // const component = AbilityVisualizer(rules, params);
     return (
         <View style={{width: 1000, height: 1000, backgroundColor: 'red', position: 'absolute'}} >
-            <AbilityComponent style={{ width: 250, height: 50, backgroundColor: 'powderblue' }} rules={rules} params={params} >
+            <AbilityComponent styles={{ width: 250, height: 50, backgroundColor: 'powderblue' }} rules={rules} params={params} >
             </AbilityComponent>
             {/* <AbilityComponent styles={styles} rules={rules} params={params} ></AbilityComponent> */}
             {/* {component} */}
