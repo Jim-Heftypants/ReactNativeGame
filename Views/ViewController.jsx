@@ -52,7 +52,7 @@ class ViewController extends React.Component {
         );
     }
     componentWillUnmount() {
-        this?.appStateSubscription.remove();
+        if (this.appStateSubscription) this.appStateSubscription.remove();
     }
 
     render() {

@@ -1,33 +1,51 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Image } from 'react-native';
 
-const colors = [['#d4aee0', '#8975b4', '#64518a', '#565190'],
-['#44abac', '#2ca7d8', '#1482ce', '#05597c'],
-['#b2dd57', '#57c443', '#05b853', '#19962e'],
-['#fdc82e', '#fd9c2e', '#d5385a', '#911750']];
-
-const opacities = [[1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1]];
+const numRows = 5;
+const numCols = 5;
+const nodeSizeScale = (0.2);
+const maxOpacity = 1.0;
+const minOpacity = 0.2;
+const opacityUpdateScale = 0.05;
+const refreshRate = 50;
+const downTime = 0.5; // seconds
 
 export default LoadingScreen = (props) => {
-    console.log("Displaying loading screen");
+    const [state, setState] = useState(0);
+    const colors = useRef(setColors(numRows, numCols));
+    const opacities = useRef(setOpacities(colors.current.length, colors.current[0].length, minOpacity, maxOpacity));
+    const scale = useRef(setScale(numRows, numCols, 1));
+    // console.log("reloading");
+    useEffect(() => {
+        let timer = updateOpacities(opacities, scale, setState, opacityUpdateScale, minOpacity, maxOpacity, refreshRate, downTime);
+        return () => clearInterval(timer);
+    }, [])
+
     let row = -1;
     let col = 0;
-    const width = props.deviceWidth; const height = props.deviceHeight;
+    const width = props.deviceWidth;
+    const height = props.deviceHeight;
+    const subHeight = height * nodeSizeScale * numRows;
+    const subWidth = width * nodeSizeScale * numCols;
     return (
         <View style={{ backgroundColor: 'gray', position: 'absolute', height, width }} >
-            <View style={{ backgroundColor: 'white', position: 'absolute', height: height / 2, width: width / 2, marginLeft: (width / 4), marginTop: (height / 4) }}>
+            <View style={{
+                backgroundColor: 'white', position: 'absolute', height: subHeight, width: subWidth,
+                marginLeft: ((width - subWidth) / 2), marginTop: ((height - subHeight) / 2)
+            }}>
                 {
-                    colors.map((rowColors) => {
+                    colors.current.map((rowColors) => {
+                        // console.log(rowColors);
                         row++;
                         return <View key={row}
-                            style={{ backgroundColor: 'white', height: props.deviceHeight / 8, width: props.deviceWidth / 2 }} >
+                            style={{ backgroundColor: 'black', height: height * nodeSizeScale, width: subWidth }} >
                             {rowColors.map((color) => {
-                                console.log(row, col % colors.length);
+                                // console.log(color);
+                                // console.log(row, col % colors.current.length);
                                 return <View style={{
-                                    opacity: opacities[row][col % colors.length],
-                                    marginLeft: (col % colors.length) * width / 8, position: 'absolute',
-                                    backgroundColor: color, width: width / 8, height: height / 8
-                                }} key={col++} ></View>
+                                    marginLeft: (col % colors.current.length) * width * nodeSizeScale, position: 'absolute',
+                                    backgroundColor: color, width: width * nodeSizeScale, height: height * nodeSizeScale
+                                }} opacity={opacities.current[row][col % colors.current[row].length]} key={col++} ></View>
                             })
                             }
                         </View>;
@@ -38,3 +56,73 @@ export default LoadingScreen = (props) => {
     )
 }
 
+function generateRandomColor() {
+    return ('#' + Math.floor((Math.random() * 15777215) + 1000000).toString(16));
+}
+
+function setColors(numRows, numCols) {
+    const colors = [];
+    for (let i = 0; i < numRows; i++) {
+        colors.push([]);
+        for (let j = 0; j < numCols; j++) {
+            colors[i].push(generateRandomColor());
+        }
+    }
+    // console.log(colors);
+    return colors;
+}
+
+function setOpacities(numRows, numCols, min, max) {
+    const opacities = [];
+    const numNodes = numRows * numCols;
+    const delta = (max - min) / numNodes;
+    for (let i = 0; i < numRows; i++) {
+        opacities.push([]);
+        for (let j = 0; j < numCols; j++) {
+            opacities[i].push(max);
+            max -= delta;
+        }
+        // if (i % 2 === 1) {
+        //     opacities[i].reverse();
+        // }
+    }
+    return opacities;
+}
+
+function setScale(numRows, numCols, num) {
+    const scale = [];
+    for (let i = 0; i < numRows; i++) {
+        scale.push([]);
+        for (let j = 0; j < numCols; j++) {
+            scale[i].push(num);
+        }
+    }
+    return scale;
+}
+
+function updateOpacities(opacities, scale, setState, opacityUpdateScale, min, max, refreshRate, downTime) {
+    return setInterval(() => {
+        for (let i = 0; i < opacities.current.length; i++) {
+            for (let j = 0; j < opacities.current[i].length; j++) {
+                let val = opacities.current[i][j];
+                val += (opacityUpdateScale * scale.current[i][j]);
+                if (val < min) {
+                    // if (scale.current[i][j] < 1) {
+                    //     scale.current[i][j] += (downTime * 1000) / refreshRate;
+                    //     if (scale.current[i][j] > 1) scale.current[i][j] = 1;
+                    //     continue;
+                    // }
+                    scale.current[i][j] = Math.abs(scale.current[i][j]);
+                }
+                if (val >= max) {
+                    scale.current[i][j] = -Math.abs(scale.current[i][j]);
+                }
+
+                // console.log(val);
+                opacities.current[i][j] = val;
+            }
+        }
+        // console.log(opacities);
+        setState(state => state + 1);
+    }, refreshRate);
+}
