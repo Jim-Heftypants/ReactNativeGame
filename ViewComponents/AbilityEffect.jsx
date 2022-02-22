@@ -8,19 +8,20 @@ export default AbilityComponent = (props) => {
     }
     // console.log("Creating abilityComponent");
     // console.log(props.styles.main);
-    // console.log(props.pos);
 
     // const baseOpacity = props.rules.opacity ? props.rules.opacity : 1;
     // const animOpacity = useRef(new Animated.Value(baseOpacity)).current;
     // const opacity = props.rules.shouldFade ? animOpacity : baseOpacity;
 
-    const wOffset = (props.pos[0] - props.params.prePos[0]);
-    const hOffset = (props.pos[1] + props.params.prePos[1]);
-    // console.log("W Offset: " + wOffset);
+    const wOffset = -(props.params.prePos[0] - props.pos[0]);
+    const hOffset = (props.params.prePos[1] - props.pos[1]);
+    // console.log(wOffset, hOffset);
     const varStyles = {
         top: props.styles.main.top - hOffset,
         right: props.styles.main.right - wOffset,
     }
+    // if (outOfBounds(varStyles, props.deviceDims)) return <></>;
+    // console.log(varStyles);
 
     // if (props.rules.shouldFade) {
     //     Animated.timing(opacity, {
@@ -38,4 +39,12 @@ export default AbilityComponent = (props) => {
         //     {props.component}
         // </Animated.View>
     )
+}
+
+const outOfBounds = (top, right, deviceDims) => {
+    const height = deviceDims.height;
+    const width = deviceDims.width;
+    if (top < 0 || top > height) return true; // doesnt account for angles -- invalid
+    if (right < 0 || right > width) return true;
+    return false;
 }

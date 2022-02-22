@@ -91,7 +91,7 @@ export default GameDisplay = (props) => {
         [props.Character.ID, abilityX, abilityY]
     );
     const effectsDisp = useMemo(() =>
-        <EffectsContainer Character={props.Character} effect={effect} >
+        <EffectsContainer Character={props.Character} effect={effect} deviceDims={props.deviceDims} >
         </EffectsContainer>,
         [Object.keys(props.Character.DynamicData.AnimEffects).length, mapX, mapY, effect]
     );
@@ -102,9 +102,6 @@ export default GameDisplay = (props) => {
             {charDisp}
             {abilityDisp}
             {effectsDisp}
-
-            {/* {just the visual display -- no functionality} */}
-            {/* {controlCircle} */}
         </View>
     )
 }
