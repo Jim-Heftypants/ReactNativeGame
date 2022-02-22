@@ -1,4 +1,4 @@
-import React, {useMemo, useRef, useState, useEffect} from "react";
+import React, { useMemo, useRef, useState, useEffect } from "react";
 import { View, Image } from "react-native";
 import MapDisplay from "./MapDisplay";
 
@@ -23,21 +23,21 @@ export default MapContainer = (props) => {
     if (props.touches.next) nextTouch.current = props.touches.next;
 
     if (!props.touches.ID && mapTimer.current) {
-        console.log("clearing mapContainer timer");
+        // console.log("clearing mapContainer timer");
         // clear timer
         clearInterval(mapTimer.current);
         mapTimer.current = null;
         // update database (maybe needs to be on each change ?)
-        // props.Character.DynamicData.currentPosition = [mapOffset.current.x, mapOffset.current.y];
+        refreshCharPos(props.Character, [mapOffset.current.x, mapOffset.current.y]);
     }
     if (!props.touches.next && props.touches.initial && !mapTimer.current) {
-        console.log("starting mapContainer timer");
+        // console.log("starting mapContainer timer");
         // start timer -- timer must check if next exists
         mapTimer.current = setInterval(() => {
             if (nextTouch.current) {
                 // console.log('x: ' + nextTouch.current.pageX + ' y: ' + nextTouch.current.pageY);
                 mapFunc(props.touches.initial, nextTouch.current, props.deviceDims, props.Character, mapOffset);
-                setState(state => state+1);
+                setState(state => state + 1);
             }
         }, 20);
     }
@@ -74,6 +74,10 @@ const mapFunc = (initialTouch, currentTouch, dims, Character, mapOffset) => {
     // console.log("tempX: " + tempX + " tempY: " + tempY);
     mapOffset.current = ({ x: tempX, y: tempY });
 
-    // Character.DynamicData.currentPosition = [tempX, tempY]; // seems slow to be here -- set on touch end ?
-    // sets location in database
+    refreshCharPos(Character, [tempX, tempY]); // might be slow here (for server update)
+    // console.log(Character.DynamicData.pos);
+}
+
+const refreshCharPos = (Character, pos) => {
+    Character.DynamicData.pos = pos;
 }

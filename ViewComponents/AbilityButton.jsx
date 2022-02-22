@@ -1,5 +1,5 @@
-import React, {useRef, useState, useMemo} from 'react';
-import {View, Text} from 'react-native';
+import React, { useRef, useState, useMemo } from 'react';
+import { View, Text } from 'react-native';
 
 // import TargettingDisplay from './TargettingDisplay';
 
@@ -7,37 +7,24 @@ export default AbilityButton = (props) => {
     // console.log(`Ability Button ${props.keyy} Loaded`);
     const [cooldown, setCooldown] = useState(0);
     const timer = useRef();
-    const abilityDisplay = useRef({component: <></>, lifespan: 0});
 
-    if (!cooldown && props.currentNodeID.current === props.keyy && props.targetDirection.current && !props.touch) {
-        addCooldown(props.ability, setCooldown, timer);
-        useAbility(abilityDisplay, props.ability, props.Character, props.targetDirection.current,
-            props.top, props.left, props.posChange.current,
-            props.dims, props.circleDims);
-        props.targetDirection.current = null;
-        props.posChange.current = null;
-        props.currentNodeID.current = null;
-    }
-    
-    const styles = useMemo(() => {return createStyle(props.ability, props.circleDims, props.top, props.left);},
+    useMemo(() => {
+        if (props.shouldStartCD) addCooldown(props.ability, setCooldown, timer);
+    }, [props.shouldStartCD]);
+
+    const styles = useMemo(() => { return createStyle(props.ability, props.circleDims, props.top, props.left); },
         [cooldown, props.top, props.left]);
-    const textDisp = !cooldown ? props.ability[0] : `${cooldown}`;
-    const buttonDisp = useMemo(() => 
+    const textDisp = !cooldown ? props.abilityName : `${cooldown}`;
+    const buttonDisp = useMemo(() =>
         <View style={styles.view} >
             <Text style={styles.text} >{textDisp}</Text>
             <View style={styles.subButton} ></View>
         </View>,
         [cooldown, props.circleDims]
     );
-    // if (abilityDisplay.current.component._store) console.log(abilityDisplay.current.component._store); // empty object ?
-    const abDisplay = useMemo(() =>
-        abilityDisplay.current.component,
-        [abilityDisplay.current.lifespan]
-    );
     return (
         <>
             {buttonDisp}
-            {abDisplay}
         </>
     )
 }
@@ -59,23 +46,11 @@ const addCooldown = (ability, setCooldown, timer) => {
     // [name, levelReq, currentCD, cd, func, onCDColor, baseColor]
     if (ability[2]) return;
     ability[2] = ability[3];
-    console.log("adding cooldown for: " + JSON.stringify(ability));
+    console.log("Adding cooldown for: " + JSON.stringify(ability));
     const inter = 100; const cdSpeed = (inter / 1000); // any cooldown speed mods go here
     timer.current = setInterval(() => {
         updateCooldown(ability, cdSpeed, setCooldown, timer);
     }, inter)
-}
-
-const useAbility = (abilityDisplay, ability, Character, direction, top, left, posChange, dims, circleDims) => {
-    // just pass basic dims -- handle conversions in ability file
-    abilityDisplay.current = ability[4](Character, {direction, top, left, ...posChange, ...dims, circleDims});
-    console.log('abilityDisplay lifespan (seconds): ' + abilityDisplay.current.lifespan/1000);
-    if (abilityDisplay.current.lifespan) {
-        setTimeout(() => {
-            abilityDisplay.current = { component: <></>, lifespan: 0 };
-            console.log("abilityDisplay lifespan concluded");
-        }, abilityDisplay.current.lifespan);
-    }
 }
 
 const createStyle = (ability, circleDims, top, left) => {
