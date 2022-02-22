@@ -33,24 +33,26 @@ export default LoadingScreen = (props) => {
                 backgroundColor: 'white', position: 'absolute', height: subHeight, width: subWidth,
                 marginLeft: ((width - subWidth) / 2), marginTop: ((height - subHeight) / 2)
             }}>
-                {
-                    colors.current.map((rowColors) => {
-                        // console.log(rowColors);
-                        row++;
-                        return <View key={row}
-                            style={{ backgroundColor: 'black', height: height * nodeSizeScale, width: subWidth }} >
-                            {rowColors.map((color) => {
-                                // console.log(color);
-                                // console.log(row, col % colors.current.length);
-                                return <View style={{
-                                    marginLeft: (col % colors.current.length) * width * nodeSizeScale, position: 'absolute',
-                                    backgroundColor: color, width: width * nodeSizeScale, height: height * nodeSizeScale
-                                }} opacity={opacities.current[row][col % colors.current[row].length]} key={col++} ></View>
-                            })
-                            }
-                        </View>;
-                    })
-                }
+                {colors.current.map((rowColors) => {
+                    // console.log(rowColors);
+                    row++;
+                    return <View key={row}
+                        style={{ backgroundColor: 'black', height: height * nodeSizeScale, width: subWidth }} >
+                        {rowColors.map((color) => {
+                            // console.log(color);
+                            // console.log(row, col % colors.current.length);
+                            return <View style={{ marginLeft: (col % colors.current.length) * width * nodeSizeScale,
+                                position: 'absolute', width: width * nodeSizeScale, height: height * nodeSizeScale,
+                                borderColor: color, borderWidth: 3, borderStyle: 'solid'
+                            }} key={col++} >
+                                <View style={{
+                                backgroundColor: color, width: width * nodeSizeScale, height: height * nodeSizeScale
+                                }} opacity={opacities.current[row][(col - 1) % colors.current[row].length]} ></View>
+                            </View>
+                        })
+                        }
+                    </View>;
+                })}
             </View>
         </View>
     )
@@ -75,6 +77,7 @@ function setColors(numRows, numCols) {
 function setOpacities(numRows, numCols, min, max) {
     const opacities = [];
     const numNodes = numRows * numCols;
+    max -= 0.01;
     const delta = (max - min) / numNodes;
     for (let i = 0; i < numRows; i++) {
         opacities.push([]);

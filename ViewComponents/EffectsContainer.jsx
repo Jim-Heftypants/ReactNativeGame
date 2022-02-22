@@ -4,7 +4,7 @@ import AbilityEffect from "./AbilityEffect";
 export default EffectsContainer = (props) => {
     const animEffects = props?.Character?.DynamicData.AnimEffects;
     if (!animEffects) return <></>;
-    const prePos = animEffects?.LightningBolt?.params.prePos; // negative values
+    // const prePos = animEffects?.LightningBolt?.params.prePos; // negative values
     const pos = props.Character.DynamicData.pos;
     // if (prePos) {
     //     const dx = prePos[0] - pos[0];

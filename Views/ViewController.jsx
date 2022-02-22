@@ -5,7 +5,7 @@ import Settings from './Settings';
 import SplashPage from './SplashPage';
 import GameDisplayContainer from './GameDisplayContainer';
 import LoadingScreen from './LoadingScreen';
-import { storeJSONData, getJSONData } from '../Utils/storageUtils';
+import { getJSONData } from '../Utils/storageUtils';
 
 import splashImg from '../assets/LandscapeAssets/splash-background.jpg';
 import backgroundImg from '../assets/LandscapeAssets/rpg-background.jpg';
@@ -50,7 +50,37 @@ class ViewController extends React.Component {
                 this.appState = nextAppState;
             }
         );
+        this.getAccountData();
     }
+    getAccountData() {
+        const that = this;
+        getJSONData(that.state.data.characterID).then(data => {
+            if (data) { // data exists in database
+                console.log("Local data found!");
+                that.setState({
+                    dataFetched: true,
+                    page: 1,
+                    data: {
+                        displayScale: 2,
+                        characterID: 1,
+                        controlType: 'transparent',
+                    },
+                });
+            } else {
+                console.log("No local data found!");
+                that.setState({
+                    dataFetched: true,
+                    page: -1,
+                    data: {
+                        displayScale: 2,
+                        characterID: 0,
+                        controlType: 'transparent',
+                    },
+                });
+            }
+        });
+    }
+
     componentWillUnmount() {
         if (this.appStateSubscription) this.appStateSubscription.remove();
     }

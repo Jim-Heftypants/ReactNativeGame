@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const getJSONData = async (key) => {
     try {
-        const jsonValue = await AsyncStorage.getItem(key)
+        const jsonValue = await AsyncStorage.getItem('' + key)
         return jsonValue != null ? JSON.parse(jsonValue) : null;
     } catch(e) {
         // error reading value
@@ -11,7 +11,7 @@ export const getJSONData = async (key) => {
 
 export const getData = async (key) => {
     try {
-        const data = await AsyncStorage.getItem(key);
+        const data = await AsyncStorage.getItem('' + key);
         // if data is null, no data has been previously stored
         return data;
     } catch(e) {
@@ -22,7 +22,7 @@ export const getData = async (key) => {
 export const storeJSONData = async (key, value) => {
     try {
         const jsonValue = JSON.stringify(value);
-        await AsyncStorage.setItem(key, jsonValue);
+        await AsyncStorage.setItem('' + key, jsonValue);
     } catch (e) {
         // saving error
     }
@@ -30,7 +30,7 @@ export const storeJSONData = async (key, value) => {
 
 export const storeData = async (key, value) => {
     try {
-        await AsyncStorage.setItem(key, value);
+        await AsyncStorage.setItem('' + key, value);
     } catch (e) {
         
     }

@@ -1,6 +1,7 @@
 import React, {useState, useRef} from 'react';
 import { Text, TextInput, View, Image, StyleSheet, PixelRatio, Animated, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import Accounts from '../Classes/Accounts';
+import { storeJSONData } from '../Utils/storageUtils';
 
 const SplashPage = (props) => {
     const animPos = useRef(new Animated.Value(0)).current;
@@ -78,6 +79,7 @@ const SplashPage = (props) => {
         if (Accounts[username] && Accounts[username].password == password) {
             data.characterID = Accounts[username].characterID;
             console.log("Validated user credentials -- characterID: " + data.characterID);
+            storeJSONData( data.characterID, data );
             props.that.setState({ page, data });
             return;
         }
