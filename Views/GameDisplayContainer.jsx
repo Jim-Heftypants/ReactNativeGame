@@ -2,7 +2,7 @@ import React from 'react';
 import { Image, View } from 'react-native';
 
 import GameDisplay from './GameDisplay';
-import getImgDims from '../ViewComponents/Utilities/getImgDims';
+import getImgDims from '../Utils/getImgDims';
 
 import Characters from '../Classes/Characters'
 

@@ -1,6 +1,6 @@
 import { View, Image, Text, StyleSheet } from "react-native";
 import React, {useState, useEffect, useRef} from 'react';
-import getImgDims from "./Utilities/getImgDims";
+import getImgDims from "../Utils/getImgDims";
 
 export default CharacterDisplay = (props) => {
     updateAnimationSet(props.Character, "AttackCompiled");
