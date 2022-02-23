@@ -9,8 +9,11 @@ import { getJSONData } from '../Utils/storageUtils';
 
 import splashImg from '../assets/LandscapeAssets/splash-background.jpg';
 import backgroundImg from '../assets/LandscapeAssets/rpg-background.jpg';
+import getDisplayScale from '../Utils/getDisplayScale';
 
 const characterSize = 100;
+const mapSizeByCharacterSize = 20; // num characters left to right to equal map size
+const mapScale = characterSize * mapSizeByCharacterSize;
 
 class ViewController extends React.Component {
     constructor(props) {
@@ -18,12 +21,6 @@ class ViewController extends React.Component {
         // props that could be changed from settings page
         this.state = {
             dataFetched: false,
-            page: 1,
-            data: {
-                displayScale: 2,
-                characterID: 1,
-                controlType: 'transparent',
-            },
         };
         this.appState = AppState.currentState;
         this.deviceWidth = Dimensions.get('window').width; //full width
@@ -54,29 +51,42 @@ class ViewController extends React.Component {
     }
     getAccountData() {
         const that = this;
-        getJSONData(that.state.data.characterID).then(data => {
-            if (data) { // data exists in database
+        getJSONData('users').then(data => {
+            if (data) { // data exists in database -- data should be an array format
                 console.log("Local data found!");
+                const displayScale = getDisplayScale(this.deviceWidth, this.deviceHeight, mapScale);
+                const controlType = 'transparent';
                 that.setState({
                     dataFetched: true,
                     page: 1,
+                    settings: {
+                        displayScale,
+                        controlType,
+                    },
                     data: {
-                        displayScale: 2,
-                        characterID: 1,
-                        controlType: 'transparent',
+                        characterID: data[0],
                     },
                 });
             } else {
                 console.log("No local data found!");
-                that.setState({
-                    dataFetched: true,
-                    page: -1,
-                    data: {
-                        displayScale: 2,
-                        characterID: 0,
-                        controlType: 'transparent',
-                    },
-                });
+                // pull data from cloud
+                const cloudSaveData = false;
+                if (cloudSaveData) {
+
+                } else {
+                    // if no cloud save data,
+                    that.setState({
+                        dataFetched: true,
+                        page: -1,
+                        settings: {
+                            displayScale,
+                            controlType,
+                        },
+                        data: {
+                            characterID: 0,
+                        },
+                    });
+                }
             }
         });
     }
@@ -90,8 +100,6 @@ class ViewController extends React.Component {
         if (!dataFetched) {
             return <LoadingScreen deviceWidth={this.deviceWidth} deviceHeight={this.deviceHeight} ></LoadingScreen>
         }
-        const mapSizeByCharacterSize = 20; // num characters left to right to equal map size
-        const mapScale = characterSize * mapSizeByCharacterSize;
         this.deviceDims = {
             deviceWidth: this.deviceWidth,
             deviceHeight: this.deviceHeight,
