@@ -52,10 +52,10 @@ class ViewController extends React.Component {
     getAccountData() {
         const that = this;
         getJSONData('users').then(data => {
+            const displayScale = getDisplayScale(this.deviceWidth, this.deviceHeight, mapScale);
+            const controlType = 'transparent';
             if (data) { // data exists in database -- data should be an array format
                 console.log("Local data found!");
-                const displayScale = getDisplayScale(this.deviceWidth, this.deviceHeight, mapScale);
-                const controlType = 'transparent';
                 that.setState({
                     dataFetched: true,
                     page: 1,
