@@ -93,7 +93,8 @@ export default GameDisplay = (props) => {
     const effectsDisp = useMemo(() =>
         <EffectsContainer Character={props.Character} effect={effect} deviceDims={props.deviceDims} >
         </EffectsContainer>,
-        [Object.keys(props.Character.DynamicData.AnimEffects).length, mapX, mapY, effect]
+        [mapX, mapY, effect]
+        // Object.keys(props.Character.DynamicData.AnimEffects).length, 
     );
     return (
         <View {...panResponder.panHandlers}

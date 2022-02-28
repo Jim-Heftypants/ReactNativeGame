@@ -5,7 +5,7 @@ import Settings from './Settings';
 import SplashPage from './SplashPage';
 import GameDisplayContainer from './GameDisplayContainer';
 import LoadingScreen from './LoadingScreen';
-import { getJSONData } from '../Utils/storageUtils';
+import { getData } from '../Utils/storageUtils';
 
 import splashImg from '../assets/LandscapeAssets/splash-background.jpg';
 import backgroundImg from '../assets/LandscapeAssets/rpg-background.jpg';
@@ -51,7 +51,7 @@ class ViewController extends React.Component {
     }
     getAccountData() {
         const that = this;
-        getJSONData('users').then(data => {
+        getData('users').then(data => {
             const displayScale = getDisplayScale(this.deviceWidth, this.deviceHeight, mapScale);
             const controlType = 'transparent';
             if (data) { // data exists in database -- data should be an array format
