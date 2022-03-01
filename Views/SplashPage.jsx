@@ -4,26 +4,10 @@ import { Text, TextInput, View, Image, StyleSheet, PixelRatio, Animated, Touchab
 import { storeLocalData } from '../Utils/storageUtils';
 import * as RTDB from '../Utils/firebaseRTDBUtils';
 import * as Firestore from '../Utils/firebaseFirestoreUtils';
-import { stringToHash } from '../Utils/hashingUtils';
+
+import { login, createAccount } from '../Utils/userAuth';
 
 import Accounts from '../Classes/Accounts';
-
-// getData(collectionName);
-// setData(collectionName, "User", documentValue);
-// (async () => {
-//   await updateKey(collectionName, "User", "user");
-//   console.log("last");
-// })();
-// console.log("first");
-// updateKey(collectionName, "User", "user").then(() => {
-//   console.log("Key update successful!");
-//   getData(collectionName, "user");
-// })
-
-// setCollectionDocument(collectionName, "Test", documentValue).then(() => {
-//   console.log("Successfully set document data!");
-//   getDataList(collectionName).then((data) => { console.log(data) });
-// }).catch((err) => { console.log(err) });
 
 const SplashPage = (props) => {
     const animPos = useRef(new Animated.Value(0)).current;
@@ -43,39 +27,35 @@ const SplashPage = (props) => {
 
     const updateState = () => {
         if (userState === 'login') {
-            login();
+            _login();
         }
-        createAccount();
+        _createAccount();
     }
 
-    const login = () => {
-        let page = 1;
-        let data = props.that.state.data;
-
-        const loginHash = stringToHash(username, password);
-        RTDB.getData("Users", loginHash).then((userData) => {
-            if (!userData) {
-                console.log("Invalid user credentials -- hash ==", loginHash);
+    const _login = () => {
+        login(username, password).then((userData) => {
+            if (!userData.data) {
+                console.log("Login data received is null");
                 return;
             }
-            data.accountID = loginHash;
-            console.log("Validated user credentials -- accountID:", data.accountID);
-            props.that.setState({ page, data });
+            console.log("Validated user credentials!", data.userID);
+            let page = "Character Login";
+            props.that.state.data.userID = userData.userID;
+            props.that.setState({ page, data: props.that.state.data });
         })
     }
 
-    const createAccount = () => {
-        const loginHash = stringToHash(username, password);
-        RTDB.getData("Users", loginHash).then((userData) => {
-            if (userData) {
-                console.log("User already exists -- hash ==", loginHash);
+    const _createAccount = () => {
+        createAccount(username, password).then((userID) => {
+            if (!userID) {
+                console.log("Account creation failed");
                 return;
             }
-            RTDB.setData("Users", loginHash, { someKey: "someValue" });
-            data.accountID = loginHash;
-            console.log("Created new account -- accountID:", data.accountID);
-            props.that.setState({ page, data });
-        })
+            console.log("Account successfully created!", userID);
+            let page = "Character Creation";
+            props.that.state.data.userID = userData.userID;
+            props.that.setState({ page, data: props.that.state.data });
+        });
     }
 
     const changeTypeName = () => {

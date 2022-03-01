@@ -3,8 +3,8 @@ import app from '../firebaseApp';
 
 const db = getDatabase(app);
 
-async function setData(path, key, data) {
-    const reference = ref(db, `${path}/${key}`);
+async function setData(path, data) {
+    const reference = ref(db, path);
     await set(reference, data);
     // console.log("fourth");
 }

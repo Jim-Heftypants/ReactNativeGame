@@ -1,18 +1,9 @@
 import React from 'react';
-import { Text, View, TextInput, Image } from 'react-native';
 import * as ScreenOrientation from 'expo-screen-orientation';
 
 import Main from './Views/ViewController';
 
-import { getDataList, setCollectionDocument } from './Utils/firebaseFirestoreUtils';
-import { getData, setData, updateKey } from './Utils/firebaseRTDBUtils';
-
-const collectionName = "Users";
-
-const documentValue = {
-  name: 'Jim Zimbabawe',
-  level: 9001,
-}
+import setAppState from '../Utils/appStateUtils';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -22,6 +13,7 @@ export default class App extends React.Component {
   componentDidMount() {
     // console.log("ScreenOrientation: " + JSON.stringify(ScreenOrientation));
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
+    if (!this.state.display) setAppState();
     this.setState( { display: true } );
   }
   render() {

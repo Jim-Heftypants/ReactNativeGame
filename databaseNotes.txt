@@ -4,14 +4,34 @@ Character ID's are a combination of UserID + character name
 User data
 Users: {
     UserID: {
-        username: String,
-        characterList: [name, name, name, name]
+        username: String
     }
 }
 // in root
 UserID: {
     username: String,
-    characterList: [name, name, name, name]
+    characterList: {
+        characterID: characterName,
+        characterID: characterName,
+    }
+    messages: {
+        Timestamp: {
+            message: String,
+            senderID: shaHash,
+            receiverID: shaHash,
+            Timestamp
+        },
+        Timestamp: {
+            message: String,
+            senderID: shaHash,
+            receiverID: shaHash,
+            Timestamp
+        },
+    },
+    friends: {
+        friendID: friendUsername,
+        friendID: friendUsername,
+    }
 }
 
 CharacterID: {
@@ -35,8 +55,6 @@ CharacterID: {
 }
 
 CharactersOnline: {
-    CharacterID: name,
-    CharacterID: name,
     CharacterID: name,
     CharacterID: name,
 }

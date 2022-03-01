@@ -5,7 +5,8 @@ import Settings from './Settings';
 import SplashPage from './SplashPage';
 import GameDisplayContainer from './GameDisplayContainer';
 import LoadingScreen from './LoadingScreen';
-import { getData } from '../Utils/storageUtils';
+
+import { getLocalData } from '../Utils/storageUtils';
 
 import splashImg from '../assets/LandscapeAssets/splash-background.jpg';
 import backgroundImg from '../assets/LandscapeAssets/rpg-background.jpg';
@@ -18,81 +19,20 @@ const mapScale = characterSize * mapSizeByCharacterSize;
 class ViewController extends React.Component {
     constructor(props) {
         super(props);
-        // props that could be changed from settings page
-        this.state = {
-            dataFetched: false,
-        };
-        this.appState = AppState.currentState;
-        this.deviceWidth = Dimensions.get('window').width; //full width
-        this.deviceHeight = Dimensions.get('window').height; //full height
-        // bandadge fix for wrong Dimensions vals on launch
-        if (this.deviceHeight > this.deviceWidth) {
-            const temp = this.deviceWidth;
-            this.deviceWidth = this.deviceHeight;
-            this.deviceHeight = temp;
-        }
-        // console.log(backgroundImg);
+        this.state = { dataFetched: false };
+        [this.deviceWidth, this.deviceHeight] = getDeviceDims();
+        this.pages = {};
     }
-
+    
     componentDidMount() {
-        this.appStateSubscription = AppState.addEventListener("change",
-            nextAppState => {
-                if (this.appState.match(/inactive|background/) && nextAppState === "active") {
-                    console.log("App has come to the foreground!");
-                }
-                if (this.appState === "active" && nextAppState.match(/inactive|background/)) {
-                    console.log("App has been sent to the background!");
-
-                }
-                this.appState = nextAppState;
+        getLocalData('User').then((data) => {
+            if (!data) {
+                console.log("No local user data found");
+                this.setState({ dataFetched: true });
+                return;
             }
-        );
-        this.getAccountData();
-    }
-    getAccountData() {
-        const that = this;
-        getData('users').then(data => {
-            const displayScale = getDisplayScale(this.deviceWidth, this.deviceHeight, mapScale);
-            const controlType = 'transparent';
-            if (data) { // data exists in database -- data should be an array format
-                console.log("Local data found!");
-                that.setState({
-                    dataFetched: true,
-                    page: 1,
-                    settings: {
-                        displayScale,
-                        controlType,
-                    },
-                    data: {
-                        characterID: data[0],
-                    },
-                });
-            } else {
-                console.log("No local data found!");
-                // pull data from cloud
-                const cloudSaveData = false;
-                if (cloudSaveData) {
-
-                } else {
-                    // if no cloud save data,
-                    that.setState({
-                        dataFetched: true,
-                        page: -1,
-                        settings: {
-                            displayScale,
-                            controlType,
-                        },
-                        data: {
-                            characterID: 0,
-                        },
-                    });
-                }
-            }
-        });
-    }
-
-    componentWillUnmount() {
-        if (this.appStateSubscription) this.appStateSubscription.remove();
+            this.setState({ dataFetched: true });
+        })
     }
 
     render() {
@@ -109,15 +49,15 @@ class ViewController extends React.Component {
         }
         let disp;
         switch (this.state.page) {
-            case -1:
+            case "Splash Page":
                 disp = <SplashPage that={this} img={splashImg} deviceDims={this.deviceDims} ></SplashPage>
                 console.log("Opening splash page");
                 break;
-            case 0:
+            case "Settings":
                 disp = <Settings that={this} deviceDims={this.deviceDims} ></Settings>;
                 console.log("Opening settings page");
                 break;
-            case 1:
+            case "Gameplay":
                 disp = <GameDisplayContainer that={this} img={backgroundImg}
                     data={this.state.data} deviceDims={this.deviceDims} ></GameDisplayContainer>;
                 console.log("Opening game display");
@@ -126,11 +66,23 @@ class ViewController extends React.Component {
                 disp = <View></View>;
         }
         return (
-            <View>
+            <>
                 {disp}
-            </View>
+            </>
         )
     }
 }
 
 export default ViewController;
+
+const getDeviceDims = () => {
+    const deviceWidth = Dimensions.get('window').width; //full width
+    const deviceHeight = Dimensions.get('window').height; //full height
+    // bandadge fix for wrong Dimensions vals on launch
+    if (deviceHeight > deviceWidth) {
+        const temp = deviceWidth;
+        deviceWidth = deviceHeight;
+        deviceHeight = temp;
+    }
+    return [deviceWidth, deviceHeight];
+}
