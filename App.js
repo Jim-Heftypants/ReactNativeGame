@@ -18,22 +18,6 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = { display: false };
-
-    // setData(collectionName, "User", documentValue);
-    (async () => {
-      await updateKey(collectionName, "User", "user");
-      console.log(2);
-    })();
-    console.log(1);
-    // updateKey(collectionName, "User", "user").then(() => {
-    //   console.log("Key update successful!");
-    //   getData(collectionName, "user");
-    // })
-
-    // setCollectionDocument(collectionName, "Test", documentValue).then(() => {
-    //   console.log("Successfully set document data!");
-    //   getDataList(collectionName).then((data) => { console.log(data) });
-    // }).catch((err) => { console.log(err) });
   }
   componentDidMount() {
     // console.log("ScreenOrientation: " + JSON.stringify(ScreenOrientation));
@@ -41,9 +25,9 @@ export default class App extends React.Component {
     this.setState( { display: true } );
   }
   render() {
-    // console.log("running application");
+    console.log("Running Application");
     if (!this.state.display) return <></>;
-    return <View style={{backgroundColor: 'red', width: '100%', height:'100%'}} ></View>
-    // return <Main></Main>;
+    return <Main></Main>;
+    // return <View style={{backgroundColor: 'red', width: '100%', height:'100%'}} ></View>
   }
 }

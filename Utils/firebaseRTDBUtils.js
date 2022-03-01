@@ -6,6 +6,7 @@ const db = getDatabase(app);
 async function setData(path, key, data) {
     const reference = ref(db, `${path}/${key}`);
     await set(reference, data);
+    // console.log("fourth");
 }
 
 async function getData(path, key) {
@@ -14,6 +15,7 @@ async function getData(path, key) {
     get(referencePath).then((snapshot) => {
         if (snapshot.exists()) {
             console.log("Data retrieved ==", snapshot.val());
+            // console.log("second");
             return snapshot.val();
         }
         console.log("No data available");
@@ -26,6 +28,7 @@ async function getData(path, key) {
 
 async function updateKey(path, oldKey, newKey) {
     getData(path, oldKey).then((data) => {
+        // console.log("third");
         if (data !== null) {
             console.log("Data:", data);
             setData(path, newKey, data);
@@ -37,6 +40,7 @@ async function updateKey(path, oldKey, newKey) {
 }
 
 function getChild(path, key) {
+    if (!key) return child(ref(db), path);
     return child(ref(db), path + '/' + key);
 }
 

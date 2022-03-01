@@ -10,6 +10,7 @@ npm-debug.*
 *.orig.*
 web-build/
 firebaseApp.js
+mergeUsernamePassword.js
 
 # macOS
 .DS_Store
