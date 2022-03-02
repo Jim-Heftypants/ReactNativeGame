@@ -5,17 +5,15 @@ const db = getDatabase(app);
 
 async function setData(path, data) {
     const reference = ref(db, path);
-    await set(reference, data);
-    // console.log("fourth");
+    return await set(reference, data);
 }
 
-async function getData(path, key) {
-    const referencePath = getChild(path, key);
-    console.log(referencePath);
-    get(referencePath).then((snapshot) => {
+async function getData(path) {
+    const referencePath = getChild(path);
+    // console.log(referencePath);
+    return get(referencePath).then((snapshot) => {
         if (snapshot.exists()) {
             console.log("Data retrieved ==", snapshot.val());
-            // console.log("second");
             return snapshot.val();
         }
         console.log("No data available");
@@ -27,21 +25,29 @@ async function getData(path, key) {
 }
 
 async function updateKey(path, oldKey, newKey) {
-    getData(path, oldKey).then((data) => {
-        // console.log("third");
+    return getData(path + '/' + oldKey).then((data) => {
         if (data !== null) {
-            console.log("Data:", data);
-            setData(path, newKey, data);
-            // setData(path, oldKey, null);
+            return getData(path + '/' + newKey).then((otherData) => {
+                if (otherData) {
+                    console.log("Data found at new key -- rejected to not overwrite");
+                    return false;
+                }
+                setData(path + '/' + newKey, data);
+                setData(path + '/' + oldKey, null);
+                return true;
+            }).catch((err) => {
+                console.log("Error in getData");
+                return false;
+            })
         } else {
             console.log("Null found for data to update");
+            return false;
         }
     })
 }
 
-function getChild(path, key) {
-    if (!key) return child(ref(db), path);
-    return child(ref(db), path + '/' + key);
+function getChild(path) {
+    return child(ref(db), path);
 }
 
 export { setData, getData, updateKey };

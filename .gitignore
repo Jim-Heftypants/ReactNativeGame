@@ -11,6 +11,7 @@ npm-debug.*
 web-build/
 firebaseApp.js
 mergeUsernamePassword.js
+.vscode
 
 # macOS
 .DS_Store

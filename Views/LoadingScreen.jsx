@@ -23,8 +23,8 @@ export default LoadingScreen = (props) => {
 
     let row = -1;
     let col = 0;
-    const width = props.deviceWidth;
-    const height = props.deviceHeight;
+    const width = props.width;
+    const height = props.height;
     const subHeight = height * nodeSizeScale * numRows;
     const subWidth = width * nodeSizeScale * numCols;
     return (
@@ -41,12 +41,13 @@ export default LoadingScreen = (props) => {
                         {rowColors.map((color) => {
                             // console.log(color);
                             // console.log(row, col % colors.current.length);
-                            return <View style={{ marginLeft: (col % colors.current.length) * width * nodeSizeScale,
+                            return <View style={{
+                                marginLeft: (col % colors.current.length) * width * nodeSizeScale,
                                 position: 'absolute', width: width * nodeSizeScale, height: height * nodeSizeScale,
                                 borderColor: color, borderWidth: 3, borderStyle: 'solid'
                             }} key={col++} >
                                 <View style={{
-                                backgroundColor: color, width: width * nodeSizeScale, height: height * nodeSizeScale
+                                    backgroundColor: color, width: width * nodeSizeScale, height: height * nodeSizeScale
                                 }} opacity={opacities.current[row][(col - 1) % colors.current[row].length]} ></View>
                             </View>
                         })

@@ -1,13 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { Text, TextInput, View, Image, StyleSheet, PixelRatio, Animated, TouchableWithoutFeedback, Keyboard } from 'react-native';
 
-import { storeLocalData } from '../Utils/storageUtils';
-import * as RTDB from '../Utils/firebaseRTDBUtils';
-import * as Firestore from '../Utils/firebaseFirestoreUtils';
-
 import { login, createAccount } from '../Utils/userAuth';
-
-import Accounts from '../Classes/Accounts';
+import normalizeFont from '../Utils/normalizeFont';
 
 const SplashPage = (props) => {
     const animPos = useRef(new Animated.Value(0)).current;
@@ -34,14 +29,14 @@ const SplashPage = (props) => {
 
     const _login = () => {
         login(username, password).then((userData) => {
-            if (!userData.data) {
+            if (!userData?.data) {
                 console.log("Login data received is null");
                 return;
             }
             console.log("Validated user credentials!", data.userID);
-            let page = "Character Login";
-            props.that.state.data.userID = userData.userID;
-            props.that.setState({ page, data: props.that.state.data });
+            let page = "Character Selection";
+            props.parentState.data.userID = userData.userID;
+            props.setParentState({ page, data: props.parentState.data });
         })
     }
 
@@ -53,8 +48,8 @@ const SplashPage = (props) => {
             }
             console.log("Account successfully created!", userID);
             let page = "Character Creation";
-            props.that.state.data.userID = userData.userID;
-            props.that.setState({ page, data: props.that.state.data });
+            props.parentState.data.userID = userData.userID;
+            props.setParentState({ page, data: props.parentState.data });
         });
     }
 
@@ -100,19 +95,10 @@ const SplashPage = (props) => {
 
 export default SplashPage;
 
-function normalize(size, scale) {
-    const newSize = size * scale;
-    if (Platform.OS === 'ios') {
-        return Math.round(PixelRatio.roundToNearestPixel(newSize));
-    } else {
-        return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2;
-    }
-}
-
 function getStyles(props) {
     const scale = props.deviceDims.deviceHeight / 600;
     // let adjustedFontSize = 1000;
-    adjustedFontSize = normalize(50, scale); // if (Platform.OS != 'ios')
+    adjustedFontSize = normalizeFont(50, scale); // if (Platform.OS != 'ios')
     return styles = StyleSheet.create({
         img: {
             width: props.deviceDims.deviceWidth,
@@ -129,13 +115,13 @@ function getStyles(props) {
             backgroundColor: 'rgba(255,255,255,0.5)',
             color: 'black',
             textAlign: 'center',
-            fontSize: normalize(30, scale),
+            fontSize: normalizeFont(30, scale),
             borderColor: 'black',
             borderWidth: props.deviceDims.deviceHeight * 0.01,
             borderRadius: 90,
-            padding: normalize(10, scale),
-            paddingLeft: normalize(20, scale),
-            paddingRight: normalize(20, scale),
+            padding: normalizeFont(10, scale),
+            paddingLeft: normalizeFont(20, scale),
+            paddingRight: normalizeFont(20, scale),
         },
         title: {
             fontSize: adjustedFontSize,

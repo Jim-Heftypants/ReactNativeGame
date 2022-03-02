@@ -7,18 +7,15 @@ import getImgDims from '../Utils/getImgDims';
 import Characters from '../Classes/Characters'
 
 const GameDisplayContainer = (props) => {
-    // console.log(props.img);
-    // parent == props.that
     const { uri, width, height } = Image.resolveAssetSource(props.img);
-    const dims = getImgDims(props.deviceDims.mapScale, width, height, props.deviceDims.displayScale);
-    const widthMax = dims[0] - props.deviceDims.deviceWidth;
-    const heightMax = dims[1] - props.deviceDims.deviceHeight;
-    
-    const Character = Characters[props.data.characterID]; // for testing
+    const dims = getImgDims(props.mapScales.mapScale, width, height, props.mapScales.displayScale);
+    const widthMax = dims[0] - props.deviceDims.width;
+    const heightMax = dims[1] - props.deviceDims.height;
+
+    const Character = Characters[props.parentState.characterID];
 
     return (
-        <GameDisplay imgData={{ img: props.img, uri, width, height, dims }} deviceDims={{...props.deviceDims,widthMax,heightMax}}
-            Character={Character} controlType={props.data.controlType} ></GameDisplay>
+        <GameDisplay imgData={{ img: props.img, uri, width, height, dims }} deviceDims={{ ...props.deviceDims, widthMax, heightMax }} Character={Character} ></GameDisplay>
     )
 }
 

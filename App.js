@@ -1,9 +1,10 @@
 import React from 'react';
 import * as ScreenOrientation from 'expo-screen-orientation';
+import { View, Dimensions } from 'react-native';
 
 import Main from './Views/ViewController';
 
-import setAppState from '../Utils/appStateUtils';
+import setAppState from './Utils/appStateUtils';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -11,15 +12,17 @@ export default class App extends React.Component {
     this.state = { display: false };
   }
   componentDidMount() {
-    // console.log("ScreenOrientation: " + JSON.stringify(ScreenOrientation));
-    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
+    console.log("Running Application");
+    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE).then(() => {
+      const width = Dimensions.get('window').width; //full width
+      const height = Dimensions.get('window').height; //full height
+      this.setState( { display: true, width, height} );
+    })
     if (!this.state.display) setAppState();
-    this.setState( { display: true } );
   }
   render() {
-    console.log("Running Application");
     if (!this.state.display) return <></>;
-    return <Main></Main>;
-    // return <View style={{backgroundColor: 'red', width: '100%', height:'100%'}} ></View>
+    // return <Main width={this.state.width} height={this.state.height} ></Main>;
+    return <View style={{backgroundColor: 'red', width: '100%', height:'100%'}} ></View>
   }
 }

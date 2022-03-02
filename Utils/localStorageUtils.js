@@ -15,7 +15,7 @@ export const getLocalData = async (key) => {
     }
 }
 
-export const storeLocalData = async (key, value) => {
+export const setLocalData = async (key, value) => {
     try {
         try {
             const jsonValue = JSON.stringify(value);

@@ -6,7 +6,7 @@ const Sliders = (props) => {
     const [value, setValue] = useState(1);
 
     const interpolate = (start, end) => {
-        let k = (value - 0) / 10; // 0 =>min  && 10 => MAX
+        let k = (value - 1) / 2; // 1 =>min  && 2 => MAX
         return Math.ceil((1 - k) * start + k * end) % 256;
     };
 
@@ -18,10 +18,11 @@ const Sliders = (props) => {
     };
 
     function close() {
-        let page = 1;
-        let data = props.that.state.data;
-        data.displayScale = value;
-        props.that.setState({ page, data });
+        props.that.setState({
+            ...props.parentState, page: "Game Display", settings: {
+                displayScale: value,
+            }
+        });
     }
 
     return (
@@ -48,8 +49,8 @@ const Sliders = (props) => {
                     thumbStyle={{ height: 40, width: 20, backgroundColor: 'transparent' }}
                     thumbProps={{
                         children: (
-                            <View style={{...styles.innerTextDisplay, backgroundColor: color()}} >
-                                <Text style={{fontSize: 20}}>{value}</Text>
+                            <View style={{ ...styles.innerTextDisplay, backgroundColor: color() }} >
+                                <Text style={{ fontSize: 20 }}>{value}</Text>
                             </View>
                         ),
                     }}

@@ -1,7 +1,7 @@
 import { AppState } from "react-native";
 
 export default function setAppState() {
-    const appState = AppState.currentState;
+    let appState = AppState.currentState;
     AppState.addEventListener("change",
         nextAppState => {
             if (appState.match(/inactive|background/) && nextAppState === "active") {
