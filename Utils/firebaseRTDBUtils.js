@@ -1,7 +1,11 @@
-import { getDatabase, ref, set, child, get, once } from "firebase/database";
+import { getDatabase, ref, set, child, get, push } from "firebase/database";
 import app from '../firebaseApp';
 
 const db = getDatabase(app);
+
+async function pushData(path, data) {
+    return push(child(ref(db), path), data);
+}
 
 async function setData(path, data) {
     const reference = ref(db, path);
@@ -50,4 +54,4 @@ function getChild(path) {
     return child(ref(db), path);
 }
 
-export { setData, getData, updateKey };
+export { setData, getData, updateKey, pushData };

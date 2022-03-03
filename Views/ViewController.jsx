@@ -33,8 +33,9 @@ class ViewController extends React.Component {
         this.state = {
             dataFetched: false,
             userID: null,
-            characterList: {},
-            characterID: null,
+            username: null,
+            characterList: [],
+            characterName: null,
             settings: {},
             page: "Splash Page",
         };

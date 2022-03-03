@@ -1,10 +1,10 @@
 import React, { useState, useMemo, useRef } from 'react';
 import { Text, View, Image, PanResponder } from 'react-native';
 
-import MapContainer from '../ViewComponents/MapContainer';
-import AbilityButtonContainer from '../ViewComponents/AbilityButtonContainer';
-import CharacterDisplay from '../ViewComponents/CharacterDisplay';
-import EffectsContainer from '../ViewComponents/EffectsContainer';
+import MapContainer from '../GameDisplayComponents/MapContainer';
+import AbilityButtonContainer from '../GameDisplayComponents/AbilityButtonContainer';
+import CharacterDisplay from '../GameDisplayComponents/CharacterDisplay';
+import EffectsContainer from '../GameDisplayComponents/EffectsContainer';
 
 export default GameDisplay = (props) => {
     const mapTouch = useRef({ initial: null, next: null, ID: null });
