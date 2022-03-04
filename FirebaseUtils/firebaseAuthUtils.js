@@ -4,7 +4,7 @@ import app from '../firebaseApp';
 const auth = getAuth(app);
 // const user = auth.currentUser();
 
-export async function signInCustom(token) {
+export async function signInWithCustomToken(token) {
     return signInWithCustomToken(auth, token).then((userCredential) => {
             // Signed in
             return userCredential.user;
@@ -31,22 +31,21 @@ export async function signOut() {
 export async function createAccountWithEmail(email, password) {
     return createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
         // Signed in
-        const user = userCredential.user;
-    })
-    .catch((error) => {
+        return userCredential.user;
+    }).catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
+        return [errorCode, errorMessage];
     });
 }
 
 export async function signInWithEmail(email, password) {
     return signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
-        // Signed in 
-        const user = userCredential.user;
-        // ...
-    })
-    .catch((error) => {
+        // Signed in
+        return userCredential.user;
+    }).catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
+        return [errorCode, errorMessage];
     });
 }

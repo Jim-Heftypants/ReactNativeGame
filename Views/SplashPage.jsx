@@ -28,28 +28,26 @@ const SplashPage = (props) => {
     }
 
     const _login = () => {
-        login(username, password).then((userData) => {
-            if (!userData?.data) {
-                console.log("Login data received is null");
+        login(username, password).then((user) => {
+            if (!user) {
+                console.log("User does not exist");
                 return;
             }
             console.log("Validated user credentials!", data.userID);
             let page = "Character Selection";
-            props.parentState.data.userID = userData.userID;
-            props.setParentState({ page, data: props.parentState.data });
+            props.setParentState({ ...props.parentState, page, userID: user.uid, username: user.displayName });
         })
     }
 
     const _createAccount = () => {
-        createAccount(username, password).then((userID) => {
-            if (!userID) {
+        createAccount(username, password).then((user) => {
+            if (!user) {
                 console.log("Account creation failed");
                 return;
             }
-            console.log("Account successfully created!", userID);
+            console.log("Account successfully created! User:", user);
             let page = "Character Creation";
-            props.parentState.data.userID = userData.userID;
-            props.setParentState({ page, data: props.parentState.data });
+            props.setParentState({ ...props.parentState, page, userID: user.uid, username: user.displayName });
         });
     }
 
