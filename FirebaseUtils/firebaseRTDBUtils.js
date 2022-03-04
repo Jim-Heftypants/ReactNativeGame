@@ -3,16 +3,16 @@ import app from '../firebaseApp';
 
 const db = getDatabase(app);
 
-async function pushData(path, data) {
+export async function pushData(path, data) {
     return push(child(ref(db), path), data);
 }
 
-async function setData(path, data) {
+export async function setData(path, data) {
     const reference = ref(db, path);
     return await set(reference, data);
 }
 
-async function getData(path) {
+export async function getData(path) {
     const referencePath = getChild(path);
     // console.log(referencePath);
     return get(referencePath).then((snapshot) => {
@@ -28,7 +28,7 @@ async function getData(path) {
     });
 }
 
-async function updateKey(path, oldKey, newKey) {
+export async function updateKey(path, oldKey, newKey) {
     return getData(path + '/' + oldKey).then((data) => {
         if (data !== null) {
             return getData(path + '/' + newKey).then((otherData) => {

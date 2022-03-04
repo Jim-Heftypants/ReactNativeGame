@@ -3,7 +3,7 @@ import app from '../firebaseApp';
 
 const db = getFirestore(app);
 
-async function getDataList(name) {
+export async function getDataList(name) {
     console.log("getDataList call");
     const Data = collection(db, name);
     const DataSnapshot = await getDocs(Data);
@@ -12,9 +12,7 @@ async function getDataList(name) {
 }
 
 // value is a plain object
-async function setCollectionDocument(collectionName, documentName, value) {
+export async function setCollectionDocument(collectionName, documentName, value) {
     const document = doc(db, collectionName, documentName);
     return await setDoc(document, value);
 }
-
-export { getDataList, setCollectionDocument };

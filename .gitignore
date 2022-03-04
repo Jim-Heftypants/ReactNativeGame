@@ -12,6 +12,7 @@ web-build/
 firebaseApp.js
 mergeUsernamePassword.js
 .vscode
+firebasePrivateAuthKey.json
 
 # macOS
 .DS_Store

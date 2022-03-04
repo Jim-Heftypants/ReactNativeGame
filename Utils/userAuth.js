@@ -1,6 +1,7 @@
-import * as RTDB from '../Utils/firebaseRTDBUtils';
-import * as Firestore from '../Utils/firebaseFirestoreUtils';
+import * as RTDB from '../FirebaseUtils/firebaseRTDBUtils';
+import * as Firestore from '../FirebaseUtils/firebaseFirestoreUtils';
 import { getLocalData, setLocalData } from './localStorageUtils';
+import { signInCustom, signOut } from '../FirebaseUtils/firebaseAuthUtils';
 
 import { shaHash } from "./hashingUtils";
 
