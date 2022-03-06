@@ -5,6 +5,13 @@ import { signInWithEmail, createAccountWithEmail, signOut } from '../FirebaseUti
 // import * as Firestore from '../FirebaseUtils/firebaseFirestoreUtils';
 // import { shaHash } from "./hashingUtils";
 
+export async function loginWithLocalData() {
+    return getLocalData('user').then((data) => {
+        if (!data) return false;
+        return login([data.email, data.password]);
+    })
+}
+
 export async function login(email, password) {
     return signInWithEmail(email, password).then((data) => {
         if (Array.isArray(data)) {

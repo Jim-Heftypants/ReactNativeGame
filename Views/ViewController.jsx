@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TextInput, View, Image, AppState } from 'react-native';
+import { Text, TextInput, View, Image } from 'react-native';
 
 import Settings from './Settings';
 import SplashPage from './SplashPage';
@@ -9,11 +9,11 @@ import ViewSelectionScreen from './ViewSelectionScreen';
 import CharacterCreationScreen from './CharacterCreationScreen';
 import CharacterSelectionScreen from './CharacterSelectionScreen';
 
-import { getLocalData } from '../Utils/localStorageUtils';
-
 import splashImg from '../assets/LandscapeAssets/splash-background.jpg';
 import backgroundImg from '../assets/LandscapeAssets/rpg-background.jpg';
 import getDisplayScale from '../Utils/getDisplayScale';
+
+import { loginWithLocalData } from '../Utils/userAuth';
 
 const characterSize = 100;
 const mapSizeByCharacterSize = 20; // num characters left to right to equal map size
@@ -53,22 +53,19 @@ class ViewController extends React.Component {
     }
 
     componentDidMount() {
-        getLocalData('User').then((data) => {
+        loginWithLocalData().then((data) => {
+            let page = "Character Selection";
             if (!data) {
                 console.log("No local user data found");
-                this.setState({ ...this.state, dataFetched: true });
-                return;
+                page = "Splash Page";
+            } else {
+                console.log("Local user data found!");
             }
-            console.log("Local user data found!");
-            this.setState({ ...this.state, dataFetched: true, page: "Character Selection" });
+            this.setState({ ...this.state, page });
         })
     }
 
     render() {
-        const { dataFetched } = this.state;
-        if (!dataFetched) {
-            return <LoadingScreen {...this.deviceDims} ></LoadingScreen>
-        }
         const mapScales = {
             displayScale: this.state.settings?.displayScale || getDisplayScale(...this.deviceDims, mapScale),
             mapScale,
@@ -83,7 +80,9 @@ class ViewController extends React.Component {
         switch (this.state.page) {
             case "Splash Page":
                 disp = <SplashPage {...basicExports} img={splashImg} ></SplashPage>
-                console.log("Opening splash page");
+                break;
+            case "Loading Screen":
+                disp = <LoadingScreen {...this.deviceDims} ></LoadingScreen>
                 break;
             case "Character Creation":
                 disp = <CharacterCreationScreen {...basicExports} ></CharacterCreationScreen>
