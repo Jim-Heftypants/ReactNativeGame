@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Text, TextInput, View, Image, StyleSheet, PixelRatio, Animated, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { Text, TextInput, View, Image, StyleSheet, Animated, TouchableWithoutFeedback, Keyboard } from 'react-native';
 
 import { login, createAccount } from '../Utils/userAuth';
 import normalizeFont from '../Utils/normalizeFont';
@@ -8,6 +8,7 @@ const SplashPage = (props) => {
     const animPos = useRef(new Animated.Value(0)).current;
     const [username, setusername] = useState('');
     const [password, setpassword] = useState('');
+    const [email, setemail] = useState('');
     const [userState, setUserState] = useState('Login');
 
     const styles = getStyles(props);
@@ -21,32 +22,34 @@ const SplashPage = (props) => {
     }
 
     const updateState = () => {
-        if (userState === 'login') {
+        if (userState === 'Login') {
             _login();
+            return;
         }
         _createAccount();
     }
 
     const _login = () => {
-        login(username, password).then((user) => {
+        login(email, password).then((user) => {
             if (!user) {
                 console.log("User does not exist");
                 return;
             }
-            console.log("Validated user credentials!", data.userID);
+            console.log("Validated user credentials!", user.uid);
             let page = "Character Selection";
             props.setParentState({ ...props.parentState, page, userID: user.uid, username: user.displayName });
         })
     }
 
     const _createAccount = () => {
-        createAccount(username, password).then((user) => {
+        createAccount(email, username, password).then((user) => {
             if (!user) {
                 console.log("Account creation failed");
                 return;
             }
-            console.log("Account successfully created! User:", user);
-            let page = "Character Creation";
+            console.log("Account successfully created! User:", user.displayName);
+            // let page = "Character Creation";
+            let page = "Character Selection";
             props.setParentState({ ...props.parentState, page, userID: user.uid, username: user.displayName });
         });
     }
@@ -61,19 +64,32 @@ const SplashPage = (props) => {
         return "Sign Up";
     }
 
+    let usernameInput = <></>;
+    if (userState === 'Create Account') {
+        usernameInput = <TextInput
+            onFocus={() => updatePosition(-100)}
+            onBlur={() => updatePosition(0)}
+            style={styles.textInput}
+            placeholder="Enter Username"
+            onChangeText={username => setusername(username)}
+            defaultValue={username}
+        />
+    }
+
     return (
         <View>
             <Image source={props.img} style={styles.img} />
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <Animated.View style={{ transform: [{ translateY: animPos }] }}>
                     <Text adjustsFontSizeToFit={true} style={styles.title}>{getTitle()}</Text>
+                    {usernameInput}
                     <TextInput
                         onFocus={() => updatePosition(-100)}
                         onBlur={() => updatePosition(0)}
                         style={styles.textInput}
-                        placeholder="Enter Username"
-                        onChangeText={username => setusername(username)}
-                        defaultValue={username}
+                        placeholder="Enter Email"
+                        onChangeText={email => setemail(email)}
+                        defaultValue={email}
                     />
                     <TextInput
                         onFocus={() => updatePosition(-100)}
@@ -94,28 +110,28 @@ const SplashPage = (props) => {
 export default SplashPage;
 
 function getStyles(props) {
-    const scale = props.deviceDims.deviceHeight / 600;
-    // let adjustedFontSize = 1000;
+    const scale = props.deviceDims.height / 600;
+    let adjustedFontSize = 1000;
     adjustedFontSize = normalizeFont(50, scale); // if (Platform.OS != 'ios')
-    return styles = StyleSheet.create({
+    return StyleSheet.create({
         img: {
-            width: props.deviceDims.deviceWidth,
-            height: props.deviceDims.deviceHeight,
+            width: props.deviceDims.width,
+            height: props.deviceDims.height,
             zIndex: -5,
             position: 'absolute',
         },
         textInput: {
-            marginTop: props.deviceDims.deviceHeight * 0.1,
-            // height: props.deviceDims.deviceHeight * 0.1,
-            marginLeft: props.deviceDims.deviceWidth * 0.05,
-            width: props.deviceDims.deviceWidth * 0.9,
+            marginTop: props.deviceDims.height * 0.05,
+            // height: props.deviceDims.height * 0.1,
+            marginLeft: props.deviceDims.width * 0.05,
+            width: props.deviceDims.width * 0.9,
             zIndex: 10,
             backgroundColor: 'rgba(255,255,255,0.5)',
             color: 'black',
             textAlign: 'center',
             fontSize: normalizeFont(30, scale),
             borderColor: 'black',
-            borderWidth: props.deviceDims.deviceHeight * 0.01,
+            borderWidth: props.deviceDims.height * 0.01,
             borderRadius: 90,
             padding: normalizeFont(10, scale),
             paddingLeft: normalizeFont(20, scale),
@@ -123,18 +139,18 @@ function getStyles(props) {
         },
         title: {
             fontSize: adjustedFontSize,
-            width: props.deviceDims.deviceWidth,
-            height: props.deviceDims.deviceHeight * 0.1,
+            width: props.deviceDims.width,
+            height: props.deviceDims.height * 0.1,
             textAlign: 'center',
-            marginTop: props.deviceDims.deviceHeight * 0.1,
+            marginTop: props.deviceDims.height * 0.1,
             zIndex: 8,
         },
         submitButtonContainer: {
             borderRadius: 30,
             zIndex: 12,
-            height: props.deviceDims.deviceHeight * 0.1,
+            height: props.deviceDims.height * 0.1,
             textAlign: 'center',
-            marginTop: props.deviceDims.deviceHeight * 0.1,
+            marginTop: props.deviceDims.height * 0.1,
             backgroundColor: 'rgba(0,100,200,0.7)',
             shadowOpacity: 1,
             shadowRadius: 8,
@@ -154,15 +170,15 @@ function getStyles(props) {
         changeTypeButton: {
             fontSize: adjustedFontSize / 2,
             zIndex: 12,
-            // width: props.deviceDims.deviceWidth * 0.1,
-            height: props.deviceDims.deviceHeight * 0.05,
+            // width: props.deviceDims.width * 0.1,
+            height: props.deviceDims.height * 0.05,
             textAlign: 'center',
-            marginTop: props.deviceDims.deviceHeight * 0.05,
+            marginTop: props.deviceDims.height * 0.05,
             // backgroundColor: 'rgba(0,100,200,0.7)',
             shadowOpacity: 1,
             shadowRadius: 8,
             shadowColor: 'black',
-            // marginLeft: props.deviceDims.deviceWidth * 0.45,
+            // marginLeft: props.deviceDims.width * 0.45,
             margin: 'auto'
         },
     });

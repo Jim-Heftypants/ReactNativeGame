@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 
-import { getData, pushData, setData } from '../Utils/firebaseRTDBUtils';
+import { getData, pushData, setData } from '../FirebaseUtils/firebaseRTDBUtils';
 
 export default CreateCharacterButton = (props) => {
     return (
@@ -34,13 +34,13 @@ function verifyName(name) {
     }
 
     // only if we care about duplicate names
-    const duplicateName = await checkDuplicate(name);
-    if (duplicateName) {
-        console.log("Character name is already taken!");
-        return false;
-    }
-
-    return true;
+    return checkDuplicate(name).then((duplicateName) => {
+        if (duplicateName) {
+            console.log("Character name is already taken!");
+            return false;
+        }
+        return true;
+    })
 }
 
 function getNewCharacterData(props) {
@@ -65,6 +65,9 @@ function createCharacter(props) {
     if (!verifyName(props.name)) return null;
     console.log("Character name verified!");
     const charData = getNewCharacterData(props);
-    await pushData(props.name, charData);
-    await pushData('Users/' + props.parentState.userID + '/characterList', props.name);
+    pushData(props.name, charData).then(() => {
+        pushData('Users/' + props.parentState.userID + '/characterList', props.name).then(() => {
+            console.log("Character data added!");
+        })
+    })
 }

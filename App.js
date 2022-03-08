@@ -22,7 +22,7 @@ export default class App extends React.Component {
   }
   render() {
     if (!this.state.display) return <></>;
-    // return <Main width={this.state.width} height={this.state.height} ></Main>;
-    return <View style={{backgroundColor: 'red', width: '100%', height:'100%'}} ></View>
+    return <Main width={this.state.width} height={this.state.height} ></Main>;
+    // return <View style={{backgroundColor: 'red', width: '100%', height:'100%'}} ></View>
   }
 }

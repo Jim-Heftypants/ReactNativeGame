@@ -6,7 +6,7 @@ export default CharacterSelectionScreen = (props) => {
 
 
     return (
-        <View>
+        <View style={{ backgroundColor: 'blue', height: props.deviceDims.height, width: props.deviceDims.width }} >
 
         </View>
     )

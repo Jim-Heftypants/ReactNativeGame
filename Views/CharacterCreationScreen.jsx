@@ -1,7 +1,12 @@
 import React, { useState, useRef } from 'react';
 import { View } from 'react-native';
 
-import { StatDisplayContainer, SelectionDisplayContainer, DescriptionDisplayContainer, CharacterDisplay, CreateCharacterButton, NameDisplay } from '../CharacterCreationComponents/index';
+import StatDisplayContainer from '../CharacterCreationComponents/StatDisplayContainer';
+import SelectionDisplayContainer from '../CharacterCreationComponents/SelectionDisplayContainer';
+import DescriptionDisplayContainer from '../CharacterCreationComponents/DescriptionDisplayContainer';
+import CharacterDisplay from '../CharacterCreationComponents/CharacterDisplay';
+import CreateCharacterButton from '../CharacterCreationComponents/CreateCharacterButton';
+import NameDisplay from '../CharacterCreationComponents/NameDisplay';
 
 import normalizeFont from '../Utils/normalizeFont';
 

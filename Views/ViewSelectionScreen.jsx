@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, ScrollView } from 'react-native';
 
-import normalizeFont from 'normalize-font';
+import normalizeFont from '../Utils/normalizeFont';
 
 export default ViewSelectionContainer = (props) => {
     const scale = props.deviceDims.deviceHeight / 600;

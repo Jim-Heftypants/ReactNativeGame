@@ -1,4 +1,4 @@
-import { getAuth, signInWithCustomToken, createUserWithEmailAndPassword, signInWithEmailAndPassword , signOut, deleteUser } from "firebase/auth";
+import { getAuth, signInWithCustomToken, createUserWithEmailAndPassword, signInWithEmailAndPassword , signOut, deleteUser, updateProfile } from "firebase/auth";
 import app from '../firebaseApp';
 
 import { getLocalData, setLocalData } from "../Utils/localStorageUtils";
@@ -6,7 +6,7 @@ import { getLocalData, setLocalData } from "../Utils/localStorageUtils";
 const auth = getAuth(app);
 // const user = auth.currentUser();
 
-export async function signInWithCustomToken(token) {
+export async function signInCustom(token) {
     return signInWithCustomToken(auth, token).then((userCredential) => {
             // Signed in
             return userCredential.user;
@@ -19,7 +19,7 @@ export async function signInWithCustomToken(token) {
         });
 }
 
-export async function signOut() {
+export async function signOutUser() {
     return signOut(auth).then(() => {
         // Sign-out successful.
         return true;
@@ -30,19 +30,24 @@ export async function signOut() {
       });
 }
 
-export async function createAccountWithEmail(email, password) {
+export async function createAccountWithEmail(email, username, password) {
     return createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
         // Signed in
-        return setLocalData("user", { email, password }).then((data) => {
-                return userCredential.user;
-            }).catch((error) => {
-                console.log("Error with setting local data");
-                return userCredential.user;
-            })
+        const user = userCredential.user;
+        return updateProfile(user, { displayName: username }).then(() => {
+            return setLocalData("user", { email, password }).then(() => {
+                    return user
+                }).catch((error) => {
+                    console.log("Error with setting local data");
+                    return user;
+                })
+        })
         }).catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
-            return [errorCode, errorMessage];
+            console.log("Account creation failed!:", errorMessage);
+            return false;
+            // return [errorCode, errorMessage];
         });
 }
 

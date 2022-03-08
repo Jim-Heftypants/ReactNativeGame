@@ -53,5 +53,3 @@ export async function updateKey(path, oldKey, newKey) {
 function getChild(path) {
     return child(ref(db), path);
 }
-
-export { setData, getData, updateKey, pushData };

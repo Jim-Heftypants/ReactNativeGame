@@ -1,3 +1,5 @@
+import { PixelRatio } from 'react-native';
+
 export default function normalize(size, scale) {
     const newSize = size * scale;
     if (Platform.OS === 'ios') {
