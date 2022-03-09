@@ -44,20 +44,19 @@ function verifyName(name) {
 }
 
 function getNewCharacterData(props) {
+    const Races = {};
+    Races[props.race] = 1;
+    const Classes = {};
+    Classes[props.class] = 1;
     return {
-        RaceName: props.race,
-        ClassName: props.klass,
-        Attributes: props.stats,
+        Races,
+        Classes,
+        Stats: props.stats,
         Zone: "Intro",
         Equipment: {},
         Items: {},
-        DynamicData: {
-            pos: [0, 0],
-            AnimEffects: {},
-            movementSpeed: 1000,
-            imageCycleId: 0,
-            currentAnimationSet: [],
-        },
+        pos: [0, 0],
+        movementSpeed: 1000,
     }
 }
 
