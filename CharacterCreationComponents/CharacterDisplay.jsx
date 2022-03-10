@@ -1,10 +1,11 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 
 export default CharacterDisplay = (props) => {
-
-
+    const text = "Character Display";
     return (
-        <View></View>
+        <View style={props.style} >
+            <Text style={{ fontSize: props.style.fontSize, textAlign: props.style.textAlign }} >{text}</Text>
+        </View>
     )
 }

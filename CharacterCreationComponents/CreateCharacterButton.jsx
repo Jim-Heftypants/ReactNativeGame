@@ -5,13 +5,22 @@ import { getData, pushData, setData } from '../FirebaseUtils/firebaseRTDBUtils';
 
 export default CreateCharacterButton = (props) => {
     return (
-        <TouchableOpacity style={{
-            width: props.width, height: props.height, textAlign: 'center', marginTop: props.hSpacing, marginLeft: props.wSpacing, backgroundColor: 'lightgrey',
-            borderWidth: 2, borderColor: 'gray'
-        }} onPress={() => createCharacter(props)}>
-            <Text style={{ fontSize: props.fontSize, color: 'black' }} >Create Character</Text>
+        <TouchableOpacity style={{ ...props.style, borderWidth: 2, borderColor: 'gray', borderRadius: 180 }} onPress={() => createCharacter(props)}>
+            <Text style={{ fontSize: props.style.fontSize, textAlign: 'center', padding: props.style.fontSize / 4, color: 'black' }} >Create Character</Text>
         </TouchableOpacity>
     )
+}
+
+function createCharacter(props) {
+    return false;
+    if (!verifyName(props.name)) return null;
+    console.log("Character name verified!");
+    const charData = getNewCharacterData(props);
+    pushData(props.name, charData).then(() => {
+        pushData('Users/' + props.parentState.userID + '/characterList', props.name).then(() => {
+            console.log("Character data added!");
+        })
+    })
 }
 
 async function checkDuplicate(name) {
@@ -58,15 +67,4 @@ function getNewCharacterData(props) {
         pos: [0, 0],
         movementSpeed: 1000,
     }
-}
-
-function createCharacter(props) {
-    if (!verifyName(props.name)) return null;
-    console.log("Character name verified!");
-    const charData = getNewCharacterData(props);
-    pushData(props.name, charData).then(() => {
-        pushData('Users/' + props.parentState.userID + '/characterList', props.name).then(() => {
-            console.log("Character data added!");
-        })
-    })
 }

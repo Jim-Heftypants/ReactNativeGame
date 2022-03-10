@@ -10,8 +10,17 @@ import NameDisplay from '../CharacterCreationComponents/NameDisplay';
 
 import normalizeFont from '../Utils/normalizeFont';
 
+const spacing = 0.01;
+
 export default CharacterCreationScreen = (props) => {
+    const width = props.deviceDims.width;
+    const height = props.deviceDims.height;
     const fontScale = props.deviceDims.height / 600;
+    const wSpacing = width * spacing;
+    const hSpacing = height * spacing;
+
+    const titleFont = normalizeFont(30, fontScale);
+    const descriptionFont = normalizeFont(20, fontScale);
 
     const name = useRef("").current;
     const [race, setRace] = useState("");
@@ -25,49 +34,74 @@ export default CharacterCreationScreen = (props) => {
         cha: 0,
     });
 
-    const spacing = {
-        wSpacing: 0.05 * props.deviceDims.width,
-        hSpacing: 0.05 * props.deviceDims.height,
+    const defaults = {
+        position: 'absolute',
+        textAlign: 'center',
     }
-    const charDisplay = {
-        width: props.deviceDims.width * 0.4,
-        height: props.deviceDims.height * 0.4,
-    };
-    const selectionDisplay = {
-        width: props.deviceDims.width * 0.2,
-        height: props.deviceDims.height * 0.6,
-        fontSize: normalizeFont(25, fontScale),
-    };
-    const statDisplay = {
-        width: props.deviceDims.width * 0.4,
-        height: props.deviceDims.height * 0.2,
-        fontSize: normalizeFont(20, fontScale),
-    };
     const descriptionDisplay = {
-        width: props.deviceDims.width * 0.3,
-        height: props.deviceDims.height * 0.25,
-        fontSize: normalizeFont(20, fontScale),
+        width: wSpacing * 30,
+        height: hSpacing * 25,
+        left: wSpacing * 2,
+        top: hSpacing * 2,
+        fontSize: descriptionFont,
+        backgroundColor: "lightgrey",
+        ...defaults
     };
     const nameDisplay = {
-        width: props.deviceDims.width * 0.4,
-        height: props.deviceDims.height * 0.1,
-        fontSize: normalizeFont(30, fontScale),
+        width: wSpacing * 30,
+        height: hSpacing * 10,
+        left: wSpacing * 35,
+        top: hSpacing * 3,
+        fontSize: titleFont,
+        backgroundColor: 'lightblue',
+        ...defaults
     }
     const createCharacter = {
-        width: props.deviceDims.width * 0.4,
-        height: props.deviceDims.height * 0.1,
-        fontSize: normalizeFont(30, fontScale),
+        width: wSpacing * 30,
+        height: hSpacing * 10,
+        left: wSpacing * 35,
+        top: hSpacing * 16,
+        fontSize: titleFont,
+        backgroundColor: 'lightblue',
+        ...defaults
     }
+    const charDisplay = {
+        width: wSpacing * 44,
+        height: hSpacing * 68,
+        left: wSpacing * 28,
+        top: hSpacing * 30,
+        fontSize: titleFont,
+        backgroundColor: 'lightgreen',
+        ...defaults
+    };
+    const selectionDisplay = {
+        width: wSpacing * 20,
+        height: hSpacing * 50,
+        left: wSpacing * 4,
+        top: hSpacing * 30,
+        fontSize: descriptionFont,
+        backgroundColor: 'magenta',
+        ...defaults
+    };
+    const statDisplay = {
+        width: wSpacing * 24,
+        height: hSpacing * 16,
+        left: wSpacing * 2,
+        top: hSpacing * 82,
+        fontSize: descriptionFont,
+        backgroundColor: 'orange',
+        ...defaults
+    };
 
     return (
         <>
-            <StatDisplayContainer {...spacing} {...statDisplay} stats={stats} setStats={setStats} ></StatDisplayContainer>
-            <SelectionDisplayContainer {...spacing} {...selectionDisplay} klass={klass} setKlass={setKlass} race={race} setRace={setRace} ></SelectionDisplayContainer>
-            <DescriptionDisplayContainer {...spacing} {...descriptionDisplay} klass={klass} race={race} ></DescriptionDisplayContainer>
-            <CharacterDisplay {...spacing} {...charDisplay} klass={klass} race={race} ></CharacterDisplay>
-            <CreateCharacterButton {...spacing} {...createCharacter} parentState={props.parentState} setParentState={props.setParentState}
+            <StatDisplayContainer style={statDisplay} stats={stats} setStats={setStats} ></StatDisplayContainer>
+            <SelectionDisplayContainer style={selectionDisplay} klass={klass} setKlass={setKlass} race={race} setRace={setRace} ></SelectionDisplayContainer>
+            <DescriptionDisplayContainer style={descriptionDisplay} klass={klass} race={race} ></DescriptionDisplayContainer>
+            <CharacterDisplay style={charDisplay} klass={klass} race={race} ></CharacterDisplay>
+            <CreateCharacterButton style={createCharacter} parentState={props.parentState} setParentState={props.setParentState}
                 name={name} race={race} klass={klass} stats={stats} ></CreateCharacterButton>
-            <NameDisplay {...spacing} {...nameDisplay} name={name} ></NameDisplay>
+            <NameDisplay style={nameDisplay} name={name} ></NameDisplay>
         </>
     )
 }

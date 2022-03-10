@@ -19,14 +19,6 @@ const characterSize = 100;
 const mapSizeByCharacterSize = 20; // num characters left to right to equal map size
 const mapScale = characterSize * mapSizeByCharacterSize;
 
-/* Pages
-Splash Page
-Character Selection
-Character Creation
-Settings
-Game Display
-*/
-
 const pages = [
     'Splash Page',
     'Character Creation',
@@ -42,7 +34,7 @@ const ViewController = (props) => {
         username: null,
         characterList: [],
         characterName: null,
-        settings: { displayScale: getDisplayScale(deviceDims.width, deviceDims.height, mapScale) },
+        settings: { displayScale: getDisplayScale(props.width, props.height, mapScale) },
         // page: "Loading Screen",
         page: "Character Creation",
     });
@@ -67,7 +59,7 @@ const ViewController = (props) => {
     //     }
     // }, []);
 
-    console.log("Username:", state.username);
+    // console.log("Username:", state.username);
     console.log("Page:", state.page);
     const mapScales = {
         displayScale: state.settings.displayScale,
