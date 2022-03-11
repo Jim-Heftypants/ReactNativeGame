@@ -1,61 +1,79 @@
-Unique Identifiers: CharacterName, UserID, conversationID
+Unique Identifiers: CharacterName, UserID, conversationID, achievementName
 
 Users: { // read: Any
     UserID: username (value), // write: UserID
     UserID: username (value), // write: UserID
 }
 
-UserID: {
-    username (value),
-    characterList: {
-        one: characterName,
-        two: characterName,
-        three: characterName,
+UserID: { // read: UserID
+    username (value), // write: UserID
+    characterList: { // write: UserID
+        characterName,
+        characterName,
+        characterName,
     },
     conversations: {
-        receiverName("," + s): conversationID (value),
-        receiverName("," + s): conversationID (value),
+        receiverName("," + s): conversationID (value), // write: receiverName, UserName
+        receiverName("," + s): conversationID (value), // write: receiverName, UserName
     },
-    friends: {
+    friends: { // write: UserID -- friends have to be requested and accepted
         friendID: friendUsername,
         friendID: friendUsername,
     },
-    achievements: {
-        achievementName: Boolean,
-        achievementName: Boolean,
+    achievements: { // write: UserID
+        achievementName: achievementName,
+        achievementName: achievementName,
     }
 }
 
 conversationID (senderName + "," + receiverName(s) + Timestamp): {
-    Timestamp+senderName: {
+    Timestamp+senderName: { // write: senderName, read: senderName, receiverName(s)
         Timestamp (value),
         senderName (value),
         message (value),
     },
-    Timestamp+senderName: {
+    Timestamp+senderName: { // write: senderName, read: senderName, receiverName(s)
         Timestamp (value),
         senderName (value),
         message (value),
     },
 }
 
-characterName: {
-    RaceName: String,
-    ClassName: String,
-    Attributes: Object,
-    Zone: String,
-    Equipment: {},
-    Items: {},
-    DynamicData: {
+characterName: { // read: Any
+    constant: { // write: UserID
+        Races: {
+            RaceName: level (value),
+            RaceName: level (value),
+        },
+        ClassName: {
+            ClassName: level (value),
+            ClassName: level (value),
+        },
+        Stats: {},
+        Zone: Zone (value),
+        Equipment: {},
+        Items: {}, // maybe different write with item trades
         pos: [0, 0],
-        AnimEffects: {}, //  { name: data }
-        movementSpeed: 1000,
-        imageCycleId: 0,
-        currentAnimationSet: [],
     },
+    dynamic: { // write: Any
+        health: 100,
+        mana: 100,
+        pos: [0, 0],
+        statusEffect: 'root',
+    },
+}
+
+Characters: {
+    characterName,
+    characterName,
 }
 
 CharactersOnline: {
     characterName,
     characterName,
+}
+
+achievements: {
+    achievementName: Description,
+    achievementName: Description,
 }
