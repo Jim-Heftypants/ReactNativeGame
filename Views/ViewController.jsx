@@ -13,7 +13,7 @@ import splashImg from '../assets/LandscapeAssets/splash-background.jpg';
 import backgroundImg from '../assets/LandscapeAssets/rpg-background.jpg';
 import getDisplayScale from '../Utils/getDisplayScale';
 
-import { loginWithLocalData } from '../Utils/userAuth';
+import { loginWithLocalData } from '../databaseUtils/userAuth';
 
 const characterSize = 100;
 const mapSizeByCharacterSize = 20; // num characters left to right to equal map size
@@ -43,21 +43,22 @@ const ViewController = (props) => {
         height: props.height,
     }
 
-    // useEffect(() => {
-    //     if (!state.userID) {
-    //         loginWithLocalData().then((user) => {
-    //             let page = "Character Selection";
-    //             if (!user) {
-    //                 console.log("No local user data found");
-    //                 page = "Splash Page";
-    //                 setState({ ...state, page });
-    //             } else {
-    //                 console.log("Local user data found!");
-    //                 setState({ ...state, page, userID: user.uid, username: user.displayName });
-    //             }
-    //         })
-    //     }
-    // }, []);
+    useEffect(() => {
+        if (!state.userID) {
+            loginWithLocalData().then((user) => {
+                let page = "Character Selection";
+                if (!user) {
+                    console.log("No local user data found");
+                    page = "Splash Page";
+                    setState({ ...state, page });
+                } else {
+                    console.log("Local user data found!");
+                    page = "Character Creation";
+                    setState({ ...state, page, userID: user.uid, username: user.displayName });
+                }
+            })
+        }
+    }, []);
 
     // console.log("Username:", state.username);
     console.log("Page:", state.page);

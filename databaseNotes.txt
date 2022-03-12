@@ -10,7 +10,6 @@ UserID: { // read: UserID
     characterList: { // write: UserID
         characterName,
         characterName,
-        characterName,
     },
     conversations: {
         receiverName("," + s): conversationID (value), // write: receiverName, UserName

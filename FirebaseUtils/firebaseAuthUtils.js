@@ -1,7 +1,7 @@
 import { getAuth, signInWithCustomToken, createUserWithEmailAndPassword, signInWithEmailAndPassword , signOut, deleteUser, updateProfile } from "firebase/auth";
 import app from '../firebaseApp';
 
-import { getLocalData, setLocalData } from "../Utils/localStorageUtils";
+import { getLocalData, setLocalData } from "../databaseUtils/localStorageUtils";
 
 const auth = getAuth(app);
 // const user = auth.currentUser();
@@ -41,8 +41,7 @@ export async function createAccountWithEmail(email, username, password) {
                     console.log("Error with setting local data");
                     return user;
                 })
-        })
-        }).catch((error) => {
+        })}).catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
             console.log("Account creation failed!:", errorMessage);

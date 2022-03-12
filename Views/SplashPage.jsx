@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Text, TextInput, View, Image, StyleSheet, Animated, TouchableWithoutFeedback, Keyboard } from 'react-native';
 
-import { login, createAccount } from '../Utils/userAuth';
+import { login, createAccount } from '../databaseUtils/userAuth';
 import normalizeFont from '../Utils/normalizeFont';
 
 const SplashPage = (props) => {
@@ -48,8 +48,7 @@ const SplashPage = (props) => {
                 return;
             }
             console.log("Account successfully created! User:", user.displayName);
-            // let page = "Character Creation";
-            let page = "Character Selection";
+            let page = "Character Creation";
             props.setParentState({ ...props.parentState, page, userID: user.uid, username: user.displayName });
         });
     }
