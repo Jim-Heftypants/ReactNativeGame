@@ -34,6 +34,7 @@ const ViewController = (props) => {
         username: null,
         characterList: [],
         characterName: null,
+        Character: null,
         settings: { displayScale: getDisplayScale(props.width, props.height, mapScale) },
         // page: "Loading Screen",
         page: "Character Creation",
@@ -91,7 +92,7 @@ const ViewController = (props) => {
             console.log("Opening settings page");
             break;
         case "Game Display":
-            disp = <GameDisplayContainer {...basicExports} img={backgroundImg} mapScales={mapScales} ></GameDisplayContainer>;
+            disp = <GameDisplayContainer {...basicExports} img={backgroundImg} mapScales={mapScales} Character={state.Character} ></GameDisplayContainer>;
             console.log("Opening game display");
             break;
         default:

@@ -6,6 +6,7 @@ export default function getNewCharacterData({race, klass, stats, name}) {
     Races[race] = 1;
     const Classes = {};
     Classes[klass] = 1;
+    const movementSpeed = getMovementSpeed(Races, Classes, stats);
     return { // read: Any
         constant: { // write: UserID
             Races,
@@ -14,13 +15,14 @@ export default function getNewCharacterData({race, klass, stats, name}) {
             Zone: "Intro",
             Equipment: {},
             Items: {}, // maybe different write with item trades
-            movementSpeed: getMovementSpeed(Races, Classes, stats),
-            pos: [0, 0],
+            movementSpeed,
+            pos: { x: 0, y: 0 },
         },
         dynamic: { // write: Any
             health: getHealth(stats),
             mana: getMana(stats),
-            pos: [0, 0],
+            pos: { x: 0, y: 0 },
+            movementSpeed,
             statusEffect: '',
         },
     }

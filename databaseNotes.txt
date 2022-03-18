@@ -52,12 +52,14 @@ characterName: { // read: Any
         Zone: Zone (value),
         Equipment: {},
         Items: {}, // maybe different write with item trades
-        pos: [0, 0],
+        pos: { x: 0, y: 0 },
+        movementSpeed: 1,
     },
     dynamic: { // write: Any
         health: 100,
         mana: 100,
-        pos: [0, 0],
+        pos: { x: 0, y: 0 },
+        movementSpeed: 1,
         statusEffect: 'root',
     },
 }
