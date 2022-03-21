@@ -44,14 +44,14 @@ function wallMatrixToMap(matrix, size = 50) {
 
 function getSiblings(matrix, i, j, size = 1) {
     const siblings = [];
-    if (i > -1) siblings.push(getCenter(i-1, j, size));
-    if (i > -1 && j > -1) siblings.push(getCenter(i - 1, j - 1, size));
-    if (j > -1) siblings.push(getCenter(i, j - 1, size));
-    if (matrix.length > i) siblings.push(getCenter(i + 1, j, size));
-    if (matrix.length > i && matrix[0].length > j) siblings.push(getCenter(i + 1, j + 1, size));
-    if (matrix[0].length > j) siblings.push(getCenter(i, j + 1, size));
-    if (matrix.length > i && j > -1) siblings.push(getCenter(i + 1, j - 1, size));
-    if (matrix[0].length > j && i > -1) siblings.push(getCenter(i - 1, j + 1, size));
+    if (i > 0) siblings.push(getCenter(i-1, j, size));
+    if (i > 0 && j > 0) siblings.push(getCenter(i - 1, j - 1, size));
+    if (j > 0) siblings.push(getCenter(i, j - 1, size));
+    if (matrix.length - 1 > i) siblings.push(getCenter(i + 1, j, size));
+    if (matrix.length - 1 > i && matrix[0].length - 1 > j) siblings.push(getCenter(i + 1, j + 1, size));
+    if (matrix[0].length - 1 > j) siblings.push(getCenter(i, j + 1, size));
+    if (matrix.length - 1 > i && j > 0) siblings.push(getCenter(i + 1, j - 1, size));
+    if (matrix[0].length - 1 > j && i > 0) siblings.push(getCenter(i - 1, j + 1, size));
     return siblings;
 }
 
