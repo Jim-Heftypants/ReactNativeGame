@@ -6,7 +6,7 @@ import AbilityButtonContainer from '../GameDisplayComponents/AbilityButtonContai
 import CharacterDisplay from '../GameDisplayComponents/CharacterDisplay';
 import EffectsContainer from '../GameDisplayComponents/EffectsContainer';
 
-import getPath from '../Utils/getPath';
+import getPath from '../Utils/pathingUtils';
 
 export default GameDisplay = (props) => {
     const [endPos, setEndPos] = useState({ x: 0, y: 0 });

@@ -1,27 +1,23 @@
-export default function getPath(startPos, endPos, movementSpeed, map) {
-    if (!map) return mapLessPath(startPos, endPos, movementSpeed);
+export function getPath(startPos, endPos, map) {
+    // if (!map) return mapLessPath(startPos, endPos);
     const path = aStar(startPos, endPos, map);
-    return mapMovementSpeedToPath(path, movementSpeed);
-}
-
-function mapMovementSpeedToPath(path, movementSpeed) {
-    // maybe dont need to use movement speed and allow the path to continue until fruition
-}
-
-function mapLessPath(startPos, endPos, movementSpeed) {
-    // linear path
-    const dx = endPos.x - startPos.x;
-    const dy = endPos.y - startPos.y;
-    const distance = dx + dy;
-    const movementPerFrame = distance / movementSpeed;
-    const x = dx / movementPerFrame;
-    const y = dy / movementPerFrame;
-    const path = [];
-    for (let i = 0; i < distance; i += movementPerFrame) {
-        path.push({ x, y });
-    }
     return path;
 }
+
+// function mapLessPath(startPos, endPos) {
+//     // linear path
+//     const dx = endPos.x - startPos.x;
+//     const dy = endPos.y - startPos.y;
+//     const distance = dx + dy;
+//     const movementPerFrame = distance;
+//     const x = dx / movementPerFrame;
+//     const y = dy / movementPerFrame;
+//     const path = [];
+//     for (let i = 0; i < distance; i += movementPerFrame) {
+//         path.push({ x, y });
+//     }
+//     return path;
+// }
 
 function aStar(start, end, graph) {
     const endNode = graph[end];

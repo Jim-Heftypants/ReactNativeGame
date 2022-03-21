@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Text, TextInput, View, Image, StyleSheet, Animated, TouchableWithoutFeedback, Keyboard } from 'react-native';
 
-import { login, createAccount } from '../databaseUtils/userAuth';
+import { login, createAccount } from '../Utils/databaseUtils/userAuth';
 import normalizeFont from '../Utils/normalizeFont';
 
 const SplashPage = (props) => {

@@ -1,6 +1,6 @@
 
 
-export const testMap = wallMatrixToMap(testMapMatrix, 50);
+export const testMap = wallMatrixToMap(testMapMatrix(), 50);
 
 const testMapMatrix = () => {
     const matrix = getDefaultedMatrix(100, 100);
@@ -18,7 +18,7 @@ const testMapMatrix = () => {
     return matrix;
 }
 
-const wallMatrixToMap = (matrix, nodeSize = 50) => {
+function wallMatrixToMap(matrix, nodeSize = 50) {
     const graph = {};
     for (let i = 0; i < matrix.length; i++) {
         for (let j = 0; j < matrix[i].length; j++) {

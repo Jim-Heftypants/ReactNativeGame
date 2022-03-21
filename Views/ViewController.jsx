@@ -13,7 +13,7 @@ import splashImg from '../assets/LandscapeAssets/splash-background.jpg';
 import backgroundImg from '../assets/LandscapeAssets/rpg-background.jpg';
 import getDisplayScale from '../Utils/getDisplayScale';
 
-import { loginWithLocalData } from '../databaseUtils/userAuth';
+import { loginWithLocalData } from '../Utils/databaseUtils/userAuth';
 
 const characterSize = 100;
 const mapSizeByCharacterSize = 20; // num characters left to right to equal map size

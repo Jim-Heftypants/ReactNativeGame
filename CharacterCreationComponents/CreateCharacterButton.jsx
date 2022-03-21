@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 
-import createCharacter from '../CharacterUtils/createCharacter';
+import createCharacter from '../Utils/CharacterUtils/createCharacter';
 
 export default CreateCharacterButton = (props) => {
     return (

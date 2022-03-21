@@ -1,5 +1,5 @@
 import { getAuth, signInWithCustomToken, createUserWithEmailAndPassword, signInWithEmailAndPassword , signOut, deleteUser, updateProfile } from "firebase/auth";
-import app from '../firebaseApp';
+import app from '../../firebaseApp';
 
 import { getLocalData, setLocalData } from "../databaseUtils/localStorageUtils";
 

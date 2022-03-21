@@ -1,8 +1,8 @@
 import { getData, setData } from '../FirebaseUtils/firebaseRTDBUtils';
 import createUser from '../databaseUtils/createUser';
 
-import getNewCharacterData from '../CharacterUtils/getNewCharacterData';
-import validName from '../CharacterUtils/validateName';
+import getNewCharacterData from './getNewCharacterData';
+import validName from './validateName';
 
 export default async function createCharacter(props) {
     if (!props.parentState.userID) return "No user is signed in";
