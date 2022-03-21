@@ -2,7 +2,7 @@ import React from 'react';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import { View, Dimensions } from 'react-native';
 
-import Main from './Views/ViewController';
+// import Main from './Views/ViewController';
 import MapTest from './Views/MapTest';
 
 import setAppState from './Utils/appStateUtils';
@@ -23,7 +23,7 @@ export default class App extends React.Component {
   }
   render() {
     if (!this.state.display) return <></>;
-    <MapTest width={this.state.width} height={this.state.height} ></MapTest>
+    return <MapTest width={this.state.width} height={this.state.height} ></MapTest>
     // return <Main width={this.state.width} height={this.state.height} ></Main>;
     // return <View style={{backgroundColor: 'red', width: '100%', height:'100%'}} ></View>
   }

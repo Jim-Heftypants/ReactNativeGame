@@ -25,30 +25,34 @@ function aStar(start, end, graph) {
     const startScores = {};
     startScores[start] = 0;
     const endScores = {};
-    endScores[start] = getNodeDistance(graph[start], graph[end]);
+    endScores[start] = getDistance(start, end);
     const totalScores = {};
     totalScores[start] = startScores[start] + endScores[start];
     const nodes = {};
     nodes[start] = startNode;
     const pathMap = {};
-    while (nodes.length > 0) {
+    while (Object.values(nodes).length > 0) {
+        console.log("there");
         const minNode = getMinNode(nodes, totalScores);
+        console.log(minNode.center);
         if (minNode.center[0] == end[0] && minNode.center[1] == end[1]) return reconstruct_path(pathMap, minNode);
         delete nodes[minNode];
+        // console.log(minNode.siblings);
         for (let i = 0; i < minNode.siblings.length; i++) {
-            const sibling = minNode.siblings[i];
-            const tempEndScore = endScores[minNode.center] + getNodeDistance(minNode, sibling);
+            const sibling = graph[minNode.siblings[i]];
+            const tempEndScore = endScores[minNode.center] + getDistance(minNode.center, sibling.center);
             if (tempEndScore < endScores[sibling.center]) {
                 pathMap[sibling.center] = minNode.center;
                 endScores[sibling.center] = tempEndScore;
-                totalScores[sibling.center] = tempEndScore + getNodeDistance(sibling, endNode);
+                totalScores[sibling.center] = tempEndScore + getDistance(sibling.center, endNode.center);
                 if (!nodes[sibling.center])
                     nodes[sibling.center] = sibling;
             }
         }
 
     }
-    return null
+    console.log("There");
+    return null;
 }
 
 function reconstruct_path(pathMap, endNode) {
@@ -73,8 +77,9 @@ function getMinNode(nodes, scores) {
     return minNode;
 }
 
-function getNodeDistance(a, b) {
-    const dx = a.center[0] - b.center[0];
-    const dy = a.center[1] - b.center[1];
+function getDistance(a, b) {
+    console.log(b);
+    const dx = a[0] - b[0];
+    const dy = a[1] - b[1];
     return Math.round(Math.sqrt(dx * dx + dy * dy) * 10) / 10;
 }

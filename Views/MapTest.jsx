@@ -1,5 +1,5 @@
-import React, { setState } from 'react';
-import { View } from 'react-native';
+import React, { useState } from 'react';
+import { View, TouchableOpacity } from 'react-native';
 
 import { getPath } from '../Utils/pathingUtils';
 import { testMap } from '../Maps/testMap';
@@ -7,10 +7,11 @@ import { testMap } from '../Maps/testMap';
 export default MapTest = (props) => {
     const startNode = testMap[[100, 100]];
     const nodes = Object.values(testMap);
-    const [colors, setColors] = setState(getColors(nodes));
+    const [colors, setColors] = useState(getColors(nodes));
 
-    const applyPath = (node) => {
-        const path = getPath(startNode, node, testMap);
+    function applyPath(node) {
+        // console.log('here');
+        const path = getPath(nodes[66].center, node.center, testMap);
         console.log(path);
         for (const node in path) {
             colors[node.center] = "blue";
@@ -18,12 +19,13 @@ export default MapTest = (props) => {
         setColors(colors);
     }
 
+    let key = 0;
     return (
         <View style={{ width: props.width, height: props.height, backgroundColor: 'grey' }} >
             {nodes.map(node => {
                 return (
-                    <View style={{ width: node.size, height: node.size, position: 'absolute', left: node.center[0], top: node.center[1], backgroundColor: colors[node.center] }}
-                        onPress={() => applyPath(node)} ></View>
+                    <TouchableOpacity style={{ width: node.size, height: node.size, position: 'absolute', left: node.center[0], top: node.center[1], backgroundColor: colors[node.center], borderWidth: 1 }}
+                        onPress={() => applyPath(node)} key={key++} ></TouchableOpacity>
                 )
             })}
         </View>
