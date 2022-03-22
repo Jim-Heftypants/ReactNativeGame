@@ -28,43 +28,36 @@ function aStar(start, end, graph) {
     const pathMap = {}; // map of node traversal path
     let nodeLength = 1;
 
-    let first = true;
     while (nodeLength > 0) {
         const minNode = getMinNode(nodes, totalScores); // find node with minimum total distance
         delete nodes[minNode.center]; nodeLength--; // remove found node from pick list
-        // console.log("nodes:", Object.values(nodes).length);
-        if (minNode.center[0] == end[0] && minNode.center[1] == end[1]) return reconstruct_path(pathMap, minNode); // if node is end node return path
+        if (minNode.center[0] == end[0] && minNode.center[1] == end[1]) return reconstruct_path(pathMap, minNode, start); // if node is end node return path
 
-        for (let i = 0; i < minNode.siblings.length; i++) { // traverse siblings of min distance node
-            const sibling = graph[minNode.siblings[i]];
-            if (sibling.unpathable) continue; // node is non-traversable
+        for (const neighbor of minNode.pathableNeighbors) { // traverse neighbors of min distance node
+            // const neighbor = graph[minNode.neighbors[i]];
+            if (neighbor.unpathable) continue; // node is non-traversable
             
-            const potentialStartScore = startScores[minNode.center] + getDistance(minNode.center, sibling.center, minNode.size);
-            if (!startScores[sibling.center] || potentialStartScore < startScores[sibling.center]) {
-                pathMap[sibling.center] = minNode;
-                startScores[sibling.center] = potentialStartScore;
-                totalScores[sibling.center] = potentialStartScore + getDistance(sibling.center, end, minNode.size);
-                if (!nodes[sibling.center]) {
-                    nodes[sibling.center] = sibling;
+            const potentialStartScore = startScores[minNode.center] + getDistance(minNode.center, neighbor.center, minNode.size); // distance from start to min node to neighbor node
+            if (!startScores[neighbor.center] || potentialStartScore < startScores[neighbor.center]) {
+                pathMap[neighbor.center] = minNode;
+                startScores[neighbor.center] = potentialStartScore;
+                totalScores[neighbor.center] = potentialStartScore + getDistance(neighbor.center, end, minNode.size);
+                if (!nodes[neighbor.center]) {
+                    nodes[neighbor.center] = neighbor;
                     nodeLength++;
                 }
             }
-        }
-        if (first) {
-            first = false;
-            console.log("start:",startScores);
-            console.log("total:",totalScores);
         }
     }
     console.log("Failed to find solution to aStar path");
     return [];
 }
 
-function reconstruct_path(pathMap, endNode) {
+function reconstruct_path(pathMap, endNode, startPos) {
     const total_path = [endNode];
     let currentNode = endNode;
-    while (pathMap[currentNode.center]) {
-        // console.log("endNode:", currentNode.center);
+    // while (pathMap[currentNode.center]) {
+    while (!(currentNode.center[0] === startPos[0] && currentNode.center[1] === startPos[1])) {
         currentNode = pathMap[currentNode.center];
         total_path.unshift(currentNode);
     }
@@ -73,7 +66,7 @@ function reconstruct_path(pathMap, endNode) {
 
 function getMinNode(nodes, scores) {
     const keys = Object.keys(nodes);
-    let minVal = -Infinity;
+    let minVal = Infinity;
     let minNode = nodes[keys[0]];
     for (let i = 0; i < keys.length; i++) {
         if (!scores[keys[i]]) continue;
