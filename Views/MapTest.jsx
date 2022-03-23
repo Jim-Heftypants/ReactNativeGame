@@ -9,12 +9,8 @@ export default MapTest = (props) => {
     let [colors, setColors] = useState({});
 
     function applyPath(node) {
-        console.log("Pathfinder called");
-        // var startTime = performance.now();
         const path = getPath(nodes[66].center, node.center, testMap);
         console.log("path length:", path.length);
-        // var endTime = performance.now()
-        // console.log(`Call to doSomething took ${endTime - startTime} milliseconds`)
 
         colors = {};
         for (let i = 0; i < path.length; i++) {
@@ -23,16 +19,24 @@ export default MapTest = (props) => {
         setColors({ ...colors });
     }
 
+    const octagonStyles = useRef({}).current;
+    for (const node of nodes) {
+        const color = node.unpathable ? "red" : "green";
+        octagonStyles[node.center] = getOctagonStyles(node, color);
+    }
+
     let key = 0;
     return (
         <View style={{ width: props.width, height: props.height, backgroundColor: 'grey' }} >
             {nodes.map(node => {
-                const color = colors[node.center] ? colors[node.center] : node.unpathable ? "red" : "green";
-                const octagon = getOctagon(node, color);
+                octagonStyles[node.center].backgroundColor = colors[node.center] ? colors[node.center] : node.unpathable ? "red" : "green";
+                const octagonKeys = Object.keys(octagonStyles[node.center]);
                 return (
                     <TouchableOpacity style={{ width: node.size, height: node.size, position: 'absolute', left: node.center[0], top: node.center[1] }}
                         onPress={() => applyPath(node)} key={key++} >
-                        {octagon}
+                        {octagonKeys.map(styleKey => {
+                            return <View style={octagonStyles[node.center][styleKey]} key={styleKey} ></View>
+                        })}
                     </TouchableOpacity>
                 )
             })}
@@ -40,62 +44,50 @@ export default MapTest = (props) => {
     )
 }
 
-function getBorderColors(node) {
-    const colors = {};
-    for (const key in node.neighbors) {
-        if (node.pathableNeighbors[key]) {
-            colors[key] = "green";
-            continue;
-        }
-        colors[key] = "red";
+function getOctagonStyles(node, faceColor) {
+    const rotations = {
+        right: 180,
+        topRight: 225,
+        top: 270,
+        topLeft: 315,
+        left: 0,
+        bottomLeft: 45,
+        bottom: 90,
+        bottomRight: 135,
     }
-    return colors;
-}
-
-function getOctagon(node, faceColor) {
-    const colors = getBorderColors(node);
-    const style = {
-        innerSquare: {
-            width: node.size * 0.8,
-            height: node.size * 0.8,
-            backgroundColor: faceColor,
-            position: 'absolute',
-        },
-        outerSection: {
-            width: node.size * 0.1,
-            height: node.size * 0.1,
-            position: 'absolute',
-            // transform: 'rotate'
+    const width = node.size * 0.5;
+    const height = node.size * 0.2;
+    const rect = {
+        width,
+        height,
+        position: 'absolute',
+        backgroundColor: faceColor,
+        borderLeftWidth: 4,
+    }
+    const styles = {};
+    for (const key in node.neighbors) {
+        styles[key] = {
+            ...rect,
+            borderColor: node.pathableNeighbors[key] ? "green" : "pink",
+            transform: [
+                { translateX: width / 2 },
+                { rotate: `${rotations[key]}deg` },
+                { translateX: -width / 2 }
+            ],
         }
-
-    };
-    // #octagon {
-    //     width: 100px;
-    //     height: 100px;
-    //     background: red;
-    //     position: relative;
-    //   }
-    //   #octagon:before {
-    //     content: "";
-    //     width: 100px;
-    //     height: 0;
-    //     position: absolute;
-    //     top: 0;
-    //     left: 0;
-    //     border-bottom: 29px solid red;
-    //     border-left: 29px solid #eee;
-    //     border-right: 29px solid #eee;
-    //   }
-    //   #octagon:after {
-    //     content: "";
-    //     width: 100px;
-    //     height: 0;
-    //     position: absolute;
-    //     bottom: 0;
-    //     left: 0;
-    //     border-top: 29px solid red;
-    //     border-left: 29px solid #eee;
-    //     border-right: 29px solid #eee;
-    //   }
+    }
+    return styles;
 }
 
+
+// function getBorderColors(node) {
+//     const colors = {};
+//     for (const key in node.neighbors) {
+//         if (node.pathableNeighbors[key]) {
+//             colors[key] = "green";
+//             continue;
+//         }
+//         colors[key] = "red";
+//     }
+//     return colors;
+// }
