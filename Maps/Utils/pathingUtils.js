@@ -9,8 +9,8 @@ function getNearestNodeFromPos(pos) {
 }
 
 function aStar(startID, endID, graph) {
-    console.log("startID:", startID);
-    console.log("endID:", endID);
+    // console.log("startID:", startID);
+    // console.log("endID:", endID);
     const startScores = {};     startScores[startID] = 0; // distance from start node to node n
     const totalScores = {};     totalScores[startID] = getDistance(graph[startID].center, graph[endID].center, graph[startID].size); // startScore of start + distance between start and end node
     const nodes = {};           nodes[startID] = graph[startID]; // map of all applicable nodes
@@ -19,17 +19,20 @@ function aStar(startID, endID, graph) {
 
     while (nodeLength > 0) {
         const minNode = getMinNode(nodes, totalScores); // find node with minimum total distance
+        // console.log("minNode:", minNode.ID);
         delete nodes[minNode.ID]; nodeLength--; // remove found node from pick list
-        if (minNode.ID === endID) return reconstruct_path(pathMap, minNode.ID, startID); // if node is end node return path
+        if (minNode.ID == endID) return reconstruct_path(pathMap, endID, startID); // if node is end node return path
 
         for (const neighborID in minNode.pathableNeighbors) { // traverse pathable neighbors of min distance node
+            if (neighborID === 0) continue;
             const neighbor = graph[neighborID];
+            // console.log("neighbor:", neighborID);
             
             const potentialStartScore = startScores[minNode.ID] + getDistance(minNode.center, neighbor.center, minNode.size); // distance from start to min node to neighbor node
             if (!startScores[neighborID] || potentialStartScore < startScores[neighborID]) {
                 pathMap[neighborID] = minNode.ID;
                 startScores[neighborID] = potentialStartScore;
-                totalScores[neighborID] = potentialStartScore + getDistance(neighbor.center, end, minNode.size);
+                totalScores[neighborID] = potentialStartScore + getDistance(neighbor.center, graph[endID].center, minNode.size);
                 if (!nodes[neighborID]) {
                     nodes[neighborID] = neighbor;
                     nodeLength++;
@@ -45,7 +48,7 @@ function reconstruct_path(pathMap, endID, startID) {
     const total_path = [endID];
     let currentID = endID;
     // while (pathMap[currentNode.center]) {
-    while (!currentID === startID) {
+    while (currentID != startID) {
         currentID = pathMap[currentID];
         total_path.unshift(currentID);
     }

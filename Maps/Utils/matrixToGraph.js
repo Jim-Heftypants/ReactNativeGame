@@ -4,8 +4,7 @@ export default function matrixToGraph(matrix, size = 50, color = "purple") {
     for (let i = 0; i < matrix.length; i++) {
         for (let j = 0; j < matrix[i].length; j++) {
             const nodeID = getNodeID(i, j, matrix.length);
-            // const centerOffset = i % 2 === 0 ? size / 2 : size;
-            const centerOffset = size / 2;
+            const centerOffset = j % 2 === 0 ? size / 2 : size;
             const center = getCenter(i, j, size, centerOffset);
             const neighbors = matrix[i][j];
             // const neighbors = getneighbors(matrix, i, j, size);
@@ -24,11 +23,11 @@ export default function matrixToGraph(matrix, size = 50, color = "purple") {
 }
 
 function getNodeID(i, j, x) {
-    return (i * x) + j;
+    return (j * x) + i + 1;
 }
 
 function getCenter(i, j, size, offset) {
-    return [i * size + offset, j * size + offset];
+    return [i * size + offset, (j * size * 0.86) + size / 2];
 }
 
 // function getneighbors(matrix, i, j, size = 1) {

@@ -4,5 +4,6 @@ import randomizeMap from './Utils/randomizeMap';
 
 const testMapMatrix = getDefaultMatrix(20, 20);
 const testGraph = matrixToGraph(testMapMatrix, 50, "lightblue");
-// randomizeMap(testGraph);
+// console.log(Object.keys(testGraph));
+randomizeMap(testGraph);
 export default testGraph;

@@ -1,11 +1,8 @@
 export default function randomizeMap(graph) {
     const randomIdx = Math.floor(Math.random() * Object.keys(graph).length);
-    // const randomIdx = 50;
-    console.log("idx:",randomIdx);
-    const startKey = Object.keys(graph)[randomIdx];
-    const startNode = graph[startKey];
-    console.log("startNode:",startNode.center[0], ',', startNode.center[1]);
-
+    // const startKey = Object.keys(graph)[randomIdx];
+    const startNode = graph[randomIdx + 1];
+    // console.log("startNode:", startNode.ID);
     const newNeighbors = {};
     const visited = new Set();
     const stack = [startNode];
@@ -22,10 +19,10 @@ export default function randomizeMap(graph) {
 
             // node.pathableNeighbors[neighborID] = neighbor;
             // graph[neighbor].pathableNeighbors[oppNeighborKey(neighborID)] = node.center;
-            if (!newNeighbors[node.ID]) newNeighbors[node.ID] = [];
-            if (!newNeighbors[neighbor.ID]) newNeighbors[neighbor.ID] = [];
-            newNeighbors[node.center].push(neighbor.ID);
-            newNeighbors[neighborPos].push(node.ID);
+            if (!newNeighbors[node.ID]) newNeighbors[node.ID] = {};
+            if (!newNeighbors[neighbor.ID]) newNeighbors[neighbor.ID] = {};
+            newNeighbors[node.ID][neighbor.ID] = neighbor.ID;
+            newNeighbors[neighbor.ID][node.ID] = node.ID;
         }
     }
     let counter = 0;
@@ -33,18 +30,18 @@ export default function randomizeMap(graph) {
         counter++;
         graph[nodeID].pathableNeighbors = newNeighbors[nodeID];
     }
-    console.log("counter:",counter);
+    // console.log("counter:",counter);
 }
 
 function getUnvisitedSibling(node, visited) {
     const unvisited = [];
-    for (const neighborID in node.neighbors) {
+    for (const neighborID of node.neighbors) {
         if (neighborID === 0) continue;
         if (!visited.has(neighborID)) unvisited.push(neighborID);
     }
     if (unvisited.length === 0) return null;
     const randomIdx = Math.floor(Math.random() * unvisited.length);
-    return node.neighbors[randomIdx];
+    return unvisited[randomIdx];
 }
 
 // function oppNeighborKey(key) {

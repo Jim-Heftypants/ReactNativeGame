@@ -8,15 +8,17 @@ export default MapTest = (props) => {
     const nodeIDs = useRef(Object.keys(testMap)).current;
     const hexStyles = useRef({}).current;
     let [colors, setColors] = useState({});
+    // console.log("colors:", colors);
 
-    const randomNodeID = useRef(Math.floor(Math.random() * nodeIDs.length)).current;
+    const randomNodeID = useRef(Math.floor(Math.random() * nodeIDs.length) + 1).current;
 
     function applyPath(endNodeID) {
         const path = getPath(randomNodeID, endNodeID, testMap);
         console.log("path length:", path.length);
 
         colors = {};
-        for (const nodeID in path) {
+        for (const nodeID of path) {
+            // console.log(nodeID);
             colors[nodeID] = "blue";
         }
         setColors({ ...colors });
@@ -31,13 +33,14 @@ export default MapTest = (props) => {
         <View style={{ width: props.width, height: props.height, backgroundColor: 'grey' }} >
             {nodeIDs.map(nodeID => {
                 const node = testMap[nodeID];
-                hexStyles[nodeID].backgroundColor = colors[nodeID] ? colors[nodeID] : testMap[nodeID].color;
-                const octagonKeys = Object.keys(hexStyles[nodeID]);
+                const backgroundColor = colors[nodeID] ? colors[nodeID] : testMap[nodeID].color;
+                const hexStyleValues = Object.values(hexStyles[nodeID]);
+                let secondaryKey = 0;
                 return (
                     <TouchableOpacity style={{ width: node.size, height: node.size, position: 'absolute', left: node.center[0], top: node.center[1] }}
                         onPress={() => applyPath(nodeID)} key={key++} >
-                        {octagonKeys.map(styleKey => {
-                            return <View style={hexStyles[nodeID][styleKey]} key={styleKey} ></View>
+                        {hexStyleValues.map(style => {
+                            return <View style={{ ...style, backgroundColor: backgroundColor }} key={secondaryKey++} ></View>
                         })}
                     </TouchableOpacity>
                 )
@@ -56,17 +59,18 @@ function getHexStyles(node) {
         height,
         position: 'absolute',
         backgroundColor: node.color,
-        borderLeftWidth: 3,
+        borderLeftWidth: 4,
     }
     let angle = 0;
     const styles = {};
+    if (node.neighbors.length !== 6) console.log("hmmmm?");
     for (let i = 0; i < node.neighbors.length; i++) {
         const ID = node.neighbors[i];
-        let borderColor = node.pathableNeighbors[ID] ? "green" : "red";
+        let borderColor = node.pathableNeighbors[ID] ? "green" : "red"; // prob not gonna work
         if (ID === 0) borderColor = "black";
-        styles[ID] = {
+        styles[i] = {
             ...rect,
-            borderColor: borderColor,
+            borderColor,
             transform: [
                 { translateX: width / 2 },
                 { rotate: `${angle}deg` },
@@ -75,18 +79,6 @@ function getHexStyles(node) {
         }
         angle += angleMod;
     }
+    if (Object.keys(styles).length !== 6) console.log("the actual fuck");
     return styles;
 }
-
-
-// function getBorderColors(node) {
-//     const colors = {};
-//     for (const key in node.neighbors) {
-//         if (node.pathableNeighbors[key]) {
-//             colors[key] = "green";
-//             continue;
-//         }
-//         colors[key] = "red";
-//     }
-//     return colors;
-// }
