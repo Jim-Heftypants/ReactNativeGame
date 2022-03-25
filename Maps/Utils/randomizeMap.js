@@ -4,58 +4,57 @@ export default function randomizeMap(graph) {
     console.log("idx:",randomIdx);
     const startKey = Object.keys(graph)[randomIdx];
     const startNode = graph[startKey];
-    console.log("startNode:",startNode.center);
+    console.log("startNode:",startNode.center[0], ',', startNode.center[1]);
 
-    // const paths = new Set();
     const newNeighbors = {};
     const visited = new Set();
     const stack = [startNode];
-    let count = 0;
     while (stack.length > 0) {
         const node = stack.pop();
-        const neighborKey = getUnvisitedSibling(node, visited);
+        const neighborID = getUnvisitedSibling(node, visited);
         // console.log("neighborPos:",neighborPos);
-        if (neighborKey) {
-            const neighbor = node.neighbors[neighborKey];
+        if (neighborID) {
+            const neighbor = graph[neighborID];
             stack.push(node);
-            stack.push(graph[neighbor]);
-            visited.add(neighbor);
+            stack.push(neighbor);
+            visited.add(neighbor.ID);
             // delete wall between node and sibling
-            node.pathableNeighbors[neighborKey] = neighbor;
-            graph[neighbor].pathableNeighbors[oppNeighborKey(neighborKey)] = node.center;
 
-            // if (!newNeighbors[node.center]) newNeighbors[node.center] = [];
-            // if (!newNeighbors[neighborPos]) newNeighbors[neighborPos] = [];
-            // newNeighbors[node.center].push(neighborPos);
-            // newNeighbors[neighborPos].push(node.center);
-            // paths.add(node.center);
-            // paths.add(neighborPos);
+            // node.pathableNeighbors[neighborID] = neighbor;
+            // graph[neighbor].pathableNeighbors[oppNeighborKey(neighborID)] = node.center;
+            if (!newNeighbors[node.ID]) newNeighbors[node.ID] = [];
+            if (!newNeighbors[neighbor.ID]) newNeighbors[neighbor.ID] = [];
+            newNeighbors[node.center].push(neighbor.ID);
+            newNeighbors[neighborPos].push(node.ID);
         }
     }
-    // console.log("visited:", visited);
-    // let counter = 0;
-    // for (const key in newNeighbors) {
-    //     counter++;
-    //     graph[key].neighbors = newNeighbors[key];
-    // }
-    // console.log("counter:",counter);
-}
-
-function getUnvisitedSibling(node, visited) { // not randomized right now
-    for (const key in node.neighbors) {
-        if (!visited.has(node.neighbors[key])) return key;
+    let counter = 0;
+    for (const nodeID in newNeighbors) {
+        counter++;
+        graph[nodeID].pathableNeighbors = newNeighbors[nodeID];
     }
-    return null;
+    console.log("counter:",counter);
 }
 
-function oppNeighborKey(key) {
-    if (key === "topLeft") return "bottomRight";
-    if (key === "bottomRight") return "topLeft";
-    if (key === "topRight") return "bottomLeft";
-    if (key === "bottomLeft") return "topRight";
-    if (key === "left") return "right";
-    if (key === "right") return "left";
-    if (key === "top") return "bottom";
-    if (key === "bottom") return "top";
-    return "ur fooked m8";
+function getUnvisitedSibling(node, visited) {
+    const unvisited = [];
+    for (const neighborID in node.neighbors) {
+        if (neighborID === 0) continue;
+        if (!visited.has(neighborID)) unvisited.push(neighborID);
+    }
+    if (unvisited.length === 0) return null;
+    const randomIdx = Math.floor(Math.random() * unvisited.length);
+    return node.neighbors[randomIdx];
 }
+
+// function oppNeighborKey(key) {
+//     if (key === "topLeft") return "bottomRight";
+//     if (key === "bottomRight") return "topLeft";
+//     if (key === "topRight") return "bottomLeft";
+//     if (key === "bottomLeft") return "topRight";
+//     if (key === "left") return "right";
+//     if (key === "right") return "left";
+//     if (key === "top") return "bottom";
+//     if (key === "bottom") return "top";
+//     return "ur fooked m8";
+// }
