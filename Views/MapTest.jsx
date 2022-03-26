@@ -4,16 +4,22 @@ import { View, TouchableOpacity } from 'react-native';
 import { getPath } from '../Maps/Utils/pathingUtils';
 import testMap from '../Maps/testMap';
 
+import Node from '../MapDisplayComponents/Node';
+
 export default MapTest = (props) => {
     const nodeIDs = useRef(Object.keys(testMap)).current;
     const hexStyles = useRef({}).current;
+    const randomNodeID = useRef(Math.floor(Math.random() * nodeIDs.length) + 1).current;
     let [colors, setColors] = useState({});
+    colors[randomNodeID] = "turquoise";
     // console.log("colors:", colors);
 
-    const randomNodeID = useRef(Math.floor(Math.random() * nodeIDs.length) + 1).current;
 
     function applyPath(endNodeID) {
+        var startTime = performance.now()
         const path = getPath(randomNodeID, endNodeID, testMap);
+        var endTime = performance.now()
+        console.log(`aStar took ${endTime - startTime} milliseconds`)
         console.log("path length:", path.length);
 
         colors = {};
@@ -21,6 +27,7 @@ export default MapTest = (props) => {
             // console.log(nodeID);
             colors[nodeID] = "blue";
         }
+        colors[randomNodeID] = "turquoise";
         setColors({ ...colors });
     }
 
@@ -34,15 +41,8 @@ export default MapTest = (props) => {
             {nodeIDs.map(nodeID => {
                 const node = testMap[nodeID];
                 const backgroundColor = colors[nodeID] ? colors[nodeID] : testMap[nodeID].color;
-                const hexStyleValues = Object.values(hexStyles[nodeID]);
-                let secondaryKey = 0;
                 return (
-                    <TouchableOpacity style={{ width: node.size, height: node.size, position: 'absolute', left: node.center[0], top: node.center[1] }}
-                        onPress={() => applyPath(nodeID)} key={key++} >
-                        {hexStyleValues.map(style => {
-                            return <View style={{ ...style, backgroundColor: backgroundColor }} key={secondaryKey++} ></View>
-                        })}
-                    </TouchableOpacity>
+                    <Node nodeID={nodeID} node={node} styles={hexStyles[nodeID]} backgroundColor={backgroundColor} applyPath={applyPath} key={key++} ></Node>
                 )
             })}
         </View>

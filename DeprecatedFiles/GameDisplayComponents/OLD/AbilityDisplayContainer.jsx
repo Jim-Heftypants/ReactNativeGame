@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 
-import AbilityButtonContainer from "../AbilityButtonContainer";
+import AbilityButtonContainer from "../../../GameDisplayComponents/AbilityButtonContainer";
 // import TargettingDisplay from "./TargettingDisplay";
 
 export default AbilityDisplayContainer = (props) => {
@@ -15,9 +15,9 @@ export default AbilityDisplayContainer = (props) => {
     //     () => <TargettingDisplay {...props.deviceDims} Character={props.Character} touches={props.touches} >
     //     </TargettingDisplay>, [props.Character.ID, props.touches.next] // re-render on touch change
     // );
-    
+
     return (
-            <AbilityButtonContainer deviceDims={props.deviceDims} Character={props.Character} touches={props.touches} >
-            </AbilityButtonContainer>
+        <AbilityButtonContainer deviceDims={props.deviceDims} Character={props.Character} touches={props.touches} >
+        </AbilityButtonContainer>
     )
 }

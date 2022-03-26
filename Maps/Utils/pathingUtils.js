@@ -1,3 +1,5 @@
+import PriorityQueue from "../../Utils/PriorityQueue";
+
 export function getPath(startID, endID, map) {
     const path = aStar(startID, endID, map);
     return path;
@@ -11,16 +13,23 @@ function getNearestNodeFromPos(pos) {
 function aStar(startID, endID, graph) {
     // console.log("startID:", startID);
     // console.log("endID:", endID);
+    // const nodes = {};           nodes[startID] = graph[startID]; // map of all applicable nodes
+    // let nodeLength = 1;
+    
     const startScores = {};     startScores[startID] = 0; // distance from start node to node n
     const totalScores = {};     totalScores[startID] = getDistance(graph[startID].center, graph[endID].center, graph[startID].size); // startScore of start + distance between start and end node
-    const nodes = {};           nodes[startID] = graph[startID]; // map of all applicable nodes
     const pathMap = {}; // map of node traversal path
-    let nodeLength = 1;
+    const nodes = new PriorityQueue(); // node, priority
+    nodes.enqueue(graph[startID], totalScores[startID]);
+    const nodeSet = new Set(); nodeSet.add(graph[startID].ID); // ints
 
-    while (nodeLength > 0) {
-        const minNode = getMinNode(nodes, totalScores); // find node with minimum total distance
+    while (!nodes.isEmpty()) {
+        const minNode = nodes.dequeue();
+        nodeSet.delete(minNode.ID);
+        // const minNode = getMinNode(nodes, totalScores); // find node with minimum total distance
+        // delete nodes[minNode.ID];
+        // nodeLength--; // remove found node from pick list
         // console.log("minNode:", minNode.ID);
-        delete nodes[minNode.ID]; nodeLength--; // remove found node from pick list
         if (minNode.ID == endID) return reconstruct_path(pathMap, endID, startID); // if node is end node return path
 
         for (const neighborID in minNode.pathableNeighbors) { // traverse pathable neighbors of min distance node
@@ -33,9 +42,11 @@ function aStar(startID, endID, graph) {
                 pathMap[neighborID] = minNode.ID;
                 startScores[neighborID] = potentialStartScore;
                 totalScores[neighborID] = potentialStartScore + getDistance(neighbor.center, graph[endID].center, minNode.size);
-                if (!nodes[neighborID]) {
-                    nodes[neighborID] = neighbor;
-                    nodeLength++;
+                if (!nodeSet.has(neighbor.ID)) {
+                    nodes.enqueue(neighbor, totalScores[neighborID]);
+                    nodeSet.add(neighbor.ID);
+                    // nodes[neighborID] = neighbor;
+                    // nodeLength++;
                 }
             }
         }
