@@ -7,19 +7,28 @@ export default function matrixToGraph(matrix, size = 50, color = "purple") {
             const centerOffset = j % 2 === 0 ? size / 2 : size;
             const center = getCenter(i, j, size, centerOffset);
             const neighbors = matrix[i][j];
-            // const neighbors = getneighbors(matrix, i, j, size);
+            const pathableNeighbors = getPathableNeighbors(neighbors)
             graph[nodeID] = {
                 ID: nodeID,
                 center,
                 neighbors,
                 size,
-                pathableNeighbors: neighbors,
+                pathableNeighbors,
                 color,
             };
         }
     }
     // console.log(graph);
     return graph;
+}
+
+function getPathableNeighbors(neighbors) {
+    const newNeighbors = {};
+    for (let i = 0; i < neighbors.length; i++) {
+        if (neighbors[i] == 0) continue;
+        newNeighbors[neighbors[i]] = neighbors[i];
+    }
+    return newNeighbors;
 }
 
 function getNodeID(i, j, x) {

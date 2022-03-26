@@ -16,21 +16,15 @@ export default function randomizeMap(graph) {
             stack.push(neighbor);
             visited.add(neighbor.ID);
             // delete wall between node and sibling
-
-            // node.pathableNeighbors[neighborID] = neighbor;
-            // graph[neighbor].pathableNeighbors[oppNeighborKey(neighborID)] = node.center;
             if (!newNeighbors[node.ID]) newNeighbors[node.ID] = {};
             if (!newNeighbors[neighbor.ID]) newNeighbors[neighbor.ID] = {};
             newNeighbors[node.ID][neighbor.ID] = neighbor.ID;
             newNeighbors[neighbor.ID][node.ID] = node.ID;
         }
     }
-    let counter = 0;
     for (const nodeID in newNeighbors) {
-        counter++;
         graph[nodeID].pathableNeighbors = newNeighbors[nodeID];
     }
-    // console.log("counter:",counter);
 }
 
 function getUnvisitedSibling(node, visited) {
