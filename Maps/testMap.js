@@ -3,7 +3,7 @@ import getDefaultMatrix from './Utils/getDefaultMatrix';
 import randomizeMap from './Utils/randomizeMap';
 
 const testMapMatrix = getDefaultMatrix(50, 50);
-const testGraph = matrixToGraph(testMapMatrix, 20, "lightblue");
+const testGraph = matrixToGraph(testMapMatrix, 22, "lightblue");
 var startTime = performance.now()
 randomizeMap(testGraph);
 var endTime = performance.now()
