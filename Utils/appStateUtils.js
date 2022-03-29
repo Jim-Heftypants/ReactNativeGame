@@ -1,6 +1,8 @@
 import { AppState } from "react-native";
 
+let count = 0;
 export default function setAppState() {
+    if (++count > 1) return;
     let appState = AppState.currentState;
     AppState.addEventListener("change",
         nextAppState => {
