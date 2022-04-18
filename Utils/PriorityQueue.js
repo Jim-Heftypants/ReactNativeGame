@@ -15,13 +15,13 @@ export default class PriorityQueue {
         let right = this.items.length - 1;
         while (left <= right) {
             let middle = Math.floor((left + right) / 2);
-            if (this.items[middle].priority < target)
+            if (this.items[middle].priority < target) {
                 left = middle + 1;
                 if (this.items?.[left] && this.items[left].priority >= target) return left;
-            else if (this.items[middle].priority > target)
+            } else if (this.items[middle].priority > target) {
                 right = middle - 1;
                 if (this.items?.[right] && this.items[right].priority <= target) return right;
-            else
+            } else
                 return middle;
         }
         if (right < 0) return right;
